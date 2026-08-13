@@ -1,0 +1,16 @@
+# Python / Django temporary files
+*.pyc
+__pycache__/
+*.sqlite3
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Environment Variables & Secrets
+.env
+
+# IDE settings
+.vscode/
+.idea/
