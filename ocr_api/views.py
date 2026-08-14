@@ -5,25 +5,29 @@ import logging
 import os
 import threading
 import traceback
+
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from PIL import Image
 import torch
-from rest_framework.views import APIView
+from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-from .models import OCRRecord
-from .serializers import OCRRecordSerializer
+from .models import OCRRecord, UserProfile
+from .serializers import OCRRecordSerializer, StorageInfoSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
-MODEL_NAME = "sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3"
+MODEL_NAME = 'sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3'
 
 try:
     import arabic_reshaper
@@ -31,6 +35,13 @@ try:
 except Exception:
     arabic_reshaper = None
     get_display = None
+
+
+def get_accessible_ocr_queryset(user):
+    queryset = OCRRecord.objects.select_related('user')
+    if user.is_staff or user.is_superuser:
+        return queryset
+    return queryset.filter(user=user)
 
 
 def split_text_into_paragraphs(raw_text):
@@ -85,6 +96,16 @@ def build_metadata_payload(ocr_record, request=None):
 
 def serialize_ocr_record_response(ocr_record, request=None):
     raw_text = ocr_record.extracted_text if ocr_record.status == OCRRecord.STATUS_COMPLETED else None
+    image_url = None
+    if ocr_record.image and ocr_record.image.name:
+        if request is not None:
+            try:
+                image_url = request.build_absolute_uri(ocr_record.image.url)
+            except Exception:
+                image_url = ocr_record.image.url
+        else:
+            image_url = ocr_record.image.url
+
     data = {
         'id': ocr_record.id,
         'status': ocr_record.status,
@@ -92,6 +113,22 @@ def serialize_ocr_record_response(ocr_record, request=None):
         'error_message': ocr_record.error_message,
         'document': build_document_payload(ocr_record, request),
         'metadata': build_metadata_payload(ocr_record, request),
+        'image': {
+            'name': ocr_record.file_name or (os.path.basename(ocr_record.image.name) if ocr_record.image and ocr_record.image.name else None),
+            'size_bytes': ocr_record.file_size or 0,
+            'uploaded_at': ocr_record.created_at.isoformat() if ocr_record.created_at else None,
+            'extension': os.path.splitext((ocr_record.file_name or (ocr_record.image.name if ocr_record.image and ocr_record.image.name else '')))[1].lower().lstrip('.') if (ocr_record.file_name or (ocr_record.image.name if ocr_record.image and ocr_record.image.name else '')) else None,
+            'mime_type': getattr(ocr_record.image, 'content_type', None) or 'application/octet-stream',
+            'url': image_url,
+        },
+        'result': {
+            'status': ocr_record.status,
+            'completed_at': ocr_record.updated_at.isoformat() if getattr(ocr_record, 'updated_at', None) else None,
+            'download': {
+                'pdf_url': f'/api/download-ocr/{ocr_record.id}/?format=pdf' if ocr_record.status == OCRRecord.STATUS_COMPLETED else None,
+                'json_url': f'/api/download-ocr/{ocr_record.id}/?format=json' if ocr_record.status == OCRRecord.STATUS_COMPLETED else None,
+            },
+        },
     }
     return data
 
@@ -102,12 +139,6 @@ def run_ocr_background(record_id):
         return
 
     try:
-        # Step 1: upload/init
-        record.status = OCRRecord.STATUS_UPLOADING
-        record.error_message = None
-        record.save(update_fields=['status', 'error_message'])
-
-        # Step 2: full-image OCR processing (no line detection / cropping)
         record.status = OCRRecord.STATUS_PROCESSING
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
@@ -142,7 +173,45 @@ def run_ocr_background(record_id):
         traceback.print_exc()
 
 
+class OCRRecordViewSet(viewsets.ModelViewSet):
+    serializer_class = OCRRecordSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get_queryset(self):
+        return get_accessible_ocr_queryset(self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class StorageInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        is_admin = user.is_staff or user.is_superuser
+
+        if is_admin:
+            user_id = request.query_params.get('user_id')
+            if user_id:
+                profiles = UserProfile.objects.filter(user_id=user_id).select_related('user')
+                if not profiles.exists():
+                    return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+                payload = StorageInfoSerializer.from_profile(profiles.first())
+                return Response(payload, status=status.HTTP_200_OK)
+
+            profiles = UserProfile.objects.select_related('user').order_by('user_id')
+            payload = [StorageInfoSerializer.from_profile(profile) for profile in profiles]
+            return Response(payload, status=status.HTTP_200_OK)
+
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        payload = StorageInfoSerializer.from_profile(profile)
+        return Response(payload, status=status.HTTP_200_OK)
+
+
 class ProcessOCRView(APIView):
+    permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
@@ -150,8 +219,10 @@ class ProcessOCRView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        ocr_record = serializer.save(status=OCRRecord.STATUS_UPLOADING)
-
+        ocr_record = serializer.save(user=request.user)
+        ocr_record.status = OCRRecord.STATUS_PENDING
+        ocr_record.save(update_fields=['status'])
+        
         worker = threading.Thread(target=run_ocr_background, args=(ocr_record.id,), daemon=True)
         worker.start()
 
@@ -159,20 +230,23 @@ class ProcessOCRView(APIView):
             {
                 'id': ocr_record.id,
                 'status': ocr_record.status,
-                'message': 'OCR task accepted. Poll the status endpoint for updates.'
+                'message': 'OCR task accepted. Poll the status endpoint for updates.',
             },
             status=status.HTTP_202_ACCEPTED,
         )
 
 
 class OCRStatusView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
         data = serialize_ocr_record_response(ocr_record, request)
         return Response(data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
 
         if 'extracted_text' not in request.data:
             return Response(
@@ -203,22 +277,25 @@ class OCRStatusView(APIView):
         )
 
     def delete(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
-        ocr_record.image.delete(save=False)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
         ocr_record.delete()
         return Response({'message': 'Record and image deleted successfully'}, status=status.HTTP_200_OK)
 
 
 class OCRHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
-        records = OCRRecord.objects.all().order_by('-created_at')
+        records = get_accessible_ocr_queryset(request.user).order_by('-created_at')
         payload = [serialize_ocr_record_response(record, request) for record in records]
         return Response(payload, status=status.HTTP_200_OK)
 
 
 class OCRDownloadView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
 
         if ocr_record.status != OCRRecord.STATUS_COMPLETED:
             return Response(

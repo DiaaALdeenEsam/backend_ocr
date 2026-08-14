@@ -5,7 +5,6 @@ __pycache__/
 
 # Virtual Environment
 venv/
-.venv/
 env/
 
 # Environment Variables & Secrets
@@ -14,3 +13,6 @@ env/
 # IDE settings
 .vscode/
 .idea/
+
+# Images file
+media/
