@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 13:53:36 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 14:12:20 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 88
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -89,12 +89,12 @@
 │   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (17.21 KB)
+│   ├── 📄 ocr_engine.py (19.05 KB)
 │   ├── 📄 serializers.py (6.71 KB)
-│   ├── 📄 tasks.py (10.66 KB)
+│   ├── 📄 tasks.py (10.49 KB)
 │   ├── 📄 tests.py (10.04 KB)
 │   ├── 📄 urls.py (1.86 KB)
-│   └── 📄 views.py (21.95 KB)
+│   └── 📄 views.py (21.28 KB)
 ├── 📁 scripts/
 │   ├── 📁 output/
 │   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
@@ -1829,15 +1829,15 @@ def decrement_storage_and_delete_file(sender, instance, **kwargs):
 ### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
 
 **File Info:**
-- **Size**: 17.21 KB
+- **Size**: 19.05 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/ocr_engine.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 13:53:36 (Asia/Damascus / GMT+03:00)
-- **MD5**: `a36b8b1b24add675dbaa96992cbcc3c7`
-- **SHA256**: `30fe5d51dd6cebfd323feaa96a5e57748712b340a31bb64009fd650c3559cd7b`
+- **Modified**: 2026-08-15 14:12:19 (Asia/Damascus / GMT+03:00)
+- **MD5**: `f59728f2bb04508b93013271b95f83cd`
+- **SHA256**: `2c4d64b79f2f6d0d595498caa0f84269740bdf1e3afd974e39a5f2a321afdf07`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2184,32 +2184,73 @@ def get_ocr_engine(device=None):
         try:
             processor = AutoProcessor.from_pretrained(BASE_MODEL_NAME)
 
-            # Try memory-saving load first. Use float16 on CUDA to reduce RAM.
+            # Controlled GPU load path: try standard float16 + low_cpu_mem_usage first.
             base_model = None
-            try:
-                if device and 'cuda' in str(device).lower():
-                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            model = None
+            try_4bit = os.environ.get('MODEL_LOAD_IN_4BIT', '0') == '1'
+
+            # Helper to attempt 4-bit load if requested/available
+            def _load_with_4bit():
+                try:
+                    bnb_config = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_compute_dtype=getattr(torch, 'float16', None),
+                        bnb_4bit_use_double_quant=True,
+                        bnb_4bit_quant_type="nf4",
+                    )
+                    # use device_map='auto' when bnb is used to reduce RAM spikes
+                    return Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         BASE_MODEL_NAME,
-                        low_cpu_mem_usage=True,
+                        quantization_config=bnb_config,
+                        device_map='auto',
                         torch_dtype=getattr(torch, 'float16', None),
                     )
+                except Exception:
+                    return None
+
+            try:
+                if device and 'cuda' in str(device).lower():
+                    # try float16 low-memory first
+                    try:
+                        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                            BASE_MODEL_NAME,
+                            low_cpu_mem_usage=True,
+                            torch_dtype=getattr(torch, 'float16', None),
+                        )
+                    except Exception:
+                        base_model = None
+
+                    if base_model is None and try_4bit:
+                        base_model = _load_with_4bit()
+
+                    # if still None, fallback to normal load (may OOM)
+                    if base_model is None:
+                        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
                 else:
                     base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         BASE_MODEL_NAME,
                         low_cpu_mem_usage=True,
                     )
+            except torch.cuda.OutOfMemoryError as oom:
+                # surface OOM to caller to make a decision (retry with 4-bit or fail fast)
+                raise
             except Exception:
-                # fallback to normal load if memory-optimized call fails
+                # last-resort fallback
                 base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
 
             if WEIGHTS_PATH and os.path.exists(WEIGHTS_PATH):
-                model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
+                try:
+                    model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
+                except Exception:
+                    # if peft wrapper fails, fall back to base model
+                    model = base_model
             else:
                 model = base_model
 
             model.to(device)
             model.eval()
         except Exception as e:
+            # bubble up to caller with context
             raise
 
         class _Engine:
@@ -2468,15 +2509,15 @@ class EditedOCRExampleSerializer(serializers.ModelSerializer):
 ### <a id="📄-ocr-api-tasks-py"></a>📄 `ocr_api/tasks.py`
 
 **File Info:**
-- **Size**: 10.66 KB
+- **Size**: 10.49 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/tasks.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:44:23 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
-- **MD5**: `62638a649093a34c6ed7938c9ead4181`
-- **SHA256**: `da370245230aca3c390f20958bf7ec300459bce9139e17bdac14c50a56723e9a`
+- **Modified**: 2026-08-15 14:12:19 (Asia/Damascus / GMT+03:00)
+- **MD5**: `1ef44beec9c6ed501a1d4563fc8642a7`
+- **SHA256**: `41e13741ce71b5cdd8a32699fb415f9892c797b4a51a5f9ce538530c17b1434f`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2488,13 +2529,13 @@ import time
 from datetime import datetime
 
 import json
-from celery import shared_task
-from celery.utils.log import get_task_logger
+import logging
+import gc
 from django.db import transaction
 from django.conf import settings
 from prometheus_client import Counter, Gauge
 
-task_logger = get_task_logger(__name__)
+task_logger = logging.getLogger(__name__)
 
 # metrics
 TASK_RUNS = Counter('active_training_runs_total', 'Total active training task runs')
@@ -2512,8 +2553,7 @@ import torch
 WEIGHTS_DIR = getattr(ocr_engine, 'WEIGHTS_PATH', None)
 
 
-@shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=True, max_retries=3)
-def run_active_training(self, threshold=10):
+def run_active_training(threshold=10):
     TASK_RUNS.inc()
     # Prefer a Redis-backed distributed lock when Redis is available (recommended for multi-host).
     # Fallback to a simple file lock for single-host / Windows dev environments.
@@ -2561,8 +2601,9 @@ def run_active_training(self, threshold=10):
             except Exception:
                 pass
         try:
+            local_id = f'local-{int(time.time())}-{os.getpid()}'
             with open(lock_path, 'w') as fh:
-                json.dump({'ts': time.time(), 'task_id': self.request.id}, fh)
+                json.dump({'ts': time.time(), 'task_id': local_id}, fh)
         except Exception:
             task_logger.warning('Could not create lock file; proceeding anyway')
 
@@ -2684,10 +2725,9 @@ def run_active_training(self, threshold=10):
                         pass
 
 
-@shared_task(bind=True)
-def process_ocr_record(self, record_id):
-    """Process a single OCRRecord in the background (moved from views to Celery task)."""
-    logger = get_task_logger(__name__)
+def process_ocr_record(record_id):
+    """Process a single OCRRecord in the background."""
+    logger = logging.getLogger(__name__)
     try:
         from .models import OCRRecord
         record = OCRRecord.objects.filter(pk=record_id).first()
@@ -2699,7 +2739,7 @@ def process_ocr_record(self, record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        # default to CPU for inference to avoid persistent GPU allocation and OOMs in shared environments
+        # default to CPU for inference unless OCR_DEVICE env var requests GPU
         device = os.environ.get('OCR_DEVICE', 'cpu')
         engine = ocr_engine.get_ocr_engine(device=device)
         try:
@@ -3095,15 +3135,15 @@ urlpatterns = [
 ### <a id="📄-ocr-api-views-py"></a>📄 `ocr_api/views.py`
 
 **File Info:**
-- **Size**: 21.95 KB
+- **Size**: 21.28 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/views.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
-- **MD5**: `6c4be8cf7b044f042a7aad957fdfffff`
-- **SHA256**: `733e2ef30d3be190d0e5e0cb32ad216344563c97d8961a8ce34746635978f729`
+- **Modified**: 2026-08-15 14:12:19 (Asia/Damascus / GMT+03:00)
+- **MD5**: `03e887221a8fe0a12840c15397eecb22`
+- **SHA256**: `278154be83a07c2cb574196d52166202af5936e8b691077810cb6eccd74ce2cb`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -3116,7 +3156,6 @@ import logging
 import os
 import threading
 
-from celery import current_app
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
 from django.http import HttpResponse
@@ -3262,38 +3301,24 @@ def run_ocr_background(record_id):
 
 def dispatch_ocr_processing(record_id):
     """Dispatch OCR processing without blocking the API response."""
-    try:
-        current_app.send_task(
-            'ocr_api.tasks.process_ocr_record',
-            args=[record_id],
-            countdown=1,
-            retry=False,
-        )
-        # If there are no active workers connected to the broker, run local fallback
-        try:
-            inspector = current_app.control.inspect(timeout=1)
-            active = inspector.ping() or {}
-            if not active:
-                logger.info('No Celery workers available; running local fallback for record_id=%s', record_id)
-                from .tasks import process_ocr_record
-                process_ocr_record.run(record_id)
-                return
-        except Exception:
-            # if inspect fails, continue and let normal broker behavior happen
-            pass
-        return
-    except Exception:
-        logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)
-
-    # Celery broker may be unavailable; run local fallback in this daemon thread.
+    # Run processing in a background daemon thread to avoid Celery dependency.
     try:
         from .tasks import process_ocr_record
-        process_ocr_record.run(record_id)
-    except Exception as exc:
-        logger.exception('Local OCR fallback failed for record_id=%s', record_id)
+
+        def _run():
+            try:
+                process_ocr_record.run(record_id)
+            except Exception:
+                logger.exception('Background OCR processing failed for record_id=%s', record_id)
+
+        t = threading.Thread(target=_run, args=(), daemon=True)
+        t.start()
+        return
+    except Exception:
+        logger.exception('Failed to start background thread for record_id=%s', record_id)
         OCRRecord.objects.filter(pk=record_id).update(
             status=OCRRecord.STATUS_FAILED,
-            error_message=f'Background OCR dispatch failed: {exc}',
+            error_message='Background OCR dispatch failed (thread start error)',
         )
 
 

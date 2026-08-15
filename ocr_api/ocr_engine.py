@@ -339,32 +339,73 @@ def get_ocr_engine(device=None):
         try:
             processor = AutoProcessor.from_pretrained(BASE_MODEL_NAME)
 
-            # Try memory-saving load first. Use float16 on CUDA to reduce RAM.
+            # Controlled GPU load path: try standard float16 + low_cpu_mem_usage first.
             base_model = None
-            try:
-                if device and 'cuda' in str(device).lower():
-                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            model = None
+            try_4bit = os.environ.get('MODEL_LOAD_IN_4BIT', '0') == '1'
+
+            # Helper to attempt 4-bit load if requested/available
+            def _load_with_4bit():
+                try:
+                    bnb_config = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_compute_dtype=getattr(torch, 'float16', None),
+                        bnb_4bit_use_double_quant=True,
+                        bnb_4bit_quant_type="nf4",
+                    )
+                    # use device_map='auto' when bnb is used to reduce RAM spikes
+                    return Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         BASE_MODEL_NAME,
-                        low_cpu_mem_usage=True,
+                        quantization_config=bnb_config,
+                        device_map='auto',
                         torch_dtype=getattr(torch, 'float16', None),
                     )
+                except Exception:
+                    return None
+
+            try:
+                if device and 'cuda' in str(device).lower():
+                    # try float16 low-memory first
+                    try:
+                        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                            BASE_MODEL_NAME,
+                            low_cpu_mem_usage=True,
+                            torch_dtype=getattr(torch, 'float16', None),
+                        )
+                    except Exception:
+                        base_model = None
+
+                    if base_model is None and try_4bit:
+                        base_model = _load_with_4bit()
+
+                    # if still None, fallback to normal load (may OOM)
+                    if base_model is None:
+                        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
                 else:
                     base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         BASE_MODEL_NAME,
                         low_cpu_mem_usage=True,
                     )
+            except torch.cuda.OutOfMemoryError as oom:
+                # surface OOM to caller to make a decision (retry with 4-bit or fail fast)
+                raise
             except Exception:
-                # fallback to normal load if memory-optimized call fails
+                # last-resort fallback
                 base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
 
             if WEIGHTS_PATH and os.path.exists(WEIGHTS_PATH):
-                model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
+                try:
+                    model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
+                except Exception:
+                    # if peft wrapper fails, fall back to base model
+                    model = base_model
             else:
                 model = base_model
 
             model.to(device)
             model.eval()
         except Exception as e:
+            # bubble up to caller with context
             raise
 
         class _Engine:

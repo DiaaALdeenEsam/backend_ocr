@@ -5,7 +5,6 @@ import logging
 import os
 import threading
 
-from celery import current_app
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
 from django.http import HttpResponse
@@ -151,38 +150,24 @@ def run_ocr_background(record_id):
 
 def dispatch_ocr_processing(record_id):
     """Dispatch OCR processing without blocking the API response."""
-    try:
-        current_app.send_task(
-            'ocr_api.tasks.process_ocr_record',
-            args=[record_id],
-            countdown=1,
-            retry=False,
-        )
-        # If there are no active workers connected to the broker, run local fallback
-        try:
-            inspector = current_app.control.inspect(timeout=1)
-            active = inspector.ping() or {}
-            if not active:
-                logger.info('No Celery workers available; running local fallback for record_id=%s', record_id)
-                from .tasks import process_ocr_record
-                process_ocr_record.run(record_id)
-                return
-        except Exception:
-            # if inspect fails, continue and let normal broker behavior happen
-            pass
-        return
-    except Exception:
-        logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)
-
-    # Celery broker may be unavailable; run local fallback in this daemon thread.
+    # Run processing in a background daemon thread to avoid Celery dependency.
     try:
         from .tasks import process_ocr_record
-        process_ocr_record.run(record_id)
-    except Exception as exc:
-        logger.exception('Local OCR fallback failed for record_id=%s', record_id)
+
+        def _run():
+            try:
+                process_ocr_record.run(record_id)
+            except Exception:
+                logger.exception('Background OCR processing failed for record_id=%s', record_id)
+
+        t = threading.Thread(target=_run, args=(), daemon=True)
+        t.start()
+        return
+    except Exception:
+        logger.exception('Failed to start background thread for record_id=%s', record_id)
         OCRRecord.objects.filter(pk=record_id).update(
             status=OCRRecord.STATUS_FAILED,
-            error_message=f'Background OCR dispatch failed: {exc}',
+            error_message='Background OCR dispatch failed (thread start error)',
         )
 
 

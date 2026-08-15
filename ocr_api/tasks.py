@@ -4,13 +4,13 @@ import time
 from datetime import datetime
 
 import json
-from celery import shared_task
-from celery.utils.log import get_task_logger
+import logging
+import gc
 from django.db import transaction
 from django.conf import settings
 from prometheus_client import Counter, Gauge
 
-task_logger = get_task_logger(__name__)
+task_logger = logging.getLogger(__name__)
 
 # metrics
 TASK_RUNS = Counter('active_training_runs_total', 'Total active training task runs')
@@ -28,8 +28,7 @@ import torch
 WEIGHTS_DIR = getattr(ocr_engine, 'WEIGHTS_PATH', None)
 
 
-@shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=True, max_retries=3)
-def run_active_training(self, threshold=10):
+def run_active_training(threshold=10):
     TASK_RUNS.inc()
     # Prefer a Redis-backed distributed lock when Redis is available (recommended for multi-host).
     # Fallback to a simple file lock for single-host / Windows dev environments.
@@ -77,8 +76,9 @@ def run_active_training(self, threshold=10):
             except Exception:
                 pass
         try:
+            local_id = f'local-{int(time.time())}-{os.getpid()}'
             with open(lock_path, 'w') as fh:
-                json.dump({'ts': time.time(), 'task_id': self.request.id}, fh)
+                json.dump({'ts': time.time(), 'task_id': local_id}, fh)
         except Exception:
             task_logger.warning('Could not create lock file; proceeding anyway')
 
@@ -200,10 +200,9 @@ def run_active_training(self, threshold=10):
                         pass
 
 
-@shared_task(bind=True)
-def process_ocr_record(self, record_id):
-    """Process a single OCRRecord in the background (moved from views to Celery task)."""
-    logger = get_task_logger(__name__)
+def process_ocr_record(record_id):
+    """Process a single OCRRecord in the background."""
+    logger = logging.getLogger(__name__)
     try:
         from .models import OCRRecord
         record = OCRRecord.objects.filter(pk=record_id).first()
@@ -215,7 +214,7 @@ def process_ocr_record(self, record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        # default to CPU for inference to avoid persistent GPU allocation and OOMs in shared environments
+        # default to CPU for inference unless OCR_DEVICE env var requests GPU
         device = os.environ.get('OCR_DEVICE', 'cpu')
         engine = ocr_engine.get_ocr_engine(device=device)
         try:
