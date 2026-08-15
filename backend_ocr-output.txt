@@ -5,7 +5,7 @@ PROJECT EXPORT FOR LLMs
 PROJECT INFORMATION:
 --------------------------------------------------
 Project Name: backend_ocr
-Generated On: 2026-08-15 09:12:15 (Asia/Damascus / GMT+03:00)
+Generated On: 2026-08-15 09:23:00 (Asia/Damascus / GMT+03:00)
 Total Files Processed: 82
 Export Tool: Easy Whole Project to Single Text File for LLMs v1.1.0
 Tool Author: Jota / José Guilherme Pandolfi
@@ -115,7 +115,7 @@ PROJECT STRUCTURE
 │   ├── 📄 trainer_state.json (23.06 KB)
 │   └── 📄 training_args.bin (5.58 KB)
 ├── 📄 manage.py (682 B)
-├── 📄 requirements.txt (302 B)
+├── 📄 requirements.txt (5.06 KB)
 ├── 📄 setup.ps1 (3.53 KB)
 ├── 📄 test.png (80.5 KB)
 └── 📄 test.py (162 B)
@@ -4644,35 +4644,158 @@ FILE: requirements.txt
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 302 B
+Size: 5.06 KB
 Extension: .txt
 Language: text
 Location: requirements.txt
 Relative Path: root
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: e545631ce40788e1465191d368f1f50f
-SHA256: 433292d24c522774eccc76974e0f26e23638989219726c1c0318af512e3748d2
-Encoding: UTF-8 (with BOM)
+Modified: 2026-08-15 09:23:00 (Asia/Damascus / GMT+03:00)
+MD5: c8b725f8cfb1c3d9242b938f94843193
+SHA256: 9e9b69964fb360dfc46213b36b4b4faa0e98d7a31744abaf54beae914c5efe9a
+Encoding: UTF-16
 
 FILE CONTENT:
 ----------------------------------------
-﻿arabic_reshaper==3.0.1
-Django==6.1
-djangorestframework==3.17.1
-peft==0.20.0
-Pillow==12.3.0
-qwen_vl_utils==0.0.14
-openpyxl==3.1.5
-python-docx==1.2.0
-reportlab==5.0.0
-torch==2.5.1+cu121
-transformers==5.14.1
-celery==5.3.1
-redis==4.6.0
-django-celery-beat==2.3.0
-prometheus-client==0.16.0
-
+��a m q p = = 5 . 3 . 1  
+ a s e = = 3 . 2 8 . 0  
+ a s g i r e f = = 3 . 1 1 . 1  
+ a s t t o k e n s = = 3 . 0 . 1  
+ b e a u t i f u l s o u p 4 = = 4 . 1 2 . 3  
+ b i l l i a r d = = 4 . 2 . 4  
+ b l a c k = = 2 6 . 1 . 0  
+ b l e a c h = = 6 . 3 . 0  
+ b l i n k e r = = 1 . 9 . 0  
+ c e l e r y = = 5 . 6 . 3  
+ c e r t i f i = = 2 0 2 4 . 2 . 2  
+ c h a r s e t - n o r m a l i z e r = = 3 . 3 . 2  
+ c l i c k = = 8 . 3 . 1  
+ c l i c k - d i d y o u m e a n = = 0 . 3 . 1  
+ c l i c k - p l u g i n s = = 1 . 1 . 1 . 2  
+ c l i c k - r e p l = = 0 . 3 . 0  
+ c o l o r a m a = = 0 . 4 . 6  
+ c o m m = = 0 . 2 . 3  
+ c o n t o u r p y = = 1 . 3 . 3  
+ c y c l e r = = 0 . 1 2 . 1  
+ d e b u g p y = = 1 . 8 . 1 7  
+ d e c o r a t o r = = 5 . 2 . 1  
+ D j a n g o = = 6 . 0 . 5  
+ d j a n g o _ c e l e r y _ r e s u l t s = = 2 . 6 . 0  
+ d j a n g o r e s t f r a m e w o r k = = 3 . 1 7 . 1  
+ d n s p y t h o n = = 2 . 8 . 0  
+ d o c u t i l s = = 0 . 2 2 . 4  
+ e m a i l - v a l i d a t o r = = 1 . 3 . 1  
+ e x e c u t i n g = = 2 . 2 . 1  
+ e x p e c t r a = = 1 . 0 . 5  
+ f i l e l o c k = = 3 . 2 0 . 1  
+ F l a s k = = 2 . 3 . 2  
+ F l a s k - J W T - E x t e n d e d = = 4 . 4 . 4  
+ F l a s k - S Q L A l c h e m y = = 3 . 0 . 4  
+ f o n t t o o l s = = 4 . 6 1 . 1  
+ f s s p e c = = 2 0 2 5 . 1 2 . 0  
+ g r e e n l e t = = 3 . 3 . 0  
+ i d = = 1 . 5 . 0  
+ i d n a = = 3 . 7  
+ i p y k e r n e l = = 7 . 1 . 0  
+ i p y t h o n = = 9 . 7 . 0  
+ i p y t h o n _ p y g m e n t s _ l e x e r s = = 1 . 1 . 1  
+ i t s d a n g e r o u s = = 2 . 2 . 0  
+ j a r a c o . c l a s s e s = = 3 . 4 . 0  
+ j a r a c o . c o n t e x t = = 6 . 1 . 0  
+ j a r a c o . f u n c t o o l s = = 4 . 4 . 0  
+ j e d i = = 0 . 1 9 . 2  
+ J i n j a 2 = = 3 . 1 . 6  
+ j o b l i b = = 1 . 5 . 3  
+ j u p y t e r _ c l i e n t = = 8 . 6 . 3  
+ j u p y t e r _ c o r e = = 5 . 9 . 1  
+ k a g g l e = = 1 . 8 . 3  
+ k a g g l e s d k = = 0 . 1 . 1 5  
+ k e y r i n g = = 2 5 . 7 . 0  
+ k i w i s o l v e r = = 1 . 4 . 9  
+ k o m b u = = 5 . 6 . 2  
+ l i b r t = = 0 . 7 . 8  
+ l x m l = = 5 . 2 . 2  
+ m a r k d o w n - i t - p y = = 4 . 0 . 0  
+ M a r k u p S a f e = = 3 . 0 . 3  
+ m a r s h m a l l o w = = 3 . 2 0 . 1  
+ m a r s h m a l l o w - s q l a l c h e m y = = 0 . 2 9 . 0  
+ m a t p l o t = = 0 . 1 . 9  
+ m a t p l o t l i b = = 3 . 1 0 . 8  
+ m a t p l o t l i b - i n l i n e = = 0 . 2 . 1  
+ m d u r l = = 0 . 1 . 2  
+ m o r e - i t e r t o o l s = = 1 0 . 8 . 0  
+ m p i 4 p y = = 4 . 1 . 2  
+ m p m a t h = = 1 . 3 . 0  
+ m y p y = = 1 . 1 9 . 1  
+ m y p y _ e x t e n s i o n s = = 1 . 1 . 0  
+ n e s t - a s y n c i o = = 1 . 6 . 0  
+ n e t w o r k x = = 3 . 2 . 1  
+ n h 3 = = 0 . 3 . 2  
+ n u m p y = = 1 . 2 6 . 4  
+ p a c k a g i n g = = 2 5 . 0  
+ p a n d a s = = 2 . 2 . 1  
+ p a r s o = = 0 . 8 . 5  
+ p a s s l i b = = 1 . 7 . 4  
+ p a t h s p e c = = 1 . 0 . 4  
+ p i l l o w = = 1 2 . 0 . 0  
+ p l a t f o r m d i r s = = 4 . 5 . 0  
+ p r o m p t _ t o o l k i t = = 3 . 0 . 5 2  
+ p r o t o b u f = = 6 . 3 3 . 4  
+ p s u t i l = = 7 . 1 . 3  
+ p s y c o p g 2 - b i n a r y = = 2 . 9 . 1 2  
+ p u r e _ e v a l = = 0 . 2 . 3  
+ P y g m e n t s = = 2 . 1 9 . 2  
+ P y J W T = = 2 . 1 0 . 1  
+ p y l o c o = = 0 . 0 . 1 3 9  
+ p y p a r s i n g = = 3 . 3 . 2  
+ p y t h o n - d a t e u t i l = = 2 . 9 . 0 . p o s t 0  
+ p y t h o n - d o c x = = 1 . 1 . 2  
+ p y t h o n - d o t e n v = = 1 . 0 . 0  
+ p y t h o n - s l u g i f y = = 8 . 0 . 4  
+ p y t o k e n s = = 0 . 4 . 0  
+ p y t z = = 2 0 2 4 . 1  
+ p y w i n 3 2 - c t y p e s = = 0 . 2 . 3  
+ p y z m q = = 2 7 . 1 . 0  
+ r e a d m e _ r e n d e r e r = = 4 4 . 0  
+ r e d i s = = 7 . 4 . 0  
+ r e q u e s t s = = 2 . 3 1 . 0  
+ r e q u e s t s - t o o l b e l t = = 1 . 0 . 0  
+ r f c 3 9 8 6 = = 2 . 0 . 0  
+ r i c h = = 1 4 . 3 . 1  
+ s c i k i t - l e a r n = = 1 . 8 . 0  
+ s c i p y = = 1 . 1 6 . 3  
+ s e t u p t o o l s = = 8 0 . 9 . 0  
+ S i m p l e W e b S o c k e t S e r v e r = = 0 . 1 . 2  
+ s i x = = 1 . 1 6 . 0  
+ s o u p s i e v e = = 2 . 5  
+ S Q L A l c h e m y = = 2 . 0 . 4 5  
+ s q l p a r s e = = 0 . 5 . 5  
+ s t a c k - d a t a = = 0 . 6 . 3  
+ s y m p y = = 1 . 1 4 . 0  
+ t e x t - u n i d e c o d e = = 1 . 3  
+ t h r e a d p o o l c t l = = 3 . 6 . 0  
+ t o r c h = = 2 . 9 . 1  
+ t o r c h a u d i o = = 2 . 9 . 1  
+ t o r c h v i s i o n = = 0 . 2 4 . 1  
+ t o r n a d o = = 6 . 5 . 2  
+ t q d m = = 4 . 6 7 . 1  
+ t r a i t l e t s = = 5 . 1 4 . 3  
+ t w i n e = = 6 . 2 . 0  
+ t y p e s - r e q u e s t s = = 2 . 3 2 . 4 . 2 0 2 6 0 1 0 7  
+ t y p e s - t q d m = = 4 . 6 7 . 0 . 2 0 2 5 0 8 0 9  
+ t y p i n g = = 3 . 7 . 4 . 3  
+ t y p i n g _ e x t e n s i o n s = = 4 . 1 1 . 0  
+ t z d a t a = = 2 0 2 6 . 2  
+ t z l o c a l = = 5 . 3 . 1  
+ u r l l i b 3 = = 2 . 2 . 1  
+ u s h l e x = = 0 . 9 9 . 1  
+ v i n e = = 5 . 1 . 0  
+ w a i t r e s s = = 3 . 0 . 2  
+ w c w i d t h = = 0 . 2 . 1 4  
+ w e b e n c o d i n g s = = 0 . 5 . 1  
+ w e b s o c k e t - c l i e n t = = 1 . 9 . 0  
+ W e r k z e u g = = 3 . 1 . 5  
+ 
 ================================================================================
 
 
