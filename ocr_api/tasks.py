@@ -222,8 +222,35 @@ def process_ocr_record(record_id):
             device = 'cuda' if torch.cuda.is_available() else 'cpu'
         engine = ocr_engine.get_ocr_engine(device=device)
         try:
-            extracted_text = (engine.predict(record.image.path) or '').strip()
-            logger.info("Full-page OCR text for record_id=%s: '%s'", record.id, extracted_text)
+            raw = engine.predict(record.image.path) or ''
+            # Ensure we have a native str and normalize unicode to NFC to avoid mixed forms
+            try:
+                if isinstance(raw, bytes):
+                    extracted_text = raw.decode('utf-8', errors='replace').strip()
+                else:
+                    extracted_text = str(raw)
+            except Exception:
+                extracted_text = str(raw)
+
+            import unicodedata
+            try:
+                extracted_text = unicodedata.normalize('NFC', extracted_text)
+            except Exception:
+                pass
+
+            # remove C0 control characters except newline and tab
+            cleaned_chars = []
+            for ch in extracted_text:
+                code = ord(ch)
+                if code == 9 or code == 10 or code == 13:
+                    cleaned_chars.append(ch)
+                elif code >= 32:
+                    cleaned_chars.append(ch)
+                else:
+                    cleaned_chars.append(' ')
+            extracted_text = ''.join(cleaned_chars).strip()
+
+            logger.info("OCR text for record_id=%s (repr): %s", record.id, repr(extracted_text[:400]))
         except Exception:
             logger.exception('Full-page OCR failed for record_id=%s', record.id)
             extracted_text = ''
