@@ -3,7 +3,9 @@ import json
 import gc
 import logging
 import os
+import threading
 
+from celery import current_app
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
 from django.http import HttpResponse
@@ -16,6 +18,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.throttling import UserRateThrottle
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
@@ -146,6 +149,31 @@ def run_ocr_background(record_id):
         pass
 
 
+def dispatch_ocr_processing(record_id):
+    """Dispatch OCR processing without blocking the API response."""
+    try:
+        current_app.send_task(
+            'ocr_api.tasks.process_ocr_record',
+            args=[record_id],
+            countdown=1,
+            retry=False,
+        )
+        return
+    except Exception:
+        logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)
+
+    # Celery broker may be unavailable; run local fallback in this daemon thread.
+    try:
+        from .tasks import process_ocr_record
+        process_ocr_record.run(record_id)
+    except Exception as exc:
+        logger.exception('Local OCR fallback failed for record_id=%s', record_id)
+        OCRRecord.objects.filter(pk=record_id).update(
+            status=OCRRecord.STATUS_FAILED,
+            error_message=f'Background OCR dispatch failed: {exc}',
+        )
+
+
 class OCRRecordViewSet(viewsets.ModelViewSet):
     serializer_class = OCRRecordSerializer
     permission_classes = [IsAuthenticated]
@@ -229,9 +257,8 @@ class UserDetailsView(APIView):
 class ProcessOCRView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
-    from rest_framework.throttling import SimpleRateThrottle
 
-    class UploadRateThrottle(SimpleRateThrottle):
+    class UploadRateThrottle(UserRateThrottle):
         scope = 'uploads'
     throttle_classes = [UploadRateThrottle]
 
@@ -244,17 +271,12 @@ class ProcessOCRView(APIView):
         ocr_record.status = OCRRecord.STATUS_PENDING
         ocr_record.save(update_fields=['status'])
         
-        # enqueue background processing via Celery task
-        try:
-            from .tasks import process_ocr_record
-            process_ocr_record.delay(ocr_record.id)
-        except Exception:
-            logger.exception('Failed to enqueue OCR background task; falling back to synchronous processing')
-            # fallback synchronous processing via Celery task apply
-            try:
-                process_ocr_record.apply(args=(ocr_record.id,))
-            except Exception:
-                logger.exception('Fallback synchronous OCR processing failed')
+        # Dispatch in a daemon thread so API responds immediately even if broker is slow.
+        threading.Thread(
+            target=dispatch_ocr_processing,
+            args=(ocr_record.id,),
+            daemon=True,
+        ).start()
 
         return Response(
             {

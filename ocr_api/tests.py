@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+import io
+from PIL import Image
 from rest_framework.test import APITestCase
+from unittest.mock import patch
 
 from ocr_api.models import OCRRecord
 
@@ -167,6 +170,65 @@ class OCRHistorySearchEndpointTests(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn('Please provide a search query', response.data['detail'])
+
+
+class ProcessOCREndpointTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='ocruser',
+            email='ocruser@example.com',
+            password='StrongPass123!',
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_missing_image_returns_400_not_500(self):
+        response = self.client.post(reverse('ocr_api:process-ocr'), data={}, format='multipart')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('image', response.data)
+
+    @patch('ocr_api.views.current_app.send_task')
+    def test_valid_image_is_accepted(self, mock_send_task):
+        buffer = io.BytesIO()
+        Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
+        image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                reverse('ocr_api:process-ocr'),
+                data={'image': image},
+                format='multipart',
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
+        self.assertIn('id', response.data)
+        mock_send_task.assert_called_once_with(
+            'ocr_api.tasks.process_ocr_record',
+            args=[response.data['id']],
+            countdown=1,
+        )
+
+    @patch('ocr_api.views.current_app.send_task', side_effect=RuntimeError('broker down'))
+    def test_queue_failure_still_returns_pending_immediately(self, mock_send_task):
+        buffer = io.BytesIO()
+        Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
+        image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
+
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                reverse('ocr_api:process-ocr'),
+                data={'image': image},
+                format='multipart',
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
+        self.assertIn('id', response.data)
+        mock_send_task.assert_called_once_with(
+            'ocr_api.tasks.process_ocr_record',
+            args=[response.data['id']],
+            countdown=1,
+        )
 
 
 class MetricsEndpointTests(APITestCase):
