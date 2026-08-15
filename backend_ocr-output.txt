@@ -5,8 +5,8 @@ PROJECT EXPORT FOR LLMs
 PROJECT INFORMATION:
 --------------------------------------------------
 Project Name: backend_ocr
-Generated On: 2026-08-15 09:23:00 (Asia/Damascus / GMT+03:00)
-Total Files Processed: 82
+Generated On: 2026-08-15 13:08:44 (Asia/Damascus / GMT+03:00)
+Total Files Processed: 88
 Export Tool: Easy Whole Project to Single Text File for LLMs v1.1.0
 Tool Author: Jota / José Guilherme Pandolfi
 
@@ -26,7 +26,7 @@ PROJECT STRUCTURE
 │   ├── 📄 __init__.py (68 B)
 │   ├── 📄 asgi.py (401 B)
 │   ├── 📄 celery.py (394 B)
-│   ├── 📄 settings.py (4.7 KB)
+│   ├── 📄 settings.py (5.02 KB)
 │   ├── 📄 urls.py (1.11 KB)
 │   └── 📄 wsgi.py (401 B)
 ├── 📁 media/
@@ -82,20 +82,21 @@ PROJECT STRUCTURE
 │   │   ├── 📄 0003_ocrrecord_error_message_alter_ocrrecord_status.py (870 B)
 │   │   ├── 📄 0004_ocrrecord_document_type.py (572 B)
 │   │   ├── 📄 0005_ocrrecord_file_name_ocrrecord_file_size_and_more.py (2.3 KB)
-│   │   └── 📄 0006_ocrrecord_updated_at.py (444 B)
+│   │   ├── 📄 0006_ocrrecord_updated_at.py (444 B)
+│   │   └── 📄 0007_editedocrexample.py (1.3 KB)
 │   ├── 📄 __init__.py
 │   ├── 📄 admin.py (143 B)
 │   ├── 📄 apps.py (219 B)
 │   ├── 📄 auth_serializers.py (1.3 KB)
-│   ├── 📄 auth_views.py (1.97 KB)
+│   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
 │   ├── 📄 ocr_engine.py (16.09 KB)
-│   ├── 📄 serializers.py (5.74 KB)
+│   ├── 📄 serializers.py (6.71 KB)
 │   ├── 📄 tasks.py (10.49 KB)
-│   ├── 📄 tests.py (63 B)
-│   ├── 📄 urls.py (1.56 KB)
-│   └── 📄 views.py (16.81 KB)
+│   ├── 📄 tests.py (10.04 KB)
+│   ├── 📄 urls.py (1.86 KB)
+│   └── 📄 views.py (21.32 KB)
 ├── 📁 scripts/
 │   ├── 📁 output/
 │   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
@@ -114,25 +115,30 @@ PROJECT STRUCTURE
 │   ├── 📄 tokenizer.json (11.62 MB)
 │   ├── 📄 trainer_state.json (23.06 KB)
 │   └── 📄 training_args.bin (5.58 KB)
+├── 📄 celerybeat-schedule.bak (91 B)
+├── 📄 celerybeat-schedule.dat (1.5 KB)
+├── 📄 celerybeat-schedule.dir (91 B)
 ├── 📄 manage.py (682 B)
 ├── 📄 requirements.txt (5.06 KB)
 ├── 📄 setup.ps1 (3.53 KB)
 ├── 📄 test.png (80.5 KB)
-└── 📄 test.py (162 B)
+├── 📄 test.py (162 B)
+├── 📄 tmp_signup_check.py (391 B)
+└── 📄 tmp_signup_debug.py (391 B)
 
 ================================================================================
 PROJECT STATISTICS
 ================================================================================
-Total Files: 82
+Total Files: 88
 Total Directories: 15
-Text Files: 39
-Binary Files: 43
-Total Size: 65.58 MB
+Text Files: 42
+Binary Files: 46
+Total Size: 65.6 MB
 
 FILE TYPES DISTRIBUTION:
 ------------------------------
 .jpg            : 36
-.py             : 31
+.py             : 34
 .json           : 5
 .pt             : 2
 .safetensors    : 1
@@ -140,6 +146,9 @@ FILE TYPES DISTRIBUTION:
 .md             : 1
 .pth            : 1
 .bin            : 1
+.bak            : 1
+.dat            : 1
+.dir            : 1
 .txt            : 1
 .ps1            : 1
 .png            : 1
@@ -259,15 +268,15 @@ FILE: core/settings.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 4.7 KB
+Size: 5.02 KB
 Extension: .py
 Language: python
 Location: core/settings.py
 Relative Path: core
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: e4d26901e354cf773f252361a7887987
-SHA256: 8ec79cfe025f9249e175bd336a23c4f55868d387597c862eddc711daad2a2f97
+Modified: 2026-08-15 11:26:14 (Asia/Damascus / GMT+03:00)
+MD5: 998a2bb9044833073783926d583055f5
+SHA256: 07b12f17b21593285b0839a2eda7483501b156bebd8d02857044b39d0acb8b62
 Encoding: ASCII
 
 FILE CONTENT:
@@ -300,7 +309,7 @@ SECRET_KEY = 'django-insecure-&hry@zeo#x0cb^htybs8uomsk9op93bk^2&w-!cw!%!x)-h#i5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '[::1]']
 
 
 # Application definition
@@ -409,14 +418,19 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'signup': '5/hour',
+        'signup': '50/hour',
         'uploads': '30/day',
     },
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    # Keep admin sessions alive for active use without forcing frequent re-login.
+    # Refresh-token rotation means each successful refresh extends the session window.
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
 }
 
 
@@ -471,7 +485,7 @@ Language: python
 Location: core/urls.py
 Relative Path: core
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+Modified: 2026-08-15 10:36:58 (Asia/Damascus / GMT+03:00)
 MD5: 70f092823ef3329b9088807176108342
 SHA256: 9d452305df6187f82c65475961c2529832568cb3001b98d8cd70b5f6f65b18f5
 Encoding: ASCII
@@ -997,6 +1011,60 @@ class Migration(migrations.Migration):
 
 
 ================================================================================
+FILE: ocr_api/migrations/0007_editedocrexample.py
+================================================================================
+
+FILE INFORMATION:
+----------------------------------------
+Size: 1.3 KB
+Extension: .py
+Language: python
+Location: ocr_api/migrations/0007_editedocrexample.py
+Relative Path: ocr_api/migrations
+Created: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+Modified: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+MD5: ce54b43f7bf9636057495fc7b71285a6
+SHA256: ce3050ef3b37b31349c6cdf398562d3f5d030f94cd2f9d46454937a46eca39ad
+Encoding: ASCII
+
+FILE CONTENT:
+----------------------------------------
+# Generated by Django 5.2.16 on 2026-08-15 09:17
+
+import django.db.models.deletion
+from django.conf import settings
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0006_ocrrecord_updated_at'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='EditedOCRExample',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('edited_text', models.TextField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('used', models.BooleanField(default=False)),
+                ('used_at', models.DateTimeField(blank=True, null=True)),
+                ('ocr_record', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='edits', to='ocr_api.ocrrecord')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='edited_examples', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'indexes': [models.Index(fields=['used', 'created_at'], name='ocr_api_edi_used_e6caa4_idx')],
+            },
+        ),
+    ]
+
+================================================================================
+
+
+================================================================================
 FILE: ocr_api/__init__.py
 ================================================================================
 
@@ -1138,21 +1206,21 @@ FILE: ocr_api/auth_views.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 1.97 KB
+Size: 2.4 KB
 Extension: .py
 Language: python
 Location: ocr_api/auth_views.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: e42608ef98a8132d6bfc5dd86501407d
-SHA256: 7715648049209aff37003c5a5b8c7ae70c87da574155dbd6009515b13d4a65fa
+Modified: 2026-08-15 11:26:14 (Asia/Damascus / GMT+03:00)
+MD5: 26ea6718019162dd7d5e3b11d338839e
+SHA256: a1271eae5d5f5f410f85142cfd4cfaef03dbb52d01febe15c80f5b9e5158daed
 Encoding: ASCII
 
 FILE CONTENT:
 ----------------------------------------
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, BasePermission
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -1161,10 +1229,18 @@ from rest_framework.throttling import SimpleRateThrottle
 from .auth_serializers import SignupSerializer
 
 
+class IsAdminUser(BasePermission):
+    message = 'Access denied: admin privileges required.'
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(user and user.is_authenticated and (user.is_staff or user.is_superuser))
+
+
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
     permission_classes = [AllowAny]
-    throttle_classes = []
+    throttle_classes = [SimpleRateThrottle]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -1185,7 +1261,13 @@ class SignupView(generics.CreateAPIView):
 class SignupRateThrottle(SimpleRateThrottle):
     scope = 'signup'
 
-# attach the throttle class to the view
+    def get_cache_key(self, request, view):
+        return self.cache_format % {
+            'scope': self.scope,
+            'ident': self.get_ident(request),
+        }
+
+
 SignupView.throttle_classes = [SignupRateThrottle]
 
 
@@ -2129,15 +2211,15 @@ FILE: ocr_api/serializers.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 5.74 KB
+Size: 6.71 KB
 Extension: .py
 Language: python
 Location: ocr_api/serializers.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: f1e1b5a32a003ba843aa9c4c7a44edf4
-SHA256: 1825b5dcd2547602ce540cc206cf58c84bebcbaae041b07369de2f008cd27f1e
+Modified: 2026-08-15 11:26:14 (Asia/Damascus / GMT+03:00)
+MD5: c9fcfd4c55d9ce30481e5e8ebd7d1efa
+SHA256: 7a96a80a233d4a1d5a0de66f50f4d8f4df893d959a9d8685a81dc48008def0c0
 Encoding: ASCII
 
 FILE CONTENT:
@@ -2244,6 +2326,35 @@ class StorageInfoSerializer(serializers.Serializer):
             'megabytes_used': round(bytes_used / (1024 * 1024), 4),
             'gigabytes_used': round(bytes_used / (1024 * 1024 * 1024), 4),
         }
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = __import__('django.contrib.auth').contrib.auth.get_user_model()
+        fields = ('id', 'username', 'email')
+
+
+class UploadedFileListSerializer(serializers.ModelSerializer):
+    uploader_name = serializers.CharField(source='user.username', read_only=True)
+    uploader_email = serializers.EmailField(source='user.email', read_only=True)
+    uploaded_at = serializers.DateTimeField(source='created_at', read_only=True)
+    file_size = serializers.IntegerField(read_only=True)
+    file_name = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = OCRRecord
+        fields = (
+            'id',
+            'file_name',
+            'uploader_name',
+            'uploader_email',
+            'uploaded_at',
+            'status',
+            'file_size',
+            'document_type',
+            'image',
+        )
 
 
 class UserDetailSerializer(serializers.Serializer):
@@ -2588,22 +2699,282 @@ FILE: ocr_api/tests.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 63 B
+Size: 10.04 KB
 Extension: .py
 Language: python
 Location: ocr_api/tests.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-MD5: e08f0582500f6562bf0a931ef9503b39
-SHA256: dae0da7efdcdb3a7fb572d5e914b60631099122d4a4727ac6434c016161c5fe1
+Modified: 2026-08-15 12:55:24 (Asia/Damascus / GMT+03:00)
+MD5: 830753ef80b4ba25934c79f024ca2153
+SHA256: 2cbc2feb9f8e4806a0b203c00d048fe984b298b8428266d47c47c634b8c5f2b3
 Encoding: ASCII
 
 FILE CONTENT:
 ----------------------------------------
-from django.test import TestCase
+from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+import io
+from PIL import Image
+from rest_framework.test import APITestCase
+from unittest.mock import patch
 
-# Create your tests here.
+from ocr_api.models import OCRRecord
+
+User = get_user_model()
+
+
+class UserListEndpointTests(APITestCase):
+    def test_admin_can_list_users_with_username_and_email(self):
+        User.objects.create_user(
+            username='adminuser',
+            email='admin@example.com',
+            password='StrongPass123!',
+            is_staff=True,
+            is_superuser=True,
+        )
+        User.objects.create_user(
+            username='alice',
+            email='alice@example.com',
+            password='StrongPass123!',
+        )
+        User.objects.create_user(
+            username='bob',
+            email='bob@example.com',
+            password='StrongPass123!',
+        )
+
+        self.client.force_authenticate(user=User.objects.get(username='adminuser'))
+        response = self.client.get(reverse('ocr_api:user-list'))
+
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertIsInstance(response.data, list)
+        self.assertTrue(any(item['username'] == 'alice' and item['email'] == 'alice@example.com' for item in response.data))
+        self.assertTrue(any(item['username'] == 'bob' and item['email'] == 'bob@example.com' for item in response.data))
+
+    def test_non_admin_cannot_list_users(self):
+        User.objects.create_user(
+            username='normaluser',
+            email='normal@example.com',
+            password='StrongPass123!',
+        )
+
+        self.client.force_authenticate(user=User.objects.get(username='normaluser'))
+        response = self.client.get(reverse('ocr_api:user-list'))
+
+        self.assertEqual(response.status_code, 403, response.data)
+        self.assertEqual(response.data['detail'], 'Forbidden')
+
+
+class UploadedFilesEndpointTests(APITestCase):
+    def test_admin_can_list_uploaded_files_with_uploader_and_time(self):
+        admin = User.objects.create_user(
+            username='adminfiles',
+            email='adminfiles@example.com',
+            password='StrongPass123!',
+            is_staff=True,
+            is_superuser=True,
+        )
+        uploader = User.objects.create_user(
+            username='uploader1',
+            email='uploader1@example.com',
+            password='StrongPass123!',
+        )
+        OCRRecord.objects.create(
+            user=uploader,
+            image=SimpleUploadedFile('sample.png', b'fake-image-data', content_type='image/png'),
+            file_name='sample.png',
+            file_size=123,
+            status=OCRRecord.STATUS_COMPLETED,
+            extracted_text='hello',
+        )
+
+        self.client.force_authenticate(user=admin)
+        response = self.client.get(reverse('ocr_api:uploaded-files'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(any(
+            item['uploader_name'] == 'uploader1' and item['uploader_email'] == 'uploader1@example.com' and item['file_name'] == 'sample.png'
+            for item in response.data
+        ))
+
+    def test_non_admin_cannot_list_uploaded_files(self):
+        user = User.objects.create_user(
+            username='regularuser2',
+            email='regular2@example.com',
+            password='StrongPass123!',
+        )
+        self.client.force_authenticate(user=user)
+
+        response = self.client.get(reverse('ocr_api:uploaded-files'))
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], 'Forbidden')
+
+
+class OCRHistorySearchEndpointTests(APITestCase):
+    def test_user_can_search_own_history_by_ocr_output_text(self):
+        user = User.objects.create_user(
+            username='historyuser',
+            email='history@example.com',
+            password='StrongPass123!',
+        )
+        other_user = User.objects.create_user(
+            username='otherhistory',
+            email='otherhistory@example.com',
+            password='StrongPass123!',
+        )
+
+        OCRRecord.objects.create(
+            user=user,
+            image=SimpleUploadedFile('invoice.png', b'img-1', content_type='image/png'),
+            file_name='invoice_2026.png',
+            file_size=10,
+            status=OCRRecord.STATUS_COMPLETED,
+            extracted_text='Client name: Ahmed Hassan',
+        )
+        OCRRecord.objects.create(
+            user=other_user,
+            image=SimpleUploadedFile('secret.png', b'img-2', content_type='image/png'),
+            file_name='secret_notes.png',
+            file_size=12,
+            status=OCRRecord.STATUS_COMPLETED,
+            extracted_text='Ahmed private record',
+        )
+
+        self.client.force_authenticate(user=user)
+        response = self.client.get(reverse('ocr_api:ocr-history-search'), {'q': 'Ahmed'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['image']['name'], 'invoice.png')
+
+    def test_user_can_search_own_history_by_file_name(self):
+        user = User.objects.create_user(
+            username='historyuser2',
+            email='history2@example.com',
+            password='StrongPass123!',
+        )
+        OCRRecord.objects.create(
+            user=user,
+            image=SimpleUploadedFile('contract.png', b'img-3', content_type='image/png'),
+            file_name='employment_contract.png',
+            file_size=20,
+            status=OCRRecord.STATUS_COMPLETED,
+            extracted_text='Signed contract details',
+        )
+
+        self.client.force_authenticate(user=user)
+        response = self.client.get(reverse('ocr_api:ocr-history-search'), {'q': 'contract'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['image']['name'], 'contract.png')
+
+    def test_search_requires_query_parameter(self):
+        user = User.objects.create_user(
+            username='historyuser3',
+            email='history3@example.com',
+            password='StrongPass123!',
+        )
+        self.client.force_authenticate(user=user)
+
+        response = self.client.get(reverse('ocr_api:ocr-history-search'))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('Please provide a search query', response.data['detail'])
+
+
+class ProcessOCREndpointTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='ocruser',
+            email='ocruser@example.com',
+            password='StrongPass123!',
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_missing_image_returns_400_not_500(self):
+        response = self.client.post(reverse('ocr_api:process-ocr'), data={}, format='multipart')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('image', response.data)
+
+    @patch('ocr_api.views.current_app.send_task')
+    def test_valid_image_is_accepted(self, mock_send_task):
+        buffer = io.BytesIO()
+        Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
+        image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                reverse('ocr_api:process-ocr'),
+                data={'image': image},
+                format='multipart',
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
+        self.assertIn('id', response.data)
+        mock_send_task.assert_called_once_with(
+            'ocr_api.tasks.process_ocr_record',
+            args=[response.data['id']],
+            countdown=1,
+        )
+
+    @patch('ocr_api.views.current_app.send_task', side_effect=RuntimeError('broker down'))
+    def test_queue_failure_still_returns_pending_immediately(self, mock_send_task):
+        buffer = io.BytesIO()
+        Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
+        image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
+
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                reverse('ocr_api:process-ocr'),
+                data={'image': image},
+                format='multipart',
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
+        self.assertIn('id', response.data)
+        mock_send_task.assert_called_once_with(
+            'ocr_api.tasks.process_ocr_record',
+            args=[response.data['id']],
+            countdown=1,
+        )
+
+
+class MetricsEndpointTests(APITestCase):
+    def test_admin_can_access_metrics_and_sees_extra_summary(self):
+        admin = User.objects.create_user(
+            username='adminmetrics',
+            email='adminmetrics@example.com',
+            password='StrongPass123!',
+            is_staff=True,
+            is_superuser=True,
+        )
+        self.client.force_authenticate(user=admin)
+
+        response = self.client.get('/metrics/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('ocr_total_users', response.content.decode())
+        self.assertIn('ocr_total_records', response.content.decode())
+        self.assertIn('ocr_total_completed', response.content.decode())
+
+    def test_non_admin_cannot_access_metrics(self):
+        user = User.objects.create_user(
+            username='regularuser',
+            email='regular@example.com',
+            password='StrongPass123!',
+        )
+        self.client.force_authenticate(user=user)
+
+        response = self.client.get('/metrics/')
+
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('Access denied: admin privileges required.', str(response.data))
 
 ================================================================================
 
@@ -2614,15 +2985,15 @@ FILE: ocr_api/urls.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 1.56 KB
+Size: 1.86 KB
 Extension: .py
 Language: python
 Location: ocr_api/urls.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: bb0f778b1bb71bab4ae5102b3d369a7f
-SHA256: 4d1a7dcca36125191d5e2e5d3814b8e99c80ea8042c10bc28e7d7c7a736c0a4b
+Modified: 2026-08-15 11:26:14 (Asia/Damascus / GMT+03:00)
+MD5: 098d85f91350c76dff24ff18348ddb1f
+SHA256: 8dfee750151237fafaa292e1be1a767be928f63cada7ad132ef11600acb60dd8
 Encoding: ASCII
 
 FILE CONTENT:
@@ -2635,11 +3006,14 @@ from .exporters import OCRExportDocxView, OCRExportPdfView, OCRExportXlsxView
 from .views import (
     OCRDownloadView,
     OCRHistoryView,
+    OCRHistorySearchView,
     OCRRecordViewSet,
     OCRStatusView,
     ProcessOCRView,
     StorageInfoView,
+    UploadedFilesView,
     UserDetailsView,
+    UserListView,
 )
 
 app_name = 'ocr_api'
@@ -2652,11 +3026,14 @@ urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='auth-login'),
     path('auth/logout/', LogoutView.as_view(), name='auth-logout'),
     path('storage-info/', StorageInfoView.as_view(), name='storage-info'),
+    path('users/', UserListView.as_view(), name='user-list'),
+    path('uploaded-files/', UploadedFilesView.as_view(), name='uploaded-files'),
     path('user-details/', UserDetailsView.as_view(), name='user-details'),
     path('user-details/<int:user_id>/', UserDetailsView.as_view(), name='user-details-admin'),
     path('process-ocr/', ProcessOCRView.as_view(), name='process-ocr'),
     path('ocr-status/<int:pk>/', OCRStatusView.as_view(), name='ocr-status'),
     path('ocr-history/', OCRHistoryView.as_view(), name='ocr-history'),
+    path('ocr-history/search/', OCRHistorySearchView.as_view(), name='ocr-history-search'),
     path('download-ocr/<int:pk>/', OCRDownloadView.as_view(), name='ocr-download'),
     path('export-ocr/<int:pk>/pdf/', OCRExportPdfView.as_view(), name='export-ocr-pdf'),
     path('export-ocr/<int:pk>/docx/', OCRExportDocxView.as_view(), name='export-ocr-docx'),
@@ -2672,15 +3049,15 @@ FILE: ocr_api/views.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 16.81 KB
+Size: 21.32 KB
 Extension: .py
 Language: python
 Location: ocr_api/views.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: 2ad605c4ec80e6f3d5a457a079d7075b
-SHA256: e0d226e3f5c683ed8aba92b33b3bf35f641161f14837a17d66b4b8627ce37602
+Modified: 2026-08-15 13:08:44 (Asia/Damascus / GMT+03:00)
+MD5: 8c9939d329cde787ee140716947fe35d
+SHA256: 2890383f9807e8eb71791ea1d9c8e45144e7d657e941d1b01bcaa193d7ef22bb
 Encoding: ASCII
 
 FILE CONTENT:
@@ -2690,8 +3067,11 @@ import json
 import gc
 import logging
 import os
+import threading
 
+from celery import current_app
 from django.contrib.auth.models import User
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from PIL import Image
@@ -2702,14 +3082,16 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.throttling import UserRateThrottle
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+from .auth_views import IsAdminUser
 from .models import OCRRecord, UserProfile, EditedOCRExample
 from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
-from .serializers import UserDetailSerializer
+from .serializers import UserDetailSerializer, UserListSerializer, UploadedFileListSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
@@ -2831,6 +3213,31 @@ def run_ocr_background(record_id):
         pass
 
 
+def dispatch_ocr_processing(record_id):
+    """Dispatch OCR processing without blocking the API response."""
+    try:
+        current_app.send_task(
+            'ocr_api.tasks.process_ocr_record',
+            args=[record_id],
+            countdown=1,
+            retry=False,
+        )
+        return
+    except Exception:
+        logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)
+
+    # Celery broker may be unavailable; run local fallback in this daemon thread.
+    try:
+        from .tasks import process_ocr_record
+        process_ocr_record.run(record_id)
+    except Exception as exc:
+        logger.exception('Local OCR fallback failed for record_id=%s', record_id)
+        OCRRecord.objects.filter(pk=record_id).update(
+            status=OCRRecord.STATUS_FAILED,
+            error_message=f'Background OCR dispatch failed: {exc}',
+        )
+
+
 class OCRRecordViewSet(viewsets.ModelViewSet):
     serializer_class = OCRRecordSerializer
     permission_classes = [IsAuthenticated]
@@ -2868,6 +3275,30 @@ class StorageInfoView(APIView):
         return Response(payload, status=status.HTTP_200_OK)
 
 
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        users = User.objects.order_by('username')
+        serializer = UserListSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UploadedFilesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        uploads = OCRRecord.objects.select_related('user').order_by('-created_at')
+        serializer = UploadedFileListSerializer(uploads, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class UserDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -2890,9 +3321,8 @@ class UserDetailsView(APIView):
 class ProcessOCRView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
-    from rest_framework.throttling import SimpleRateThrottle
 
-    class UploadRateThrottle(SimpleRateThrottle):
+    class UploadRateThrottle(UserRateThrottle):
         scope = 'uploads'
     throttle_classes = [UploadRateThrottle]
 
@@ -2905,17 +3335,12 @@ class ProcessOCRView(APIView):
         ocr_record.status = OCRRecord.STATUS_PENDING
         ocr_record.save(update_fields=['status'])
         
-        # enqueue background processing via Celery task
-        try:
-            from .tasks import process_ocr_record
-            process_ocr_record.delay(ocr_record.id)
-        except Exception:
-            logger.exception('Failed to enqueue OCR background task; falling back to synchronous processing')
-            # fallback synchronous processing via Celery task apply
-            try:
-                process_ocr_record.apply(args=(ocr_record.id,))
-            except Exception:
-                logger.exception('Fallback synchronous OCR processing failed')
+        # Dispatch in a daemon thread so API responds immediately even if broker is slow.
+        threading.Thread(
+            target=dispatch_ocr_processing,
+            args=(ocr_record.id,),
+            daemon=True,
+        ).start()
 
         return Response(
             {
@@ -2985,6 +3410,33 @@ class OCRHistoryView(APIView):
         return Response(payload, status=status.HTTP_200_OK)
 
 
+class OCRHistorySearchView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        query = (request.query_params.get('q') or request.query_params.get('query') or '').strip()
+        if not query:
+            return Response(
+                {'detail': "Please provide a search query using 'q' parameter."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        records = (
+            get_accessible_ocr_queryset(request.user)
+            .filter(
+                Q(file_name__icontains=query)
+                | Q(extracted_text__icontains=query)
+                | Q(status__icontains=query)
+                | Q(document_type__icontains=query)
+                | Q(error_message__icontains=query)
+            )
+            .order_by('-created_at')
+        )
+
+        payload = [serialize_ocr_record_response(record, request) for record in records]
+        return Response({'query': query, 'count': len(payload), 'results': payload}, status=status.HTTP_200_OK)
+
+
 class OCRDownloadView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -3009,9 +3461,11 @@ class OCRDownloadView(APIView):
 
         if output_format == 'json':
             payload = {'text': ocr_record.extracted_text or ''}
+            # Ensure response is UTF-8 and contains proper charset for clients like Postman
+            body = json.dumps(payload, ensure_ascii=False, indent=2).encode('utf-8')
             response = HttpResponse(
-                json.dumps(payload, ensure_ascii=False, indent=2),
-                content_type='application/json',
+                body,
+                content_type='application/json; charset=utf-8',
             )
             response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.json"'
             return response
@@ -3111,9 +3565,8 @@ class OCRDownloadView(APIView):
 
 
 class MetricsView(APIView):
-    # expose Prometheus metrics; no auth to allow monitoring systems to scrape
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -3121,8 +3574,39 @@ class MetricsView(APIView):
         except Exception:
             return Response({'detail': 'prometheus client not available'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-        data = generate_latest()
-        return HttpResponse(data, content_type=CONTENT_TYPE_LATEST)
+        base_metrics = generate_latest()
+        base_text = base_metrics.decode('utf-8') if isinstance(base_metrics, (bytes, bytearray)) else str(base_metrics)
+
+        total_users = User.objects.count()
+        total_records = OCRRecord.objects.count()
+        total_completed = OCRRecord.objects.filter(status=OCRRecord.STATUS_COMPLETED).count()
+        total_pending = OCRRecord.objects.filter(status=OCRRecord.STATUS_PENDING).count()
+        total_failed = OCRRecord.objects.filter(status=OCRRecord.STATUS_FAILED).count()
+        total_storage_bytes = UserProfile.objects.aggregate(total=Sum('total_storage_used'))['total'] or 0
+
+        summary_metrics = "\n".join([
+            "# HELP ocr_total_users Total registered users",
+            "# TYPE ocr_total_users gauge",
+            f"ocr_total_users {total_users}",
+            "# HELP ocr_total_records Total OCR records",
+            "# TYPE ocr_total_records gauge",
+            f"ocr_total_records {total_records}",
+            "# HELP ocr_total_completed Completed OCR records",
+            "# TYPE ocr_total_completed gauge",
+            f"ocr_total_completed {total_completed}",
+            "# HELP ocr_total_pending Pending OCR records",
+            "# TYPE ocr_total_pending gauge",
+            f"ocr_total_pending {total_pending}",
+            "# HELP ocr_total_failed Failed OCR records",
+            "# TYPE ocr_total_failed gauge",
+            f"ocr_total_failed {total_failed}",
+            "# HELP ocr_total_storage_bytes Total storage used across all users",
+            "# TYPE ocr_total_storage_bytes gauge",
+            f"ocr_total_storage_bytes {total_storage_bytes}",
+        ])
+
+        payload = f"{base_text.rstrip()}\n{summary_metrics}\n"
+        return HttpResponse(payload, content_type=CONTENT_TYPE_LATEST)
 
 ================================================================================
 
@@ -4947,6 +5431,73 @@ print("Device Name:", torch.cuda.get_device_name(0) if torch.cuda.is_available()
 
 
 ================================================================================
+FILE: tmp_signup_check.py
+================================================================================
+
+FILE INFORMATION:
+----------------------------------------
+Size: 391 B
+Extension: .py
+Language: python
+Location: tmp_signup_check.py
+Relative Path: root
+Created: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+Modified: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+MD5: 4361cf4604f0e9a602d9324a2627b971
+SHA256: b4ebb1107b0afcddf22e78545e023a5986f88073ee07e8e592aec755523947fa
+Encoding: UTF-8 (with BOM)
+
+FILE CONTENT:
+----------------------------------------
+﻿import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
+import django
+django.setup()
+from django.test import Client
+c = Client()
+r = c.post('/api/auth/signup/', {'username':'newuser','email':'newuser@example.com','password':'StrongPass123!','password_confirm':'StrongPass123!'}, content_type='application/json')
+print('status=', r.status_code)
+print(r.content.decode())
+
+================================================================================
+
+
+================================================================================
+FILE: tmp_signup_debug.py
+================================================================================
+
+FILE INFORMATION:
+----------------------------------------
+Size: 391 B
+Extension: .py
+Language: python
+Location: tmp_signup_debug.py
+Relative Path: root
+Created: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+Modified: 2026-08-15 10:14:18 (Asia/Damascus / GMT+03:00)
+MD5: 4361cf4604f0e9a602d9324a2627b971
+SHA256: b4ebb1107b0afcddf22e78545e023a5986f88073ee07e8e592aec755523947fa
+Encoding: UTF-8 (with BOM)
+
+FILE CONTENT:
+----------------------------------------
+﻿import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
+import django
+django.setup()
+from django.test import Client
+c = Client()
+r = c.post('/api/auth/signup/', {'username':'newuser','email':'newuser@example.com','password':'StrongPass123!','password_confirm':'StrongPass123!'}, content_type='application/json')
+print('status=', r.status_code)
+print(r.content.decode())
+
+================================================================================
+
+
+================================================================================
 BINARY/EXCLUDED FILES (not included in text content)
 ================================================================================
+- celerybeat-schedule.bak
+- celerybeat-schedule.dat
+- celerybeat-schedule.dir
 - test.png
