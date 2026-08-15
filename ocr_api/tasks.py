@@ -67,7 +67,7 @@ def run_active_training(threshold=10):
     if not use_redis_lock:
         if os.path.exists(lock_path):
             try:
-                with open(lock_path, 'r') as fh:
+                with open(lock_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
                 ts = data.get('ts')
                 if ts and (time.time() - ts) < 6 * 3600:
@@ -77,7 +77,7 @@ def run_active_training(threshold=10):
                 pass
         try:
             local_id = f'local-{int(time.time())}-{os.getpid()}'
-            with open(lock_path, 'w') as fh:
+            with open(lock_path, 'w', encoding='utf-8') as fh:
                 json.dump({'ts': time.time(), 'task_id': local_id}, fh)
         except Exception:
             task_logger.warning('Could not create lock file; proceeding anyway')

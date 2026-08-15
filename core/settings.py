@@ -140,6 +140,13 @@ REST_FRAMEWORK = {
     },
 }
 
+# Ensure UTF-8 is used throughout responses and file handling
+DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET = 'utf-8'
+
+# Explicitly set JSON renderer to avoid custom renderers altering encoding
+REST_FRAMEWORK.setdefault('DEFAULT_RENDERER_CLASSES', ['rest_framework.renderers.JSONRenderer'])
+
 SIMPLE_JWT = {
     # Keep admin sessions alive for active use without forcing frequent re-login.
     # Refresh-token rotation means each successful refresh extends the session window.

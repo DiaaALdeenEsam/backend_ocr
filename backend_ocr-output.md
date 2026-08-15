@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 14:40:31 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 14:54:45 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 87
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -23,7 +23,7 @@
 ├── 📁 core/
 │   ├── 📄 __init__.py (63 B)
 │   ├── 📄 asgi.py (401 B)
-│   ├── 📄 settings.py (4.73 KB)
+│   ├── 📄 settings.py (5.02 KB)
 │   ├── 📄 urls.py (1.11 KB)
 │   └── 📄 wsgi.py (401 B)
 ├── 📁 media/
@@ -88,12 +88,12 @@
 │   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (19.05 KB)
+│   ├── 📄 ocr_engine.py (21.19 KB)
 │   ├── 📄 serializers.py (6.71 KB)
-│   ├── 📄 tasks.py (11.66 KB)
+│   ├── 📄 tasks.py (11.69 KB)
 │   ├── 📄 tests.py (9.82 KB)
-│   ├── 📄 urls.py (1.86 KB)
-│   └── 📄 views.py (23.72 KB)
+│   ├── 📄 urls.py (1.97 KB)
+│   └── 📄 views.py (25.22 KB)
 ├── 📁 scripts/
 │   ├── 📁 output/
 │   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
@@ -268,15 +268,15 @@ application = get_asgi_application()
 ### <a id="📄-core-settings-py"></a>📄 `core/settings.py`
 
 **File Info:**
-- **Size**: 4.73 KB
+- **Size**: 5.02 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `core/settings.py`
 - **Relative Path**: `core`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 14:29:10 (Asia/Damascus / GMT+03:00)
-- **MD5**: `37bb3ed3bc4c203ba9fb95b977722bc1`
-- **SHA256**: `999dcd75e6c391e528a4b7ea8d0cc3123718deec96945b45738b6c1185649af6`
+- **Modified**: 2026-08-15 14:53:18 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d873c7941e9987bd53fe22c5fd34352e`
+- **SHA256**: `a14e09bd8febe600c3bd9213fe1cb4780ed4a6b0b90530d2d0aaf0b93e257003`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -423,6 +423,13 @@ REST_FRAMEWORK = {
         'uploads': '30/day',
     },
 }
+
+# Ensure UTF-8 is used throughout responses and file handling
+DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET = 'utf-8'
+
+# Explicitly set JSON renderer to avoid custom renderers altering encoding
+REST_FRAMEWORK.setdefault('DEFAULT_RENDERER_CLASSES', ['rest_framework.renderers.JSONRenderer'])
 
 SIMPLE_JWT = {
     # Keep admin sessions alive for active use without forcing frequent re-login.
@@ -1776,15 +1783,15 @@ def decrement_storage_and_delete_file(sender, instance, **kwargs):
 ### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
 
 **File Info:**
-- **Size**: 19.05 KB
+- **Size**: 21.19 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/ocr_engine.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 14:12:19 (Asia/Damascus / GMT+03:00)
-- **MD5**: `f59728f2bb04508b93013271b95f83cd`
-- **SHA256**: `2c4d64b79f2f6d0d595498caa0f84269740bdf1e3afd974e39a5f2a321afdf07`
+- **Modified**: 2026-08-15 14:54:44 (Asia/Damascus / GMT+03:00)
+- **MD5**: `2a5071043c598fe1dd4049d98929ba88`
+- **SHA256**: `6c9cce59f7e47fa4f1eb08f1839df472633339eadb00a17e5a435c088cd685a7`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2107,6 +2114,8 @@ def active_train_on_examples(
 # lightweight inference engine factory
 _OCR_ENGINE = None
 _OCR_ENGINE_LOCK = None
+_UNLOAD_THREAD_STARTED = False
+_OCR_ENGINE_LAST_USED = 0
 
 def get_ocr_engine(device=None):
     """Return a singleton OCR engine with a simple `predict(image_path)` method.
@@ -2205,8 +2214,22 @@ def get_ocr_engine(device=None):
                 self.model = model
                 self.processor = processor
                 self.device = device
+                try:
+                    import time as _time
+                    self.last_used = _time.time()
+                    global _OCR_ENGINE_LAST_USED
+                    _OCR_ENGINE_LAST_USED = self.last_used
+                except Exception:
+                    self.last_used = 0
 
             def predict(self, image_path):
+                try:
+                    import time as _time
+                    self.last_used = _time.time()
+                    global _OCR_ENGINE_LAST_USED
+                    _OCR_ENGINE_LAST_USED = self.last_used
+                except Exception:
+                    pass
                 img = Image.open(image_path).convert('RGB')
                 # Resize very large images to reduce memory usage during preprocessing/inference
                 try:
@@ -2237,6 +2260,43 @@ def get_ocr_engine(device=None):
                 return output_text[0].strip() if output_text else ''
 
         _OCR_ENGINE = _Engine(model, processor, device)
+
+        # start a background watcher to unload model after idle timeout
+        def _start_unload_thread():
+            global _UNLOAD_THREAD_STARTED, _OCR_ENGINE
+            if _UNLOAD_THREAD_STARTED:
+                return
+            _UNLOAD_THREAD_STARTED = True
+
+            def _watcher():
+                import time as _time
+                import torch as _torch
+                while True:
+                    try:
+                        _time.sleep(60)
+                        last = _OCR_ENGINE_LAST_USED or 0
+                        if _OCR_ENGINE is not None and (_time.time() - last) > 300:
+                            try:
+                                # attempt to delete the model to free GPU memory
+                                try:
+                                    if getattr(_OCR_ENGINE, 'model', None) is not None:
+                                        del _OCR_ENGINE.model
+                                except Exception:
+                                    pass
+                                _OCR_ENGINE = None
+                                try:
+                                    _torch.cuda.empty_cache()
+                                except Exception:
+                                    pass
+                            except Exception:
+                                pass
+                    except Exception:
+                        pass
+
+            t = threading.Thread(target=_watcher, daemon=True)
+            t.start()
+
+        _start_unload_thread()
         return _OCR_ENGINE
 
 
@@ -2456,15 +2516,15 @@ class EditedOCRExampleSerializer(serializers.ModelSerializer):
 ### <a id="📄-ocr-api-tasks-py"></a>📄 `ocr_api/tasks.py`
 
 **File Info:**
-- **Size**: 11.66 KB
+- **Size**: 11.69 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/tasks.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:44:23 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 14:40:30 (Asia/Damascus / GMT+03:00)
-- **MD5**: `a1174a063f573e00acfb9837308701da`
-- **SHA256**: `9123c97fb018ba618eb7f224e103f2800138b14c0bbcffc0b7a9bab1ca946bd8`
+- **Modified**: 2026-08-15 14:53:44 (Asia/Damascus / GMT+03:00)
+- **MD5**: `f6da41392a9cc33824fb2b8569c00583`
+- **SHA256**: `830dc6d24397e97b94647e13a053010ca72bfea01a74ed689f07392b3972d767`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2539,7 +2599,7 @@ def run_active_training(threshold=10):
     if not use_redis_lock:
         if os.path.exists(lock_path):
             try:
-                with open(lock_path, 'r') as fh:
+                with open(lock_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
                 ts = data.get('ts')
                 if ts and (time.time() - ts) < 6 * 3600:
@@ -2549,7 +2609,7 @@ def run_active_training(threshold=10):
                 pass
         try:
             local_id = f'local-{int(time.time())}-{os.getpid()}'
-            with open(lock_path, 'w') as fh:
+            with open(lock_path, 'w', encoding='utf-8') as fh:
                 json.dump({'ts': time.time(), 'task_id': local_id}, fh)
         except Exception:
             task_logger.warning('Could not create lock file; proceeding anyway')
@@ -3042,15 +3102,15 @@ class MetricsEndpointTests(APITestCase):
 ### <a id="📄-ocr-api-urls-py"></a>📄 `ocr_api/urls.py`
 
 **File Info:**
-- **Size**: 1.86 KB
+- **Size**: 1.97 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/urls.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 11:26:14 (Asia/Damascus / GMT+03:00)
-- **MD5**: `098d85f91350c76dff24ff18348ddb1f`
-- **SHA256**: `8dfee750151237fafaa292e1be1a767be928f63cada7ad132ef11600acb60dd8`
+- **Modified**: 2026-08-15 14:46:34 (Asia/Damascus / GMT+03:00)
+- **MD5**: `1ae4df46469306245c697eef119c85eb`
+- **SHA256**: `22eb31dd51f83a7cc795e958a198c34aded01c40e1d1e5741aff3443442f7a4a`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -3063,6 +3123,7 @@ from .auth_views import LoginView, LogoutView, SignupView
 from .exporters import OCRExportDocxView, OCRExportPdfView, OCRExportXlsxView
 from .views import (
     OCRDownloadView,
+    DebugOCRRawView,
     OCRHistoryView,
     OCRHistorySearchView,
     OCRRecordViewSet,
@@ -3093,6 +3154,7 @@ urlpatterns = [
     path('ocr-history/', OCRHistoryView.as_view(), name='ocr-history'),
     path('ocr-history/search/', OCRHistorySearchView.as_view(), name='ocr-history-search'),
     path('download-ocr/<int:pk>/', OCRDownloadView.as_view(), name='ocr-download'),
+    path('debug/raw-ocr/<int:pk>/', DebugOCRRawView.as_view(), name='debug-raw-ocr'),
     path('export-ocr/<int:pk>/pdf/', OCRExportPdfView.as_view(), name='export-ocr-pdf'),
     path('export-ocr/<int:pk>/docx/', OCRExportDocxView.as_view(), name='export-ocr-docx'),
     path('export-ocr/<int:pk>/xlsx/', OCRExportXlsxView.as_view(), name='export-ocr-xlsx'),
@@ -3105,15 +3167,15 @@ urlpatterns = [
 ### <a id="📄-ocr-api-views-py"></a>📄 `ocr_api/views.py`
 
 **File Info:**
-- **Size**: 23.72 KB
+- **Size**: 25.22 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/views.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 14:29:10 (Asia/Damascus / GMT+03:00)
-- **MD5**: `4d747388de5160de44bb670e7437d4b2`
-- **SHA256**: `df0e55291a882b11252f81c4c67092b1a8c519a96f77d661924f7c401cd189d6`
+- **Modified**: 2026-08-15 14:53:53 (Asia/Damascus / GMT+03:00)
+- **MD5**: `e6b002d9eb7edd826113a1d323cda007`
+- **SHA256**: `e64faa569e3fad43ae64a222da86968c087b75036cd1ae7ce52ae4a5ec74e76f`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -3477,6 +3539,12 @@ class OCRStatusView(APIView):
     def get(self, request, pk, *args, **kwargs):
         ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
         data = serialize_ocr_record_response(ocr_record, request)
+        try:
+            # Log the exact repr of the text being returned for diagnostics
+            text = ocr_record.extracted_text or ''
+            logger.info('Returning OCRStatus for id=%s repr=%s', ocr_record.id, repr(text[:400]))
+        except Exception:
+            pass
         return Response(data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk, *args, **kwargs):
@@ -3553,6 +3621,37 @@ class OCRHistorySearchView(APIView):
 
         payload = [serialize_ocr_record_response(record, request) for record in records]
         return Response({'query': query, 'count': len(payload), 'results': payload}, status=status.HTTP_200_OK)
+
+
+class DebugOCRRawView(APIView):
+    """Debug-only view: return stored extracted_text repr and UTF-8 bytes for inspection.
+
+    Enabled only when Django `DEBUG` is True and user is staff/superuser.
+    """
+    def get(self, request, pk, *args, **kwargs):
+        from django.conf import settings
+        if not getattr(settings, 'DEBUG', False):
+            return Response({'detail': 'Not available'}, status=status.HTTP_404_NOT_FOUND)
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+        text = ocr_record.extracted_text or ''
+        try:
+            b = text.encode('utf-8', errors='surrogatepass')
+        except Exception:
+            b = text.encode('utf-8', errors='replace')
+
+        hexbytes = b.hex()
+        payload = {
+            'id': ocr_record.id,
+            'status': ocr_record.status,
+            'repr': repr(text),
+            'utf8_hex': hexbytes,
+            'length_chars': len(text),
+            'length_bytes': len(b),
+        }
+        return Response(payload, status=status.HTTP_200_OK)
 
 
 class OCRDownloadView(APIView):

@@ -5,6 +5,7 @@ from .auth_views import LoginView, LogoutView, SignupView
 from .exporters import OCRExportDocxView, OCRExportPdfView, OCRExportXlsxView
 from .views import (
     OCRDownloadView,
+    DebugOCRRawView,
     OCRHistoryView,
     OCRHistorySearchView,
     OCRRecordViewSet,
@@ -35,6 +36,7 @@ urlpatterns = [
     path('ocr-history/', OCRHistoryView.as_view(), name='ocr-history'),
     path('ocr-history/search/', OCRHistorySearchView.as_view(), name='ocr-history-search'),
     path('download-ocr/<int:pk>/', OCRDownloadView.as_view(), name='ocr-download'),
+    path('debug/raw-ocr/<int:pk>/', DebugOCRRawView.as_view(), name='debug-raw-ocr'),
     path('export-ocr/<int:pk>/pdf/', OCRExportPdfView.as_view(), name='export-ocr-pdf'),
     path('export-ocr/<int:pk>/docx/', OCRExportDocxView.as_view(), name='export-ocr-docx'),
     path('export-ocr/<int:pk>/xlsx/', OCRExportXlsxView.as_view(), name='export-ocr-xlsx'),

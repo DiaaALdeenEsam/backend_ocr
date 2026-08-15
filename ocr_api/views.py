@@ -356,6 +356,12 @@ class OCRStatusView(APIView):
     def get(self, request, pk, *args, **kwargs):
         ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
         data = serialize_ocr_record_response(ocr_record, request)
+        try:
+            # Log the exact repr of the text being returned for diagnostics
+            text = ocr_record.extracted_text or ''
+            logger.info('Returning OCRStatus for id=%s repr=%s', ocr_record.id, repr(text[:400]))
+        except Exception:
+            pass
         return Response(data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk, *args, **kwargs):
@@ -432,6 +438,37 @@ class OCRHistorySearchView(APIView):
 
         payload = [serialize_ocr_record_response(record, request) for record in records]
         return Response({'query': query, 'count': len(payload), 'results': payload}, status=status.HTTP_200_OK)
+
+
+class DebugOCRRawView(APIView):
+    """Debug-only view: return stored extracted_text repr and UTF-8 bytes for inspection.
+
+    Enabled only when Django `DEBUG` is True and user is staff/superuser.
+    """
+    def get(self, request, pk, *args, **kwargs):
+        from django.conf import settings
+        if not getattr(settings, 'DEBUG', False):
+            return Response({'detail': 'Not available'}, status=status.HTTP_404_NOT_FOUND)
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+        text = ocr_record.extracted_text or ''
+        try:
+            b = text.encode('utf-8', errors='surrogatepass')
+        except Exception:
+            b = text.encode('utf-8', errors='replace')
+
+        hexbytes = b.hex()
+        payload = {
+            'id': ocr_record.id,
+            'status': ocr_record.status,
+            'repr': repr(text),
+            'utf8_hex': hexbytes,
+            'length_chars': len(text),
+            'length_bytes': len(b),
+        }
+        return Response(payload, status=status.HTTP_200_OK)
 
 
 class OCRDownloadView(APIView):

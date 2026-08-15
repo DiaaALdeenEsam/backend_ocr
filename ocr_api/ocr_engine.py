@@ -315,6 +315,8 @@ def active_train_on_examples(
 # lightweight inference engine factory
 _OCR_ENGINE = None
 _OCR_ENGINE_LOCK = None
+_UNLOAD_THREAD_STARTED = False
+_OCR_ENGINE_LAST_USED = 0
 
 def get_ocr_engine(device=None):
     """Return a singleton OCR engine with a simple `predict(image_path)` method.
@@ -413,8 +415,22 @@ def get_ocr_engine(device=None):
                 self.model = model
                 self.processor = processor
                 self.device = device
+                try:
+                    import time as _time
+                    self.last_used = _time.time()
+                    global _OCR_ENGINE_LAST_USED
+                    _OCR_ENGINE_LAST_USED = self.last_used
+                except Exception:
+                    self.last_used = 0
 
             def predict(self, image_path):
+                try:
+                    import time as _time
+                    self.last_used = _time.time()
+                    global _OCR_ENGINE_LAST_USED
+                    _OCR_ENGINE_LAST_USED = self.last_used
+                except Exception:
+                    pass
                 img = Image.open(image_path).convert('RGB')
                 # Resize very large images to reduce memory usage during preprocessing/inference
                 try:
@@ -445,5 +461,42 @@ def get_ocr_engine(device=None):
                 return output_text[0].strip() if output_text else ''
 
         _OCR_ENGINE = _Engine(model, processor, device)
+
+        # start a background watcher to unload model after idle timeout
+        def _start_unload_thread():
+            global _UNLOAD_THREAD_STARTED, _OCR_ENGINE
+            if _UNLOAD_THREAD_STARTED:
+                return
+            _UNLOAD_THREAD_STARTED = True
+
+            def _watcher():
+                import time as _time
+                import torch as _torch
+                while True:
+                    try:
+                        _time.sleep(60)
+                        last = _OCR_ENGINE_LAST_USED or 0
+                        if _OCR_ENGINE is not None and (_time.time() - last) > 300:
+                            try:
+                                # attempt to delete the model to free GPU memory
+                                try:
+                                    if getattr(_OCR_ENGINE, 'model', None) is not None:
+                                        del _OCR_ENGINE.model
+                                except Exception:
+                                    pass
+                                _OCR_ENGINE = None
+                                try:
+                                    _torch.cuda.empty_cache()
+                                except Exception:
+                                    pass
+                            except Exception:
+                                pass
+                    except Exception:
+                        pass
+
+            t = threading.Thread(target=_watcher, daemon=True)
+            t.start()
+
+        _start_unload_thread()
         return _OCR_ENGINE
 
