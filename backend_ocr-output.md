@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 13:08:44 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 13:16:29 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 88
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -89,12 +89,12 @@
 │   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (16.09 KB)
+│   ├── 📄 ocr_engine.py (16.4 KB)
 │   ├── 📄 serializers.py (6.71 KB)
 │   ├── 📄 tasks.py (10.49 KB)
 │   ├── 📄 tests.py (10.04 KB)
 │   ├── 📄 urls.py (1.86 KB)
-│   └── 📄 views.py (21.32 KB)
+│   └── 📄 views.py (21.91 KB)
 ├── 📁 scripts/
 │   ├── 📁 output/
 │   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
@@ -1829,15 +1829,15 @@ def decrement_storage_and_delete_file(sender, instance, **kwargs):
 ### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
 
 **File Info:**
-- **Size**: 16.09 KB
+- **Size**: 16.4 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/ocr_engine.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 09:12:14 (Asia/Damascus / GMT+03:00)
-- **MD5**: `dec5e678826ab8e55667d37f06935ff7`
-- **SHA256**: `fd224861fb3dc1d43b4e059232bbc2300f38de545afa587296dbbdcaa6fdc4ad`
+- **Modified**: 2026-08-15 13:16:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `b0c0734ef77ea44e9671df9f7842757e`
+- **SHA256**: `29269a30a26b02462ca0e861dc657f21ffb99231e61d27cbe1aa3b483144fca7`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2220,7 +2220,15 @@ def get_ocr_engine(device=None):
                     generated_ids_trimmed = generated_ids
 
                 output_text = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-                return output_text[0].strip() if output_text else ''
+                raw = output_text[0].strip() if output_text else ''
+                # normalize unicode for Arabic and other scripts to NFC to avoid combining char issues
+                try:
+                    import unicodedata
+
+                    raw = unicodedata.normalize('NFC', raw)
+                except Exception:
+                    pass
+                return raw
 
         _OCR_ENGINE = _Engine(model, processor, device)
         return _OCR_ENGINE
@@ -3067,15 +3075,15 @@ urlpatterns = [
 ### <a id="📄-ocr-api-views-py"></a>📄 `ocr_api/views.py`
 
 **File Info:**
-- **Size**: 21.32 KB
+- **Size**: 21.91 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/views.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 13:08:44 (Asia/Damascus / GMT+03:00)
-- **MD5**: `8c9939d329cde787ee140716947fe35d`
-- **SHA256**: `2890383f9807e8eb71791ea1d9c8e45144e7d657e941d1b01bcaa193d7ef22bb`
+- **Modified**: 2026-08-15 13:15:36 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d2a0085dabbec27024d52bc62abd9d4b`
+- **SHA256**: `3161205481a03d4193f3de59f375a8f3e9abccd4d65bfc5cda443d370ce92a5f`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -3241,6 +3249,18 @@ def dispatch_ocr_processing(record_id):
             countdown=1,
             retry=False,
         )
+        # If there are no active workers connected to the broker, run local fallback
+        try:
+            inspector = current_app.control.inspect(timeout=1)
+            active = inspector.ping() or {}
+            if not active:
+                logger.info('No Celery workers available; running local fallback for record_id=%s', record_id)
+                from .tasks import process_ocr_record
+                process_ocr_record.run(record_id)
+                return
+        except Exception:
+            # if inspect fails, continue and let normal broker behavior happen
+            pass
         return
     except Exception:
         logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)

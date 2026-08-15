@@ -158,6 +158,18 @@ def dispatch_ocr_processing(record_id):
             countdown=1,
             retry=False,
         )
+        # If there are no active workers connected to the broker, run local fallback
+        try:
+            inspector = current_app.control.inspect(timeout=1)
+            active = inspector.ping() or {}
+            if not active:
+                logger.info('No Celery workers available; running local fallback for record_id=%s', record_id)
+                from .tasks import process_ocr_record
+                process_ocr_record.run(record_id)
+                return
+        except Exception:
+            # if inspect fails, continue and let normal broker behavior happen
+            pass
         return
     except Exception:
         logger.exception('Failed to enqueue OCR background task for record_id=%s; running local fallback', record_id)
