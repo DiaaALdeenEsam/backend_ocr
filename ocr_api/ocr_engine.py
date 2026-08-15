@@ -338,11 +338,30 @@ def get_ocr_engine(device=None):
 
         try:
             processor = AutoProcessor.from_pretrained(BASE_MODEL_NAME)
-            base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
+
+            # Try memory-saving load first. Use float16 on CUDA to reduce RAM.
+            base_model = None
+            try:
+                if device and 'cuda' in str(device).lower():
+                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        BASE_MODEL_NAME,
+                        low_cpu_mem_usage=True,
+                        torch_dtype=getattr(torch, 'float16', None),
+                    )
+                else:
+                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        BASE_MODEL_NAME,
+                        low_cpu_mem_usage=True,
+                    )
+            except Exception:
+                # fallback to normal load if memory-optimized call fails
+                base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
+
             if WEIGHTS_PATH and os.path.exists(WEIGHTS_PATH):
                 model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
             else:
                 model = base_model
+
             model.to(device)
             model.eval()
         except Exception as e:
@@ -356,6 +375,13 @@ def get_ocr_engine(device=None):
 
             def predict(self, image_path):
                 img = Image.open(image_path).convert('RGB')
+                # Resize very large images to reduce memory usage during preprocessing/inference
+                try:
+                    max_dim = 1024
+                    if max(img.size) > max_dim:
+                        img.thumbnail((max_dim, max_dim), Image.LANCZOS)
+                except Exception:
+                    pass
                 messages = [{"role": "user", "content": [
                     {"type": "image", "image": img},
                     {"type": "text", "text": "Text Recognition:"},

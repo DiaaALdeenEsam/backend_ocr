@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 13:32:13 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 13:53:36 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 88
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -89,7 +89,7 @@
 │   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (16.09 KB)
+│   ├── 📄 ocr_engine.py (17.21 KB)
 │   ├── 📄 serializers.py (6.71 KB)
 │   ├── 📄 tasks.py (10.66 KB)
 │   ├── 📄 tests.py (10.04 KB)
@@ -182,7 +182,7 @@
 | Total Directories | 15 |
 | Text Files | 42 |
 | Binary Files | 46 |
-| Total Size | 65.6 MB |
+| Total Size | 65.61 MB |
 
 ### 📄 File Types Distribution
 
@@ -1829,15 +1829,15 @@ def decrement_storage_and_delete_file(sender, instance, **kwargs):
 ### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
 
 **File Info:**
-- **Size**: 16.09 KB
+- **Size**: 17.21 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/ocr_engine.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
-- **MD5**: `dec5e678826ab8e55667d37f06935ff7`
-- **SHA256**: `fd224861fb3dc1d43b4e059232bbc2300f38de545afa587296dbbdcaa6fdc4ad`
+- **Modified**: 2026-08-15 13:53:36 (Asia/Damascus / GMT+03:00)
+- **MD5**: `a36b8b1b24add675dbaa96992cbcc3c7`
+- **SHA256**: `30fe5d51dd6cebfd323feaa96a5e57748712b340a31bb64009fd650c3559cd7b`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2183,11 +2183,30 @@ def get_ocr_engine(device=None):
 
         try:
             processor = AutoProcessor.from_pretrained(BASE_MODEL_NAME)
-            base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
+
+            # Try memory-saving load first. Use float16 on CUDA to reduce RAM.
+            base_model = None
+            try:
+                if device and 'cuda' in str(device).lower():
+                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        BASE_MODEL_NAME,
+                        low_cpu_mem_usage=True,
+                        torch_dtype=getattr(torch, 'float16', None),
+                    )
+                else:
+                    base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        BASE_MODEL_NAME,
+                        low_cpu_mem_usage=True,
+                    )
+            except Exception:
+                # fallback to normal load if memory-optimized call fails
+                base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
+
             if WEIGHTS_PATH and os.path.exists(WEIGHTS_PATH):
                 model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
             else:
                 model = base_model
+
             model.to(device)
             model.eval()
         except Exception as e:
@@ -2201,6 +2220,13 @@ def get_ocr_engine(device=None):
 
             def predict(self, image_path):
                 img = Image.open(image_path).convert('RGB')
+                # Resize very large images to reduce memory usage during preprocessing/inference
+                try:
+                    max_dim = 1024
+                    if max(img.size) > max_dim:
+                        img.thumbnail((max_dim, max_dim), Image.LANCZOS)
+                except Exception:
+                    pass
                 messages = [{"role": "user", "content": [
                     {"type": "image", "image": img},
                     {"type": "text", "text": "Text Recognition:"},
