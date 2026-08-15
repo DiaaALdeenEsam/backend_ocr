@@ -108,6 +108,29 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email')
 
 
+class UploadedFileListSerializer(serializers.ModelSerializer):
+    uploader_name = serializers.CharField(source='user.username', read_only=True)
+    uploader_email = serializers.EmailField(source='user.email', read_only=True)
+    uploaded_at = serializers.DateTimeField(source='created_at', read_only=True)
+    file_size = serializers.IntegerField(read_only=True)
+    file_name = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = OCRRecord
+        fields = (
+            'id',
+            'file_name',
+            'uploader_name',
+            'uploader_email',
+            'uploaded_at',
+            'status',
+            'file_size',
+            'document_type',
+            'image',
+        )
+
+
 class UserDetailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     username = serializers.CharField()

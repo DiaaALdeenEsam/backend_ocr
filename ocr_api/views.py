@@ -5,6 +5,7 @@ import logging
 import os
 
 from django.contrib.auth.models import User
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from PIL import Image
@@ -20,9 +21,10 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+from .auth_views import IsAdminUser
 from .models import OCRRecord, UserProfile, EditedOCRExample
 from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
-from .serializers import UserDetailSerializer, UserListSerializer
+from .serializers import UserDetailSerializer, UserListSerializer, UploadedFileListSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
@@ -193,6 +195,18 @@ class UserListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UploadedFilesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        uploads = OCRRecord.objects.select_related('user').order_by('-created_at')
+        serializer = UploadedFileListSerializer(uploads, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class UserDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -308,6 +322,33 @@ class OCRHistoryView(APIView):
         records = get_accessible_ocr_queryset(request.user).order_by('-created_at')
         payload = [serialize_ocr_record_response(record, request) for record in records]
         return Response(payload, status=status.HTTP_200_OK)
+
+
+class OCRHistorySearchView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        query = (request.query_params.get('q') or request.query_params.get('query') or '').strip()
+        if not query:
+            return Response(
+                {'detail': "Please provide a search query using 'q' parameter."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        records = (
+            get_accessible_ocr_queryset(request.user)
+            .filter(
+                Q(file_name__icontains=query)
+                | Q(extracted_text__icontains=query)
+                | Q(status__icontains=query)
+                | Q(document_type__icontains=query)
+                | Q(error_message__icontains=query)
+            )
+            .order_by('-created_at')
+        )
+
+        payload = [serialize_ocr_record_response(record, request) for record in records]
+        return Response({'query': query, 'count': len(payload), 'results': payload}, status=status.HTTP_200_OK)
 
 
 class OCRDownloadView(APIView):
@@ -436,9 +477,8 @@ class OCRDownloadView(APIView):
 
 
 class MetricsView(APIView):
-    # expose Prometheus metrics; no auth to allow monitoring systems to scrape
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -446,5 +486,36 @@ class MetricsView(APIView):
         except Exception:
             return Response({'detail': 'prometheus client not available'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-        data = generate_latest()
-        return HttpResponse(data, content_type=CONTENT_TYPE_LATEST)
+        base_metrics = generate_latest()
+        base_text = base_metrics.decode('utf-8') if isinstance(base_metrics, (bytes, bytearray)) else str(base_metrics)
+
+        total_users = User.objects.count()
+        total_records = OCRRecord.objects.count()
+        total_completed = OCRRecord.objects.filter(status=OCRRecord.STATUS_COMPLETED).count()
+        total_pending = OCRRecord.objects.filter(status=OCRRecord.STATUS_PENDING).count()
+        total_failed = OCRRecord.objects.filter(status=OCRRecord.STATUS_FAILED).count()
+        total_storage_bytes = UserProfile.objects.aggregate(total=Sum('total_storage_used'))['total'] or 0
+
+        summary_metrics = "\n".join([
+            "# HELP ocr_total_users Total registered users",
+            "# TYPE ocr_total_users gauge",
+            f"ocr_total_users {total_users}",
+            "# HELP ocr_total_records Total OCR records",
+            "# TYPE ocr_total_records gauge",
+            f"ocr_total_records {total_records}",
+            "# HELP ocr_total_completed Completed OCR records",
+            "# TYPE ocr_total_completed gauge",
+            f"ocr_total_completed {total_completed}",
+            "# HELP ocr_total_pending Pending OCR records",
+            "# TYPE ocr_total_pending gauge",
+            f"ocr_total_pending {total_pending}",
+            "# HELP ocr_total_failed Failed OCR records",
+            "# TYPE ocr_total_failed gauge",
+            f"ocr_total_failed {total_failed}",
+            "# HELP ocr_total_storage_bytes Total storage used across all users",
+            "# TYPE ocr_total_storage_bytes gauge",
+            f"ocr_total_storage_bytes {total_storage_bytes}",
+        ])
+
+        payload = f"{base_text.rstrip()}\n{summary_metrics}\n"
+        return HttpResponse(payload, content_type=CONTENT_TYPE_LATEST)
