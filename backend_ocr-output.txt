@@ -5,7 +5,7 @@ PROJECT EXPORT FOR LLMs
 PROJECT INFORMATION:
 --------------------------------------------------
 Project Name: backend_ocr
-Generated On: 2026-08-15 13:16:29 (Asia/Damascus / GMT+03:00)
+Generated On: 2026-08-15 13:32:13 (Asia/Damascus / GMT+03:00)
 Total Files Processed: 88
 Export Tool: Easy Whole Project to Single Text File for LLMs v1.1.0
 Tool Author: Jota / José Guilherme Pandolfi
@@ -91,12 +91,12 @@ PROJECT STRUCTURE
 │   ├── 📄 auth_views.py (2.4 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (16.4 KB)
+│   ├── 📄 ocr_engine.py (16.09 KB)
 │   ├── 📄 serializers.py (6.71 KB)
-│   ├── 📄 tasks.py (10.49 KB)
+│   ├── 📄 tasks.py (10.66 KB)
 │   ├── 📄 tests.py (10.04 KB)
 │   ├── 📄 urls.py (1.86 KB)
-│   └── 📄 views.py (21.91 KB)
+│   └── 📄 views.py (21.95 KB)
 ├── 📁 scripts/
 │   ├── 📁 output/
 │   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
@@ -1806,15 +1806,15 @@ FILE: ocr_api/ocr_engine.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 16.4 KB
+Size: 16.09 KB
 Extension: .py
 Language: python
 Location: ocr_api/ocr_engine.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 13:16:29 (Asia/Damascus / GMT+03:00)
-MD5: b0c0734ef77ea44e9671df9f7842757e
-SHA256: 29269a30a26b02462ca0e861dc657f21ffb99231e61d27cbe1aa3b483144fca7
+Modified: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
+MD5: dec5e678826ab8e55667d37f06935ff7
+SHA256: fd224861fb3dc1d43b4e059232bbc2300f38de545afa587296dbbdcaa6fdc4ad
 Encoding: ASCII
 
 FILE CONTENT:
@@ -2196,15 +2196,7 @@ def get_ocr_engine(device=None):
                     generated_ids_trimmed = generated_ids
 
                 output_text = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-                raw = output_text[0].strip() if output_text else ''
-                # normalize unicode for Arabic and other scripts to NFC to avoid combining char issues
-                try:
-                    import unicodedata
-
-                    raw = unicodedata.normalize('NFC', raw)
-                except Exception:
-                    pass
-                return raw
+                return output_text[0].strip() if output_text else ''
 
         _OCR_ENGINE = _Engine(model, processor, device)
         return _OCR_ENGINE
@@ -2429,15 +2421,15 @@ FILE: ocr_api/tasks.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 10.49 KB
+Size: 10.66 KB
 Extension: .py
 Language: python
 Location: ocr_api/tasks.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:44:23 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-MD5: 547c72dae9f1e21e5fb6c3fb42c769b7
-SHA256: 24655bcb424f264ae17441e97de847452d86e2eb57865c1a00d7d1950aa1b4aa
+Modified: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
+MD5: 62638a649093a34c6ed7938c9ead4181
+SHA256: da370245230aca3c390f20958bf7ec300459bce9139e17bdac14c50a56723e9a
 Encoding: ASCII
 
 FILE CONTENT:
@@ -2659,7 +2651,9 @@ def process_ocr_record(self, record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        engine = ocr_engine.get_ocr_engine()
+        # default to CPU for inference to avoid persistent GPU allocation and OOMs in shared environments
+        device = os.environ.get('OCR_DEVICE', 'cpu')
+        engine = ocr_engine.get_ocr_engine(device=device)
         try:
             extracted_text = (engine.predict(record.image.path) or '').strip()
             logger.info("Full-page OCR text for record_id=%s: '%s'", record.id, extracted_text)
@@ -3057,15 +3051,15 @@ FILE: ocr_api/views.py
 
 FILE INFORMATION:
 ----------------------------------------
-Size: 21.91 KB
+Size: 21.95 KB
 Extension: .py
 Language: python
 Location: ocr_api/views.py
 Relative Path: ocr_api
 Created: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-Modified: 2026-08-15 13:15:36 (Asia/Damascus / GMT+03:00)
-MD5: d2a0085dabbec27024d52bc62abd9d4b
-SHA256: 3161205481a03d4193f3de59f375a8f3e9abccd4d65bfc5cda443d370ce92a5f
+Modified: 2026-08-15 13:32:12 (Asia/Damascus / GMT+03:00)
+MD5: 6c4be8cf7b044f042a7aad957fdfffff
+SHA256: 733e2ef30d3be190d0e5e0cb32ad216344563c97d8961a8ce34746635978f729
 Encoding: ASCII
 
 FILE CONTENT:
@@ -3481,10 +3475,10 @@ class OCRDownloadView(APIView):
 
         if output_format == 'json':
             payload = {'text': ocr_record.extracted_text or ''}
-            # Ensure response is UTF-8 and contains proper charset for clients like Postman
-            body = json.dumps(payload, ensure_ascii=False, indent=2).encode('utf-8')
+            # Return Unicode string with explicit charset; avoid returning raw bytes which
+            # some clients may mis-handle and display mojibake for Arabic text.
             response = HttpResponse(
-                body,
+                json.dumps(payload, ensure_ascii=False, indent=2),
                 content_type='application/json; charset=utf-8',
             )
             response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.json"'

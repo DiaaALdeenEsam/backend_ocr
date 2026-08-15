@@ -215,7 +215,9 @@ def process_ocr_record(self, record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        engine = ocr_engine.get_ocr_engine()
+        # default to CPU for inference to avoid persistent GPU allocation and OOMs in shared environments
+        device = os.environ.get('OCR_DEVICE', 'cpu')
+        engine = ocr_engine.get_ocr_engine(device=device)
         try:
             extracted_text = (engine.predict(record.image.path) or '').strip()
             logger.info("Full-page OCR text for record_id=%s: '%s'", record.id, extracted_text)

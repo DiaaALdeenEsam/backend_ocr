@@ -375,15 +375,7 @@ def get_ocr_engine(device=None):
                     generated_ids_trimmed = generated_ids
 
                 output_text = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-                raw = output_text[0].strip() if output_text else ''
-                # normalize unicode for Arabic and other scripts to NFC to avoid combining char issues
-                try:
-                    import unicodedata
-
-                    raw = unicodedata.normalize('NFC', raw)
-                except Exception:
-                    pass
-                return raw
+                return output_text[0].strip() if output_text else ''
 
         _OCR_ENGINE = _Engine(model, processor, device)
         return _OCR_ENGINE

@@ -409,10 +409,10 @@ class OCRDownloadView(APIView):
 
         if output_format == 'json':
             payload = {'text': ocr_record.extracted_text or ''}
-            # Ensure response is UTF-8 and contains proper charset for clients like Postman
-            body = json.dumps(payload, ensure_ascii=False, indent=2).encode('utf-8')
+            # Return Unicode string with explicit charset; avoid returning raw bytes which
+            # some clients may mis-handle and display mojibake for Arabic text.
             response = HttpResponse(
-                body,
+                json.dumps(payload, ensure_ascii=False, indent=2),
                 content_type='application/json; charset=utf-8',
             )
             response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.json"'
