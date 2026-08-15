@@ -187,8 +187,8 @@ class ProcessOCREndpointTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn('image', response.data)
 
-    @patch('ocr_api.views.current_app.send_task')
-    def test_valid_image_is_accepted(self, mock_send_task):
+    @patch('ocr_api.views._PROCESS_QUEUE.put')
+    def test_valid_image_is_accepted(self, mock_enqueue):
         buffer = io.BytesIO()
         Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
         image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
@@ -202,14 +202,10 @@ class ProcessOCREndpointTests(APITestCase):
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
         self.assertIn('id', response.data)
-        mock_send_task.assert_called_once_with(
-            'ocr_api.tasks.process_ocr_record',
-            args=[response.data['id']],
-            countdown=1,
-        )
+        mock_enqueue.assert_called_once_with(response.data['id'])
 
-    @patch('ocr_api.views.current_app.send_task', side_effect=RuntimeError('broker down'))
-    def test_queue_failure_still_returns_pending_immediately(self, mock_send_task):
+    @patch('ocr_api.views._PROCESS_QUEUE.put', side_effect=RuntimeError('enqueue failed'))
+    def test_queue_failure_still_returns_pending_immediately(self, mock_enqueue):
         buffer = io.BytesIO()
         Image.new('RGB', (2, 2), color='white').save(buffer, format='PNG')
         image = SimpleUploadedFile('sample.png', buffer.getvalue(), content_type='image/png')
@@ -224,11 +220,7 @@ class ProcessOCREndpointTests(APITestCase):
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.data['status'], OCRRecord.STATUS_PENDING)
         self.assertIn('id', response.data)
-        mock_send_task.assert_called_once_with(
-            'ocr_api.tasks.process_ocr_record',
-            args=[response.data['id']],
-            countdown=1,
-        )
+        mock_enqueue.assert_called_once_with(response.data['id'])
 
 
 class MetricsEndpointTests(APITestCase):

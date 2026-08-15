@@ -151,20 +151,9 @@ SIMPLE_JWT = {
 }
 
 
-# Celery configuration
-from celery.schedules import crontab
-
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', CELERY_BROKER_URL)
-
-# Run `ocr_api.tasks.run_active_training` every day at midnight
-CELERY_BEAT_SCHEDULE = {
-    'run-active-training-midnight': {
-        'task': 'ocr_api.tasks.run_active_training',
-        'schedule': crontab(hour=0, minute=0),
-        'args': (10,),
-    },
-}
+# Celery has been removed; background processing is handled in-process
+# If you need scheduled jobs, consider using OS-level schedulers (cron/Task Scheduler)
+# or a dedicated lightweight scheduler process.
 
 
 # basic structured logging

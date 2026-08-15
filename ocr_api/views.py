@@ -4,6 +4,7 @@ import gc
 import logging
 import os
 import threading
+import queue
 
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
@@ -38,6 +39,55 @@ try:
 except Exception:
     arabic_reshaper = None
     get_display = None
+
+
+# In-process FIFO queue + single worker thread to ensure sequential processing
+_PROCESS_QUEUE = queue.Queue()
+_WORKER_THREAD = None
+_WORKER_LOCK = threading.Lock()
+
+def _ensure_worker_running():
+    """Start the singleton worker thread if not running."""
+    global _WORKER_THREAD
+    if _WORKER_THREAD and _WORKER_THREAD.is_alive():
+        return
+
+    def _worker_loop():
+        from .tasks import process_ocr_record
+        while True:
+            try:
+                record_id = _PROCESS_QUEUE.get()
+            except Exception:
+                break
+
+            try:
+                # mark processing state and clear prior errors
+                try:
+                    OCRRecord.objects.filter(pk=record_id).update(
+                        status=OCRRecord.STATUS_PROCESSING,
+                        error_message=None,
+                    )
+                except Exception:
+                    pass
+
+                process_ocr_record(record_id)
+            except Exception as exc:
+                logger.exception('Worker failed processing record %s', record_id)
+                try:
+                    OCRRecord.objects.filter(pk=record_id).update(
+                        status=OCRRecord.STATUS_FAILED,
+                        error_message=str(exc),
+                    )
+                except Exception:
+                    pass
+            finally:
+                try:
+                    _PROCESS_QUEUE.task_done()
+                except Exception:
+                    pass
+
+    _WORKER_THREAD = threading.Thread(target=_worker_loop, daemon=True)
+    _WORKER_THREAD.start()
 
 
 def get_accessible_ocr_queryset(user):
@@ -150,24 +200,15 @@ def run_ocr_background(record_id):
 
 def dispatch_ocr_processing(record_id):
     """Dispatch OCR processing without blocking the API response."""
-    # Run processing in a background daemon thread to avoid Celery dependency.
+    # enqueue for the singleton in-process worker
     try:
-        from .tasks import process_ocr_record
-
-        def _run():
-            try:
-                process_ocr_record.run(record_id)
-            except Exception:
-                logger.exception('Background OCR processing failed for record_id=%s', record_id)
-
-        t = threading.Thread(target=_run, args=(), daemon=True)
-        t.start()
-        return
+        _PROCESS_QUEUE.put(record_id)
+        _ensure_worker_running()
     except Exception:
-        logger.exception('Failed to start background thread for record_id=%s', record_id)
+        logger.exception('Failed to enqueue OCR record %s', record_id)
         OCRRecord.objects.filter(pk=record_id).update(
             status=OCRRecord.STATUS_FAILED,
-            error_message='Background OCR dispatch failed (thread start error)',
+            error_message='Background OCR dispatch failed (enqueue error)',
         )
 
 
@@ -268,12 +309,35 @@ class ProcessOCRView(APIView):
         ocr_record.status = OCRRecord.STATUS_PENDING
         ocr_record.save(update_fields=['status'])
         
-        # Dispatch in a daemon thread so API responds immediately even if broker is slow.
-        threading.Thread(
-            target=dispatch_ocr_processing,
-            args=(ocr_record.id,),
-            daemon=True,
-        ).start()
+        # Dispatch in a daemon thread so API responds immediately even if model load is slow.
+        def _bg_start(rid):
+            try:
+                from .tasks import process_ocr_record
+                try:
+                    process_ocr_record(rid)
+                except Exception as exc:
+                    logger.exception('Background OCR processing failed for record_id=%s', rid)
+                    OCRRecord.objects.filter(pk=rid).update(
+                        status=OCRRecord.STATUS_FAILED,
+                        error_message=f'Background OCR processing error: {exc}',
+                    )
+            except Exception:
+                logger.exception('Failed to import background OCR processor')
+                OCRRecord.objects.filter(pk=rid).update(
+                    status=OCRRecord.STATUS_FAILED,
+                    error_message='Background OCR dispatch failed (import error)',
+                )
+
+        # enqueue for serial processing by the global worker
+        try:
+            _PROCESS_QUEUE.put(ocr_record.id)
+            _ensure_worker_running()
+        except Exception:
+            logger.exception('Failed to enqueue OCR record %s', ocr_record.id)
+            OCRRecord.objects.filter(pk=ocr_record.id).update(
+                status=OCRRecord.STATUS_FAILED,
+                error_message='Background OCR dispatch failed (enqueue error)',
+            )
 
         return Response(
             {
