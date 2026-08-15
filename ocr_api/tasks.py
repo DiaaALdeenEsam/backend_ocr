@@ -214,8 +214,12 @@ def process_ocr_record(record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        # default to CPU for inference unless OCR_DEVICE env var requests GPU
-        device = os.environ.get('OCR_DEVICE', 'cpu')
+        # choose device: respect OCR_DEVICE if set, otherwise prefer CUDA when available
+        env_device = os.environ.get('OCR_DEVICE', None)
+        if env_device:
+            device = env_device
+        else:
+            device = 'cuda' if torch.cuda.is_available() else 'cpu'
         engine = ocr_engine.get_ocr_engine(device=device)
         try:
             extracted_text = (engine.predict(record.image.path) or '').strip()

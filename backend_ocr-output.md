@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 14:29:11 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 14:35:20 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 87
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -90,7 +90,7 @@
 │   ├── 📄 models.py (3.7 KB)
 │   ├── 📄 ocr_engine.py (19.05 KB)
 │   ├── 📄 serializers.py (6.71 KB)
-│   ├── 📄 tasks.py (10.49 KB)
+│   ├── 📄 tasks.py (10.64 KB)
 │   ├── 📄 tests.py (9.82 KB)
 │   ├── 📄 urls.py (1.86 KB)
 │   └── 📄 views.py (23.72 KB)
@@ -2456,15 +2456,15 @@ class EditedOCRExampleSerializer(serializers.ModelSerializer):
 ### <a id="📄-ocr-api-tasks-py"></a>📄 `ocr_api/tasks.py`
 
 **File Info:**
-- **Size**: 10.49 KB
+- **Size**: 10.64 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/tasks.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:44:23 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 14:12:19 (Asia/Damascus / GMT+03:00)
-- **MD5**: `1ef44beec9c6ed501a1d4563fc8642a7`
-- **SHA256**: `41e13741ce71b5cdd8a32699fb415f9892c797b4a51a5f9ce538530c17b1434f`
+- **Modified**: 2026-08-15 14:35:19 (Asia/Damascus / GMT+03:00)
+- **MD5**: `69108fd6cafd053f34a1cb0bf06370ba`
+- **SHA256**: `64a47cd431920b06d01ff3642e9499e3c657fecf388983f1a4420afdca76f97b`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2686,8 +2686,12 @@ def process_ocr_record(record_id):
         record.error_message = None
         record.save(update_fields=['status', 'error_message'])
 
-        # default to CPU for inference unless OCR_DEVICE env var requests GPU
-        device = os.environ.get('OCR_DEVICE', 'cpu')
+        # choose device: respect OCR_DEVICE if set, otherwise prefer CUDA when available
+        env_device = os.environ.get('OCR_DEVICE', None)
+        if env_device:
+            device = env_device
+        else:
+            device = 'cuda' if torch.cuda.is_available() else 'cpu'
         engine = ocr_engine.get_ocr_engine(device=device)
         try:
             extracted_text = (engine.predict(record.image.path) or '').strip()
