@@ -3,7 +3,7 @@
 ## 📊 Project Information
 
 - **Project Name**: `backend_ocr`
-- **Generated On**: 2026-08-15 08:42:31 (Asia/Damascus / GMT+03:00)
+- **Generated On**: 2026-08-15 09:12:15 (Asia/Damascus / GMT+03:00)
 - **Total Files Processed**: 82
 - **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
 - **Tool Author**: Jota / José Guilherme Pandolfi
@@ -88,7 +88,7 @@
 │   ├── 📄 auth_views.py (1.97 KB)
 │   ├── 📄 exporters.py (12.26 KB)
 │   ├── 📄 models.py (3.7 KB)
-│   ├── 📄 ocr_engine.py (13.19 KB)
+│   ├── 📄 ocr_engine.py (16.09 KB)
 │   ├── 📄 serializers.py (5.74 KB)
 │   ├── 📄 tasks.py (10.49 KB)
 │   ├── 📄 tests.py (63 B)
@@ -1745,15 +1745,15 @@ def decrement_storage_and_delete_file(sender, instance, **kwargs):
 ### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
 
 **File Info:**
-- **Size**: 13.19 KB
+- **Size**: 16.09 KB
 - **Extension**: `.py`
 - **Language**: `python`
 - **Location**: `ocr_api/ocr_engine.py`
 - **Relative Path**: `ocr_api`
 - **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
-- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
-- **MD5**: `b115370f76df8f20a460a0bcd9a444b0`
-- **SHA256**: `bb08cb89ea55b9241d102c0bde5c9c7658f87657f046de873a25a8a48ff42197`
+- **Modified**: 2026-08-15 09:12:14 (Asia/Damascus / GMT+03:00)
+- **MD5**: `dec5e678826ab8e55667d37f06935ff7`
+- **SHA256**: `fd224861fb3dc1d43b4e059232bbc2300f38de545afa587296dbbdcaa6fdc4ad`
 - **Encoding**: ASCII
 
 **File code content:**
@@ -2072,6 +2072,75 @@ def active_train_on_examples(
     except Exception as e:
         return {'success': False, 'new_weights_dir': None, 'error': str(e)}
     
+
+# lightweight inference engine factory
+_OCR_ENGINE = None
+_OCR_ENGINE_LOCK = None
+
+def get_ocr_engine(device=None):
+    """Return a singleton OCR engine with a simple `predict(image_path)` method.
+
+    This is intentionally lightweight and lazy: it loads the processor and model
+    on first use and caches them. It will use the adapter in `WEIGHTS_PATH` if present.
+    """
+    global _OCR_ENGINE, _OCR_ENGINE_LOCK
+    import threading
+    if _OCR_ENGINE is not None:
+        return _OCR_ENGINE
+    if _OCR_ENGINE_LOCK is None:
+        _OCR_ENGINE_LOCK = threading.Lock()
+
+    with _OCR_ENGINE_LOCK:
+        if _OCR_ENGINE is not None:
+            return _OCR_ENGINE
+
+        if device is None:
+            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+        try:
+            processor = AutoProcessor.from_pretrained(BASE_MODEL_NAME)
+            base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(BASE_MODEL_NAME)
+            if WEIGHTS_PATH and os.path.exists(WEIGHTS_PATH):
+                model = PeftModel.from_pretrained(base_model, WEIGHTS_PATH, is_trainable=False)
+            else:
+                model = base_model
+            model.to(device)
+            model.eval()
+        except Exception as e:
+            raise
+
+        class _Engine:
+            def __init__(self, model, processor, device):
+                self.model = model
+                self.processor = processor
+                self.device = device
+
+            def predict(self, image_path):
+                img = Image.open(image_path).convert('RGB')
+                messages = [{"role": "user", "content": [
+                    {"type": "image", "image": img},
+                    {"type": "text", "text": "Text Recognition:"},
+                ]}]
+
+                text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                image_inputs, video_inputs = process_vision_info(messages)
+                inputs = self.processor(text=[text], images=image_inputs, videos=video_inputs, padding=True, return_tensors='pt')
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                with torch.no_grad():
+                    generated_ids = self.model.generate(**inputs, max_new_tokens=256)
+
+                # trim prompt tokens if present
+                if inputs.get('input_ids', None) is not None:
+                    generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.get('input_ids', []), generated_ids)]
+                else:
+                    generated_ids_trimmed = generated_ids
+
+                output_text = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+                return output_text[0].strip() if output_text else ''
+
+        _OCR_ENGINE = _Engine(model, processor, device)
+        return _OCR_ENGINE
+
 
 ```
 
