@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&hry@zeo#x0cb^htybs8uomsk9op93bk^2&w-!cw!%!x)-h#i5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '[::1]']
 
 
 # Application definition
@@ -135,7 +135,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'signup': '5/hour',
+        'signup': '50/hour',
         'uploads': '30/day',
     },
 }

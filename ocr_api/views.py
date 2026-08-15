@@ -22,7 +22,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 from .models import OCRRecord, UserProfile, EditedOCRExample
 from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
-from .serializers import UserDetailSerializer
+from .serializers import UserDetailSerializer, UserListSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
@@ -179,6 +179,18 @@ class StorageInfoView(APIView):
         profile, _ = UserProfile.objects.get_or_create(user=user)
         payload = StorageInfoSerializer.from_profile(profile)
         return Response(payload, status=status.HTTP_200_OK)
+
+
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        users = User.objects.order_by('username')
+        serializer = UserListSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserDetailsView(APIView):

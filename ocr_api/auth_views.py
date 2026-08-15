@@ -11,7 +11,7 @@ from .auth_serializers import SignupSerializer
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
     permission_classes = [AllowAny]
-    throttle_classes = []
+    throttle_classes = [SimpleRateThrottle]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -32,7 +32,13 @@ class SignupView(generics.CreateAPIView):
 class SignupRateThrottle(SimpleRateThrottle):
     scope = 'signup'
 
-# attach the throttle class to the view
+    def get_cache_key(self, request, view):
+        return self.cache_format % {
+            'scope': self.scope,
+            'ident': self.get_ident(request),
+        }
+
+
 SignupView.throttle_classes = [SignupRateThrottle]
 
 

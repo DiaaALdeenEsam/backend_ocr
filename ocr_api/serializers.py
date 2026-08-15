@@ -102,6 +102,12 @@ class StorageInfoSerializer(serializers.Serializer):
         }
 
 
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = __import__('django.contrib.auth').contrib.auth.get_user_model()
+        fields = ('id', 'username', 'email')
+
+
 class UserDetailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     username = serializers.CharField()
