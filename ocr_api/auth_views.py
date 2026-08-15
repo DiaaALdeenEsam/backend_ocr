@@ -1,22 +1,39 @@
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.throttling import SimpleRateThrottle
 
 from .auth_serializers import SignupSerializer
 
 
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = []
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
+        # issue JWT tokens for convenience
+        refresh = RefreshToken.for_user(user)
         return Response(
-            {'detail': 'Account created successfully.'},
+            {
+                'detail': 'Account created successfully.',
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            },
             status=status.HTTP_201_CREATED,
         )
+
+
+class SignupRateThrottle(SimpleRateThrottle):
+    scope = 'signup'
+
+# attach the throttle class to the view
+SignupView.throttle_classes = [SignupRateThrottle]
 
 
 class LoginView(TokenObtainPairView):

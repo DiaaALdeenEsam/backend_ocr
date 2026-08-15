@@ -1,0 +1,4769 @@
+# 📁 PROJECT EXPORT FOR LLMs
+
+## 📊 Project Information
+
+- **Project Name**: `backend_ocr`
+- **Generated On**: 2026-08-15 08:42:31 (Asia/Damascus / GMT+03:00)
+- **Total Files Processed**: 82
+- **Export Tool**: Easy Whole Project to Single Text File for LLMs v1.1.0
+- **Tool Author**: Jota / José Guilherme Pandolfi
+
+### ⚙️ Export Configuration
+
+| Setting | Value |
+|---------|-------|
+| Language | `en` |
+| Max File Size | `1 MB` |
+| Include Hidden Files | `false` |
+| Output Format | `both` |
+
+## 🌳 Project Structure
+
+```
+├── 📁 core/
+│   ├── 📄 __init__.py (68 B)
+│   ├── 📄 asgi.py (401 B)
+│   ├── 📄 celery.py (394 B)
+│   ├── 📄 settings.py (4.7 KB)
+│   ├── 📄 urls.py (1.11 KB)
+│   └── 📄 wsgi.py (401 B)
+├── 📁 media/
+│   └── 📁 ocr_images/
+│       └── 📁 2026/
+│           └── 📁 08/
+│               ├── 📁 02/
+│               │   ├── 📄 debug_input_4fYjh6j.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_I0ZDlIX.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_kVhWI6F.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_L416NR2.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_RqVKMek.jpg (4.67 KB)
+│               │   └── 📄 debug_input.jpg (4.67 KB)
+│               ├── 📁 03/
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_eEINejm.jpg (983.19 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_fNyEgWF.jpg (983.19 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_G0owsrr.jpg (983.19 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_QWZMNtC.jpg (983.19 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_rOJKnB3.jpg (983.19 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1_resized.jpg (200.09 KB)
+│               │   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1.jpg (983.19 KB)
+│               │   ├── 📄 debug_input_1XypfvT.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_9pEHTZy.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_chrUvmV.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_dKh1XJ1.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_EMI20S5.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_HZlyi3o.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_UZHdQnq.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_vz59dIJ.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_X5lu2JG.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_zHIXvnx.jpg (4.67 KB)
+│               │   ├── 📄 debug_input_ZUjvSne.jpg (4.67 KB)
+│               │   └── 📄 debug_input.jpg (4.67 KB)
+│               └── 📁 13/
+│                   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_DfvcgIZ.jpg (983.19 KB)
+│                   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_vboY5F3.jpg (983.19 KB)
+│                   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_wNOYC6Z.jpg (983.19 KB)
+│                   ├── 📄 2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1.jpg (983.19 KB)
+│                   ├── 📄 debug_input_UyeuYqQ.jpg (4.67 KB)
+│                   ├── 📄 debug_input.jpg (4.67 KB)
+│                   ├── 📄 excel_HNDJX7P.jpg (55.79 KB)
+│                   ├── 📄 excel_KO0zl6b.jpg (55.79 KB)
+│                   ├── 📄 excel_ntwxP7m.jpg (55.79 KB)
+│                   └── 📄 excel.jpg (55.79 KB)
+├── 📁 ocr_api/
+│   ├── 📁 management/
+│   │   └── 📁 commands/
+│   │       └── 📄 active_train.py (1.64 KB)
+│   ├── 📁 migrations/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 0001_initial.py (685 B)
+│   │   ├── 📄 0002_ocrrecord_status_alter_ocrrecord_id.py (785 B)
+│   │   ├── 📄 0003_ocrrecord_error_message_alter_ocrrecord_status.py (870 B)
+│   │   ├── 📄 0004_ocrrecord_document_type.py (572 B)
+│   │   ├── 📄 0005_ocrrecord_file_name_ocrrecord_file_size_and_more.py (2.3 KB)
+│   │   └── 📄 0006_ocrrecord_updated_at.py (444 B)
+│   ├── 📄 __init__.py
+│   ├── 📄 admin.py (143 B)
+│   ├── 📄 apps.py (219 B)
+│   ├── 📄 auth_serializers.py (1.3 KB)
+│   ├── 📄 auth_views.py (1.97 KB)
+│   ├── 📄 exporters.py (12.26 KB)
+│   ├── 📄 models.py (3.7 KB)
+│   ├── 📄 ocr_engine.py (13.19 KB)
+│   ├── 📄 serializers.py (5.74 KB)
+│   ├── 📄 tasks.py (10.49 KB)
+│   ├── 📄 tests.py (63 B)
+│   ├── 📄 urls.py (1.56 KB)
+│   └── 📄 views.py (16.81 KB)
+├── 📁 scripts/
+│   ├── 📁 output/
+│   │   └── 📄 detected_cells_visualization.jpg (150.66 KB)
+│   ├── 📄 test_structured_prompt.py (6.17 KB)
+│   └── 📄 test_table_border_detection.py
+├── 📁 weights/
+│   ├── 📄 adapter_config.json (1.16 KB)
+│   ├── 📄 adapter_model.safetensors (28.17 MB)
+│   ├── 📄 chat_template.jinja (1023 B)
+│   ├── 📄 optimizer.pt (15.32 MB)
+│   ├── 📄 processor_config.json (1.43 KB)
+│   ├── 📄 README.md (5.36 KB)
+│   ├── 📄 rng_state.pth (14.3 KB)
+│   ├── 📄 scheduler.pt (1.43 KB)
+│   ├── 📄 tokenizer_config.json (547 B)
+│   ├── 📄 tokenizer.json (11.62 MB)
+│   ├── 📄 trainer_state.json (23.06 KB)
+│   └── 📄 training_args.bin (5.58 KB)
+├── 📄 manage.py (682 B)
+├── 📄 requirements.txt (302 B)
+├── 📄 setup.ps1 (3.53 KB)
+├── 📄 test.png (80.5 KB)
+└── 📄 test.py (162 B)
+```
+
+## 📑 Table of Contents
+
+**Project Files:**
+
+- [📄 core/__init__.py](#📄-core-init-py)
+- [📄 core/asgi.py](#📄-core-asgi-py)
+- [📄 core/celery.py](#📄-core-celery-py)
+- [📄 core/settings.py](#📄-core-settings-py)
+- [📄 core/urls.py](#📄-core-urls-py)
+- [📄 core/wsgi.py](#📄-core-wsgi-py)
+- [📄 ocr_api/management/commands/active_train.py](#📄-ocr-api-management-commands-active-train-py)
+- [📄 ocr_api/migrations/__init__.py](#📄-ocr-api-migrations-init-py)
+- [📄 ocr_api/migrations/0001_initial.py](#📄-ocr-api-migrations-0001-initial-py)
+- [📄 ocr_api/migrations/0002_ocrrecord_status_alter_ocrrecord_id.py](#📄-ocr-api-migrations-0002-ocrrecord-status-alter-ocrrecord-id-py)
+- [📄 ocr_api/migrations/0003_ocrrecord_error_message_alter_ocrrecord_status.py](#📄-ocr-api-migrations-0003-ocrrecord-error-message-alter-ocrrecord-status-py)
+- [📄 ocr_api/migrations/0004_ocrrecord_document_type.py](#📄-ocr-api-migrations-0004-ocrrecord-document-type-py)
+- [📄 ocr_api/migrations/0005_ocrrecord_file_name_ocrrecord_file_size_and_more.py](#📄-ocr-api-migrations-0005-ocrrecord-file-name-ocrrecord-file-size-and-more-py)
+- [📄 ocr_api/migrations/0006_ocrrecord_updated_at.py](#📄-ocr-api-migrations-0006-ocrrecord-updated-at-py)
+- [📄 ocr_api/__init__.py](#📄-ocr-api-init-py)
+- [📄 ocr_api/admin.py](#📄-ocr-api-admin-py)
+- [📄 ocr_api/apps.py](#📄-ocr-api-apps-py)
+- [📄 ocr_api/auth_serializers.py](#📄-ocr-api-auth-serializers-py)
+- [📄 ocr_api/auth_views.py](#📄-ocr-api-auth-views-py)
+- [📄 ocr_api/exporters.py](#📄-ocr-api-exporters-py)
+- [📄 ocr_api/models.py](#📄-ocr-api-models-py)
+- [📄 ocr_api/ocr_engine.py](#📄-ocr-api-ocr-engine-py)
+- [📄 ocr_api/serializers.py](#📄-ocr-api-serializers-py)
+- [📄 ocr_api/tasks.py](#📄-ocr-api-tasks-py)
+- [📄 ocr_api/tests.py](#📄-ocr-api-tests-py)
+- [📄 ocr_api/urls.py](#📄-ocr-api-urls-py)
+- [📄 ocr_api/views.py](#📄-ocr-api-views-py)
+- [📄 scripts/test_structured_prompt.py](#📄-scripts-test-structured-prompt-py)
+- [📄 scripts/test_table_border_detection.py](#📄-scripts-test-table-border-detection-py)
+- [📄 weights/adapter_config.json](#📄-weights-adapter-config-json)
+- [📄 weights/processor_config.json](#📄-weights-processor-config-json)
+- [📄 weights/README.md](#📄-weights-readme-md)
+- [📄 weights/tokenizer_config.json](#📄-weights-tokenizer-config-json)
+- [📄 weights/tokenizer.json](#📄-weights-tokenizer-json)
+- [📄 weights/trainer_state.json](#📄-weights-trainer-state-json)
+- [📄 manage.py](#📄-manage-py)
+- [📄 requirements.txt](#📄-requirements-txt)
+- [📄 setup.ps1](#📄-setup-ps1)
+- [📄 test.py](#📄-test-py)
+
+---
+
+## 📈 Project Statistics
+
+| Metric | Count |
+|--------|-------|
+| Total Files | 82 |
+| Total Directories | 15 |
+| Text Files | 39 |
+| Binary Files | 43 |
+| Total Size | 65.58 MB |
+
+### 📄 File Types Distribution
+
+| Extension | Count |
+|-----------|-------|
+| `.jpg` | 36 |
+| `.py` | 31 |
+| `.json` | 5 |
+| `.pt` | 2 |
+| `.safetensors` | 1 |
+| `.jinja` | 1 |
+| `.md` | 1 |
+| `.pth` | 1 |
+| `.bin` | 1 |
+| `.txt` | 1 |
+| `.ps1` | 1 |
+| `.png` | 1 |
+
+## 💻 File Code Contents
+
+### <a id="📄-core-init-py"></a>📄 `core/__init__.py`
+
+**File Info:**
+- **Size**: 68 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/__init__.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `5154ea209ac8daa66ff28761c30a2625`
+- **SHA256**: `1bf48886c252b2f8956b7e5132bf2dbe2b6948bf34c6966eff1e02f9151ff291`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from .celery import app as celery_app
+
+__all__ = ('celery_app',)
+
+```
+
+---
+
+### <a id="📄-core-asgi-py"></a>📄 `core/asgi.py`
+
+**File Info:**
+- **Size**: 401 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/asgi.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `0aa48cff01f5f83fb99a779f78350811`
+- **SHA256**: `9d146b4275d108f948accc2ac015a456d540b48f8a95d9a81a72741f851784f6`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+"""
+ASGI config for core project.
+
+It exposes the ASGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
+"""
+
+import os
+
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+
+application = get_asgi_application()
+
+```
+
+---
+
+### <a id="📄-core-celery-py"></a>📄 `core/celery.py`
+
+**File Info:**
+- **Size**: 394 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/celery.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:43:50 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `f7799eb9adb6022dfe46c3de0943f136`
+- **SHA256**: `3b0117b3a3c82ac60386b08822bf675baa8c31dccdfdbcbe653b82b53013ff28`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import os
+from celery import Celery
+import logging
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+
+app = Celery('core')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
+
+logger = logging.getLogger(__name__)
+
+
+@app.task(bind=True)
+def debug_task(self):
+    logger.debug('Celery debug task request: %r', self.request)
+
+```
+
+---
+
+### <a id="📄-core-settings-py"></a>📄 `core/settings.py`
+
+**File Info:**
+- **Size**: 4.7 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/settings.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `e4d26901e354cf773f252361a7887987`
+- **SHA256**: `8ec79cfe025f9249e175bd336a23c4f55868d387597c862eddc711daad2a2f97`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+"""
+Django settings for core project.
+
+Generated by 'django-admin startproject' using Django 6.0.7.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/6.0/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/6.0/ref/settings/
+"""
+
+from datetime import timedelta
+from pathlib import Path
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-&hry@zeo#x0cb^htybs8uomsk9op93bk^2&w-!cw!%!x)-h#i5'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = []
+
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'ocr_api',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'core.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'core.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
+# Password validation
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+
+# Internationalization
+# https://docs.djangoproject.com/en/6.0/topics/i18n/
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/6.0/howto/static-files/
+
+STATIC_URL = 'static/'
+
+import os
+
+# upload images path 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'signup': '5/hour',
+        'uploads': '30/day',
+    },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+
+# Celery configuration
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', CELERY_BROKER_URL)
+
+# Run `ocr_api.tasks.run_active_training` every day at midnight
+CELERY_BEAT_SCHEDULE = {
+    'run-active-training-midnight': {
+        'task': 'ocr_api.tasks.run_active_training',
+        'schedule': crontab(hour=0, minute=0),
+        'args': (10,),
+    },
+}
+
+
+# basic structured logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+```
+
+---
+
+### <a id="📄-core-urls-py"></a>📄 `core/urls.py`
+
+**File Info:**
+- **Size**: 1.11 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/urls.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `70f092823ef3329b9088807176108342`
+- **SHA256**: `9d452305df6187f82c65475961c2529832568cb3001b98d8cd70b5f6f65b18f5`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+"""
+URL configuration for core project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/6.0/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include
+from ocr_api.views import MetricsView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include(('ocr_api.urls', 'ocr_api'), namespace='ocr_api')),
+    path('metrics/', MetricsView.as_view()),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+---
+
+### <a id="📄-core-wsgi-py"></a>📄 `core/wsgi.py`
+
+**File Info:**
+- **Size**: 401 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `core/wsgi.py`
+- **Relative Path**: `core`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `992013d4cc7fa84a0c05379687e93ebd`
+- **SHA256**: `bdbf6d0eadac1d166647d6319e2a135220733d81539d669dd75117b5f673b42f`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+"""
+WSGI config for core project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/6.0/howto/deployment/wsgi/
+"""
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+
+application = get_wsgi_application()
+
+```
+
+---
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `media/ocr_images/2026/08/02/debug_input_4fYjh6j.jpg`
+- `media/ocr_images/2026/08/02/debug_input_I0ZDlIX.jpg`
+- `media/ocr_images/2026/08/02/debug_input_kVhWI6F.jpg`
+- `media/ocr_images/2026/08/02/debug_input_L416NR2.jpg`
+- `media/ocr_images/2026/08/02/debug_input_RqVKMek.jpg`
+- `media/ocr_images/2026/08/02/debug_input.jpg`
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_eEINejm.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_fNyEgWF.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_G0owsrr.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_QWZMNtC.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_rOJKnB3.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1_resized.jpg`
+- `media/ocr_images/2026/08/03/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1.jpg`
+- `media/ocr_images/2026/08/03/debug_input_1XypfvT.jpg`
+- `media/ocr_images/2026/08/03/debug_input_9pEHTZy.jpg`
+- `media/ocr_images/2026/08/03/debug_input_chrUvmV.jpg`
+- `media/ocr_images/2026/08/03/debug_input_dKh1XJ1.jpg`
+- `media/ocr_images/2026/08/03/debug_input_EMI20S5.jpg`
+- `media/ocr_images/2026/08/03/debug_input_HZlyi3o.jpg`
+- `media/ocr_images/2026/08/03/debug_input_UZHdQnq.jpg`
+- `media/ocr_images/2026/08/03/debug_input_vz59dIJ.jpg`
+- `media/ocr_images/2026/08/03/debug_input_X5lu2JG.jpg`
+- `media/ocr_images/2026/08/03/debug_input_zHIXvnx.jpg`
+- `media/ocr_images/2026/08/03/debug_input_ZUjvSne.jpg`
+- `media/ocr_images/2026/08/03/debug_input.jpg`
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `media/ocr_images/2026/08/13/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_DfvcgIZ.jpg`
+- `media/ocr_images/2026/08/13/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_vboY5F3.jpg`
+- `media/ocr_images/2026/08/13/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_19_wNOYC6Z.jpg`
+- `media/ocr_images/2026/08/13/2015_5-03_El-Khouri_Letter_to_Jennie_Jabaley_from_Lebanon_Oct18_1960_1.jpg`
+- `media/ocr_images/2026/08/13/debug_input_UyeuYqQ.jpg`
+- `media/ocr_images/2026/08/13/debug_input.jpg`
+- `media/ocr_images/2026/08/13/excel_HNDJX7P.jpg`
+- `media/ocr_images/2026/08/13/excel_KO0zl6b.jpg`
+- `media/ocr_images/2026/08/13/excel_ntwxP7m.jpg`
+- `media/ocr_images/2026/08/13/excel.jpg`
+
+### <a id="📄-ocr-api-management-commands-active-train-py"></a>📄 `ocr_api/management/commands/active_train.py`
+
+**File Info:**
+- **Size**: 1.64 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/management/commands/active_train.py`
+- **Relative Path**: `ocr_api/management/commands`
+- **Created**: 2026-08-15 07:33:39 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `6a5257fd90a3c0629a0ee269aed56c9a`
+- **SHA256**: `9c5b1779118a4d2eb8b5e14a7466b2e9eb7b3be4e0bf154c8895c3288125554f`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.core.management.base import BaseCommand
+from django.utils import timezone
+
+from ocr_api.models import EditedOCRExample
+from ocr_api.tasks import run_active_training
+
+
+class Command(BaseCommand):
+    help = 'Run active training loop on collected user edits.'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--threshold', type=int, default=10, help='Minimum number of edits to trigger training')
+
+    def handle(self, *args, **options):
+        threshold = options.get('threshold', 10)
+        pending_qs = EditedOCRExample.objects.filter(used=False).order_by('created_at')
+        total_pending = pending_qs.count()
+
+        if total_pending < threshold:
+            self.stdout.write(self.style.NOTICE(f'Not enough pending edits ({total_pending}) to trigger training (threshold={threshold}).'))
+            return
+
+        examples = []
+        for edit in pending_qs:
+            record = edit.ocr_record
+            image_path = None
+            try:
+                image_path = record.image.path if record.image and hasattr(record.image, 'path') else None
+            except Exception:
+                image_path = None
+
+            examples.append({
+                'ocr_record_id': record.id,
+                'original_text': record.extracted_text or '',
+                'edited_text': edit.edited_text or '',
+                'image_path': image_path,
+                'user_id': edit.user_id,
+            })
+
+        # enqueue the Celery task to process training asynchronously
+        run_active_training.delay(threshold)
+        self.stdout.write(self.style.SUCCESS('Enqueued active training task.'))
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-init-py"></a>📄 `ocr_api/migrations/__init__.py`
+
+**File Info:**
+- **Size**: 0 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/__init__.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d41d8cd98f00b204e9800998ecf8427e`
+- **SHA256**: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0001-initial-py"></a>📄 `ocr_api/migrations/0001_initial.py`
+
+**File Info:**
+- **Size**: 685 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0001_initial.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `3ff0497590fc8b70a68c653810016458`
+- **SHA256**: `02e72cd253ac91bd79252f6fc0f4f4111d8b3c0ac202127bfc576bb9e6dc2057`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 6.0.7 on 2026-08-02 19:53
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='OCRRecord',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('image', models.ImageField(upload_to='ocr_images/%Y/%m/%d/')),
+                ('extracted_text', models.TextField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0002-ocrrecord-status-alter-ocrrecord-id-py"></a>📄 `ocr_api/migrations/0002_ocrrecord_status_alter_ocrrecord_id.py`
+
+**File Info:**
+- **Size**: 785 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0002_ocrrecord_status_alter_ocrrecord_id.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `2f2353962308435a0dd0b6061a9167e5`
+- **SHA256**: `30cda76da32fbb4d702551096c131cb9e3191422e95da198d0c89ee5555554aa`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 5.2.16 on 2026-08-02 21:13
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0001_initial'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='status',
+            field=models.CharField(choices=[('uploading', 'Uploading'), ('loading_model', 'Loading Model'), ('processing', 'Processing'), ('completed', 'Completed'), ('failed', 'Failed')], default='uploading', max_length=20),
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='id',
+            field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0003-ocrrecord-error-message-alter-ocrrecord-status-py"></a>📄 `ocr_api/migrations/0003_ocrrecord_error_message_alter_ocrrecord_status.py`
+
+**File Info:**
+- **Size**: 870 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0003_ocrrecord_error_message_alter_ocrrecord_status.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `f019a004bb0325a331a93ac71c8a9a1f`
+- **SHA256**: `3a10d0bd51d09bcaae3486d1a52e313cb4d9af20d7bcf9dde6a0a3a2295842e9`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 5.2.16 on 2026-08-02 22:39
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0002_ocrrecord_status_alter_ocrrecord_id'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='error_message',
+            field=models.TextField(blank=True, null=True),
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='status',
+            field=models.CharField(choices=[('uploading', 'Uploading'), ('loading_model', 'Loading Model'), ('processing', 'Processing'), ('segmenting_lines', 'Segmenting image into lines'), ('processing_lines', 'Recognizing lines'), ('completed', 'Completed'), ('failed', 'Failed')], default='uploading', max_length=20),
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0004-ocrrecord-document-type-py"></a>📄 `ocr_api/migrations/0004_ocrrecord_document_type.py`
+
+**File Info:**
+- **Size**: 572 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0004_ocrrecord_document_type.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `0f770f3f1b208dcded63f2134eb6a08a`
+- **SHA256**: `0e5ff46d780a3f251cbd67f341e7da7e6dd62824fc7fb2720476156f44551b6e`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 5.2.16 on 2026-08-13 00:00
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0003_ocrrecord_error_message_alter_ocrrecord_status'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='document_type',
+            field=models.CharField(
+                choices=[('page', 'Page'), ('table', 'Table')],
+                default='page',
+                max_length=10,
+            ),
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0005-ocrrecord-file-name-ocrrecord-file-size-and-more-py"></a>📄 `ocr_api/migrations/0005_ocrrecord_file_name_ocrrecord_file_size_and_more.py`
+
+**File Info:**
+- **Size**: 2.3 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0005_ocrrecord_file_name_ocrrecord_file_size_and_more.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `efa472e7d248ca25119d83ff71678295`
+- **SHA256**: `e832291fdb67552dd14563127cef8eea4677366bb84939f586dbc57518bf1a46`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 5.2.16 on 2026-08-14 14:27
+
+import django.db.models.deletion
+from django.conf import settings
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0004_ocrrecord_document_type'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='file_name',
+            field=models.CharField(blank=True, max_length=255),
+        ),
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='file_size',
+            field=models.BigIntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='user',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='ocr_records', to=settings.AUTH_USER_MODEL),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='document_type',
+            field=models.CharField(blank=True, max_length=50, null=True),
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='id',
+            field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='image',
+            field=models.ImageField(upload_to='ocr_images/'),
+        ),
+        migrations.AlterField(
+            model_name='ocrrecord',
+            name='status',
+            field=models.CharField(choices=[('PENDING', 'Pending'), ('PROCESSING', 'Processing'), ('COMPLETED', 'Completed'), ('FAILED', 'Failed')], default='PENDING', max_length=20),
+        ),
+        migrations.CreateModel(
+            name='UserProfile',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('total_storage_used', models.BigIntegerField(default=0)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-migrations-0006-ocrrecord-updated-at-py"></a>📄 `ocr_api/migrations/0006_ocrrecord_updated_at.py`
+
+**File Info:**
+- **Size**: 444 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/migrations/0006_ocrrecord_updated_at.py`
+- **Relative Path**: `ocr_api/migrations`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `226219d63617826cdb646434543c4675`
+- **SHA256**: `73423fb32161e0f2a409df2d38474ed06fc00b6c1cbbcd630dba7c0d1eaaaa4a`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+# Generated by Django 5.2.16 on 2026-08-14 16:17
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('ocr_api', '0005_ocrrecord_file_name_ocrrecord_file_size_and_more'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='ocrrecord',
+            name='updated_at',
+            field=models.DateTimeField(auto_now=True),
+        ),
+    ]
+
+```
+
+---
+
+### <a id="📄-ocr-api-init-py"></a>📄 `ocr_api/__init__.py`
+
+**File Info:**
+- **Size**: 0 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/__init__.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d41d8cd98f00b204e9800998ecf8427e`
+- **SHA256**: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+
+```
+
+---
+
+### <a id="📄-ocr-api-admin-py"></a>📄 `ocr_api/admin.py`
+
+**File Info:**
+- **Size**: 143 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/admin.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d47d34f5c8ba5d7ada05ca239a7e5c5b`
+- **SHA256**: `1894450c0990fffbcc2b9310c764682661552fecbe5e3e94fdeb8b0bcf0b2520`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.contrib import admin
+from .models import EditedOCRExample
+
+# Register your models here.
+admin.site.register(EditedOCRExample)
+
+```
+
+---
+
+### <a id="📄-ocr-api-apps-py"></a>📄 `ocr_api/apps.py`
+
+**File Info:**
+- **Size**: 219 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/apps.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `28b9c31950cefca1b6181bc0b06f4f7c`
+- **SHA256**: `4eb669af9872ee13cc6e28aa231f5355f0f937ba307b227f009fbe39bbe22137`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.apps import AppConfig
+
+
+class OcrApiConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'ocr_api'
+
+    def ready(self):
+        from . import models  # noqa: F401
+
+```
+
+---
+
+### <a id="📄-ocr-api-auth-serializers-py"></a>📄 `ocr_api/auth_serializers.py`
+
+**File Info:**
+- **Size**: 1.3 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/auth_serializers.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `72189503ad5f39c22ea838d329b23bb6`
+- **SHA256**: `5133e3d3decbd7e12df089d1c7f2391754ad660e68b6294e5f5f29b5034fd630`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from rest_framework import serializers
+
+User = get_user_model()
+
+
+class SignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password_confirm = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'password_confirm')
+
+    def validate(self, attrs):
+        # uniqueness checks
+        username = attrs.get('username')
+        email = attrs.get('email')
+        if username and User.objects.filter(username__iexact=username).exists():
+            raise serializers.ValidationError({'username': 'A user with that username already exists.'})
+        if email and User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError({'email': 'A user with that email already exists.'})
+        if attrs['password'] != attrs['password_confirm']:
+            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop('password_confirm')
+        return User.objects.create_user(**validated_data)
+
+```
+
+---
+
+### <a id="📄-ocr-api-auth-views-py"></a>📄 `ocr_api/auth_views.py`
+
+**File Info:**
+- **Size**: 1.97 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/auth_views.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `e42608ef98a8132d6bfc5dd86501407d`
+- **SHA256**: `7715648049209aff37003c5a5b8c7ae70c87da574155dbd6009515b13d4a65fa`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.throttling import SimpleRateThrottle
+
+from .auth_serializers import SignupSerializer
+
+
+class SignupView(generics.CreateAPIView):
+    serializer_class = SignupSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = []
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # issue JWT tokens for convenience
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                'detail': 'Account created successfully.',
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class SignupRateThrottle(SimpleRateThrottle):
+    scope = 'signup'
+
+# attach the throttle class to the view
+SignupView.throttle_classes = [SignupRateThrottle]
+
+
+class LoginView(TokenObtainPairView):
+    pass
+
+
+class LogoutView(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response(
+                {'detail': 'Refresh token is required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception:
+            return Response(
+                {'detail': 'Invalid or expired refresh token.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+
+```
+
+---
+
+### <a id="📄-ocr-api-exporters-py"></a>📄 `ocr_api/exporters.py`
+
+**File Info:**
+- **Size**: 12.26 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/exporters.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `88a3fc72450a05ee084f25ae6ce9a38b`
+- **SHA256**: `d8293ba8ba6fffdbaf67008c14a97c7521d02a598fdd3b0358404afee4a0ddd5`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import io
+import os
+import re
+
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from openpyxl import Workbook
+from openpyxl.styles import Alignment
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.shared import Pt
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import OCRRecord
+
+try:
+    import arabic_reshaper
+    from bidi.algorithm import get_display
+except Exception:
+    arabic_reshaper = None
+    get_display = None
+
+
+FONT_NAME = 'ArialUnicode'
+
+
+def split_text_into_paragraphs(raw_text):
+    text = (raw_text or '').strip()
+    if not text:
+        return []
+
+    if '\n\n' in text:
+        parts = text.split('\n\n')
+    elif '\n' in text:
+        parts = text.split('\n')
+    else:
+        return [{'index': 1, 'text': text}]
+
+    paragraphs = []
+    for part in parts:
+        cleaned = part.strip()
+        if cleaned:
+            paragraphs.append({'index': len(paragraphs) + 1, 'text': cleaned})
+
+    if not paragraphs:
+        return []
+
+    return paragraphs
+
+
+def build_table_rows(raw_text):
+    rows = []
+    for line in (raw_text or '').splitlines():
+        stripped_line = line.strip()
+        if not stripped_line:
+            continue
+
+        cells = [cell.strip() for cell in re.split(r'\s{2,}', stripped_line) if cell and cell.strip()]
+        if not cells:
+            continue
+        rows.append(cells)
+    return rows
+
+
+def to_pdf_text(value):
+    text = value or ''
+    try:
+        if arabic_reshaper and get_display:
+            return get_display(arabic_reshaper.reshape(text))
+    except Exception:
+        pass
+    return text
+
+
+def to_word_text(value):
+    return value or ''
+
+
+def set_rtl_paragraph(paragraph):
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    p_pr = paragraph._p.get_or_add_pPr()
+
+    bidi = OxmlElement('w:bidi')
+    bidi.set(qn('w:val'), 'on')
+    p_pr.append(bidi)
+
+    jc = OxmlElement('w:jc')
+    jc.set(qn('w:val'), 'right')
+    p_pr.append(jc)
+
+
+class OCRExportPdfView(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+
+        if ocr_record.status != OCRRecord.STATUS_COMPLETED:
+            return Response(
+                {
+                    'message': 'OCR record is not completed yet.',
+                    'status': ocr_record.status,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        font_path = r'C:\Windows\Fonts\arial.ttf'
+        if not os.path.exists(font_path):
+            return Response(
+                {'message': f'Arabic font not found at {font_path}.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        try:
+            if FONT_NAME not in pdfmetrics.getRegisteredFontNames():
+                pdfmetrics.registerFont(TTFont(FONT_NAME, font_path))
+        except Exception:
+            return Response(
+                {'message': 'Failed to load Arabic PDF font.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        if not (arabic_reshaper and get_display):
+            return Response(
+                {'message': 'Arabic shaping libraries are missing. Install arabic-reshaper and python-bidi.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(
+            buffer,
+            pagesize=A4,
+            leftMargin=30,
+            rightMargin=30,
+            topMargin=30,
+            bottomMargin=30,
+        )
+        story = []
+
+        document_type = getattr(ocr_record, 'document_type', 'page') or 'page'
+
+        if document_type == 'table':
+            rows = build_table_rows(ocr_record.extracted_text)
+            if not rows:
+                cells = [to_pdf_text(ocr_record.extracted_text or '')]
+                rows = [cells]
+
+            max_columns = max(len(row) for row in rows)
+            normalized_rows = []
+            for row in rows:
+                padded = [to_pdf_text(cell) for cell in row]
+                if len(padded) < max_columns:
+                    padded.extend([''] * (max_columns - len(padded)))
+                normalized_rows.append(padded)
+
+            table = Table(normalized_rows, repeatRows=1)
+            table.setStyle(
+                TableStyle([
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#EAEAEA')),
+                    ('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('FONTNAME', (0, 0), (-1, -1), FONT_NAME),
+                    ('FONTSIZE', (0, 0), (-1, -1), 9),
+                    ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#F7F7F7')]),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                    ('TOPPADDING', (0, 0), (-1, -1), 6),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ])
+            )
+            story.append(table)
+        else:
+            paragraphs = split_text_into_paragraphs(ocr_record.extracted_text)
+            styles = getSampleStyleSheet()
+            paragraph_style = ParagraphStyle(
+                'RTLExportParagraph',
+                parent=styles['Normal'],
+                fontName=FONT_NAME,
+                fontSize=12,
+                leading=18,
+                alignment=2,
+                textColor=colors.black,
+            )
+            for paragraph in paragraphs:
+                story.append(Paragraph(to_pdf_text(paragraph.get('text', '')), paragraph_style))
+                story.append(Spacer(1, 10))
+
+        doc.build(story)
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.pdf"'
+        return response
+
+
+class OCRExportDocxView(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+
+        if ocr_record.status != OCRRecord.STATUS_COMPLETED:
+            return Response(
+                {
+                    'message': 'OCR record is not completed yet.',
+                    'status': ocr_record.status,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        font_path = r'C:\Windows\Fonts\arial.ttf'
+        if not os.path.exists(font_path):
+            return Response(
+                {'message': f'Arabic font not found at {font_path}.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        if not (arabic_reshaper and get_display):
+            return Response(
+                {'message': 'Arabic shaping libraries are missing. Install arabic-reshaper and python-bidi.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        doc = Document()
+        default_style = doc.styles['Normal']
+        default_style.font.name = 'Arial'
+        default_style.font.size = Pt(12)
+        default_style.rtl = True
+
+        try:
+            rpr = default_style.element.rPr
+            if rpr is not None:
+                rfonts = rpr.rFonts
+                if rfonts is None:
+                    rfonts = OxmlElement('w:rFonts')
+                    rpr.append(rfonts)
+                rfonts.set(qn('w:eastAsia'), 'Arial')
+        except Exception:
+            pass
+
+        document_type = getattr(ocr_record, 'document_type', 'page') or 'page'
+
+        if document_type == 'table':
+            rows = build_table_rows(ocr_record.extracted_text)
+            if not rows:
+                rows = [[to_word_text(ocr_record.extracted_text or '')]]
+
+            max_columns = max((len(row) for row in rows), default=1)
+            normalized_rows = []
+            for row in rows:
+                cells = [to_word_text(cell) for cell in row]
+                if len(cells) < max_columns:
+                    cells.extend([''] * (max_columns - len(cells)))
+                normalized_rows.append(cells)
+
+            table = doc.add_table(rows=len(normalized_rows), cols=max_columns)
+            table.style = 'Table Grid'
+            for row_idx, row in enumerate(normalized_rows):
+                for col_idx, cell_value in enumerate(row):
+                    cell = table.cell(row_idx, col_idx)
+                    paragraph = cell.paragraphs[0]
+                    paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                    if paragraph.runs:
+                        paragraph.runs[0].text = cell_value
+                    else:
+                        paragraph.add_run(cell_value)
+                    set_rtl_paragraph(paragraph)
+        else:
+            paragraphs = split_text_into_paragraphs(ocr_record.extracted_text)
+            for paragraph_data in paragraphs:
+                paragraph = doc.add_paragraph()
+                paragraph_text = to_word_text(paragraph_data.get('text', ''))
+                paragraph.add_run(paragraph_text)
+                set_rtl_paragraph(paragraph)
+
+        buffer = io.BytesIO()
+        doc.save(buffer)
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.docx"'
+        return response
+
+
+class OCRExportXlsxView(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+
+        if ocr_record.status != OCRRecord.STATUS_COMPLETED:
+            return Response(
+                {
+                    'message': 'OCR record is not completed yet.',
+                    'status': ocr_record.status,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        wb = Workbook()
+        ws = wb.active
+        ws.sheet_view.rightToLeft = True
+
+        document_type = getattr(ocr_record, 'document_type', 'page') or 'page'
+
+        if document_type == 'table':
+            rows = build_table_rows(ocr_record.extracted_text)
+            if not rows:
+                rows = [[to_word_text(ocr_record.extracted_text or '')]]
+
+            max_columns = max((len(row) for row in rows), default=1)
+            normalized_rows = []
+            for row in rows:
+                cells = [to_word_text(cell) for cell in row]
+                if len(cells) < max_columns:
+                    cells.extend([''] * (max_columns - len(cells)))
+                normalized_rows.append(cells)
+
+            for row_idx, row in enumerate(normalized_rows, start=1):
+                for col_idx, value in enumerate(row, start=1):
+                    cell = ws.cell(row=row_idx, column=col_idx, value=value)
+                    cell.alignment = Alignment(horizontal='right')
+        else:
+            paragraphs = split_text_into_paragraphs(ocr_record.extracted_text)
+            for row_idx, paragraph in enumerate(paragraphs, start=1):
+                cell_value = to_word_text(paragraph.get('text', ''))
+                cell = ws.cell(row=row_idx, column=1, value=cell_value)
+                cell.alignment = Alignment(horizontal='right')
+
+        for column_cells in ws.columns:
+            ws.column_dimensions[column_cells[0].column_letter].width = 30
+
+        buffer = io.BytesIO()
+        wb.save(buffer)
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.xlsx"'
+        return response
+
+```
+
+---
+
+### <a id="📄-ocr-api-models-py"></a>📄 `ocr_api/models.py`
+
+**File Info:**
+- **Size**: 3.7 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/models.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `0426a0c1981c3a37fb9330a25bdc7d85`
+- **SHA256**: `d7f5bfb6e24c20ec3579d398aca23dc11f1fcafa38a8f2efc479a34e435db713`
+- **Encoding**: UTF-8
+
+**File code content:**
+
+```python
+import os
+
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import F
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+    )
+    total_storage_used = models.BigIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.user.username} — {self.total_storage_used} bytes'
+
+
+class OCRRecord(models.Model):
+    STATUS_PENDING = 'PENDING'
+    STATUS_PROCESSING = 'PROCESSING'
+    STATUS_COMPLETED = 'COMPLETED'
+    STATUS_FAILED = 'FAILED'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_PROCESSING, 'Processing'),
+        (STATUS_COMPLETED, 'Completed'),
+        (STATUS_FAILED, 'Failed'),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='ocr_records',
+    )
+    image = models.ImageField(upload_to='ocr_images/')
+    file_name = models.CharField(max_length=255, blank=True)
+    file_size = models.BigIntegerField(default=0)
+    extracted_text = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING,
+    )
+    error_message = models.TextField(blank=True, null=True)
+    document_type = models.CharField(max_length=50, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'OCR Record #{self.id} — {self.file_name or "unnamed"}'
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            if hasattr(self.image, 'size') and self.image.size:
+                self.file_size = self.image.size
+            if self.image.name:
+                self.file_name = os.path.basename(self.image.name)
+        super().save(*args, **kwargs)
+
+
+class EditedOCRExample(models.Model):
+    ocr_record = models.ForeignKey(
+        OCRRecord,
+        on_delete=models.CASCADE,
+        related_name='edits',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='edited_examples',
+    )
+    edited_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Edit #{self.id} for OCRRecord #{self.ocr_record_id} by {self.user.username}'
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['used', 'created_at']),
+        ]
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=OCRRecord)
+def increment_storage_on_create(sender, instance, created, **kwargs):
+    if created and instance.file_size and instance.user_id:
+        UserProfile.objects.filter(user=instance.user).update(
+            total_storage_used=F('total_storage_used') + instance.file_size,
+        )
+
+
+@receiver(post_delete, sender=OCRRecord)
+def decrement_storage_and_delete_file(sender, instance, **kwargs):
+    if instance.file_size and instance.user_id:
+        profile = UserProfile.objects.filter(user=instance.user).first()
+        if profile:
+            profile.total_storage_used = max(0, profile.total_storage_used - instance.file_size)
+            profile.save(update_fields=['total_storage_used'])
+
+    if instance.image:
+        instance.image.delete(save=False)
+
+```
+
+---
+
+### <a id="📄-ocr-api-ocr-engine-py"></a>📄 `ocr_api/ocr_engine.py`
+
+**File Info:**
+- **Size**: 13.19 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/ocr_engine.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `b115370f76df8f20a460a0bcd9a444b0`
+- **SHA256**: `bb08cb89ea55b9241d102c0bde5c9c7658f87657f046de873a25a8a48ff42197`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import os
+import gc
+
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
+import torch
+from PIL import Image
+from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
+from peft import PeftModel
+from qwen_vl_utils import process_vision_info
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WEIGHTS_PATH = os.path.join(BASE_DIR, 'weights')
+BASE_MODEL_NAME = "sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3"
+MAX_DIMENSION = 1280
+def active_train_on_examples(
+    examples,
+    base_model_dir,
+    adapter_dir,
+    output_root=None,
+    num_epochs=2,
+    batch_size=1,
+    learning_rate=1e-5,
+    device=None,
+    val_fraction=0.1,
+    allow_promotion_without_val=False,
+    use_amp=False,
+    grad_accum_steps=1,
+):
+    """
+    Runs a short QLoRA/LoRA fine-tuning pass on collected correction examples
+    and saves the updated adapter to a new timestamped directory. Evaluation on
+    a validation split is used to decide whether to promote the new adapter.
+    Returns dict with keys: success, new_weights_dir, baseline_cer, new_cer, promoted
+    """
+    try:
+        import os
+        import torch
+        from datetime import datetime
+        from torch.utils.data import Dataset, DataLoader
+        from PIL import Image
+        from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+        from peft import PeftModel
+    except Exception as e:
+        return {'success': False, 'new_weights_dir': None, 'error': f'import failed: {e}'}
+
+    if not examples:
+        return {'success': False, 'new_weights_dir': None, 'error': 'no examples'}
+
+    if device is None:
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    if output_root is None:
+        output_root = os.path.join(BASE_DIR, 'weights_active_runs')
+    os.makedirs(output_root, exist_ok=True)
+
+    def levenshtein(a, b):
+        if a == b:
+            return 0
+        la, lb = len(a), len(b)
+        if la == 0:
+            return lb
+        if lb == 0:
+            return la
+        prev = list(range(lb + 1))
+        for i, ca in enumerate(a, start=1):
+            cur = [i] + [0] * lb
+            for j, cb in enumerate(b, start=1):
+                add = prev[j] + 1
+                delete = cur[j-1] + 1
+                change = prev[j-1] + (0 if ca == cb else 1)
+                cur[j] = min(add, delete, change)
+            prev = cur
+        return prev[lb]
+
+    def cer(preds, refs):
+        total_edits = 0
+        total_chars = 0
+        for p, r in zip(preds, refs):
+            total_edits += levenshtein(p, r)
+            total_chars += max(1, len(r))
+        return float(total_edits) / float(total_chars)
+
+    class CorrectionDataset(Dataset):
+        def __init__(self, examples, processor, instruction="Text Recognition:"):
+            self.examples = examples
+            self.processor = processor
+            self.instruction = instruction
+
+        def __len__(self):
+            return len(self.examples)
+
+        def __getitem__(self, idx):
+            ex = self.examples[idx]
+            image = Image.open(ex['image_path']).convert('RGB')
+
+            messages = [
+                {"role": "user", "content": [
+                    {"type": "image", "image": image},
+                    {"type": "text", "text": self.instruction},
+                ]},
+                {"role": "assistant", "content": ex['edited_text']},
+            ]
+
+            full_ids = self.processor.apply_chat_template(
+                messages, add_generation_prompt=False, tokenize=True, return_dict=True, return_tensors="pt",
+            )
+
+            prompt_only = self.processor.apply_chat_template(
+                messages[:1], add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt",
+            )
+            prompt_len = prompt_only["input_ids"].shape[1]
+
+            input_ids = full_ids["input_ids"].squeeze(0)
+            labels = input_ids.clone()
+            labels[:prompt_len] = -100
+
+            item = {
+                "input_ids": input_ids,
+                "attention_mask": full_ids["attention_mask"].squeeze(0),
+                "labels": labels,
+            }
+            if "pixel_values" in full_ids:
+                item["pixel_values"] = full_ids["pixel_values"]
+                item["image_grid_thw"] = full_ids["image_grid_thw"]
+            return item
+
+    def collate_fn(batch, pad_token_id):
+        max_len = max(b["input_ids"].shape[0] for b in batch)
+
+        def pad(t, value):
+            pad_len = max_len - t.shape[0]
+            return torch.cat([t, torch.full((pad_len,), value, dtype=t.dtype)]) if pad_len > 0 else t
+
+        input_ids = torch.stack([pad(b["input_ids"], pad_token_id) for b in batch])
+        attention_mask = torch.stack([pad(b["attention_mask"], 0) for b in batch])
+        labels = torch.stack([pad(b["labels"], -100) for b in batch])
+
+        out = {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
+        if "pixel_values" in batch[0]:
+            out["pixel_values"] = torch.cat([b["pixel_values"] for b in batch], dim=0)
+            out["image_grid_thw"] = torch.cat([b["image_grid_thw"] for b in batch], dim=0)
+        return out
+
+    # ensure image_path exists for all examples
+    for ex in examples:
+        if not ex.get('image_path') or not os.path.exists(ex.get('image_path')):
+            return {'success': False, 'new_weights_dir': None, 'error': f"missing image_path for example {ex.get('ocr_record_id')}"}
+
+    # split train/val
+    import random
+    rng = random.Random(42)
+    ex_copy = examples.copy()
+    rng.shuffle(ex_copy)
+    val_size = max(1, int(len(ex_copy) * val_fraction)) if len(ex_copy) > 1 else 0
+    val_examples = ex_copy[:val_size]
+    train_examples = ex_copy[val_size:]
+    if not train_examples:
+        train_examples = val_examples
+        val_examples = []
+
+    try:
+        # device_map handling
+        if isinstance(device, str) and device == 'cuda' and torch.cuda.is_available():
+            device_map = {"": 0}
+            torch_dtype = torch.bfloat16
+        else:
+            device_map = 'cpu'
+            torch_dtype = torch.float32
+
+        processor = AutoProcessor.from_pretrained(base_model_dir)
+
+        # baseline model (with current adapter if present)
+        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            base_model_dir, torch_dtype=torch_dtype, device_map=device_map,
+        )
+        if adapter_dir and os.path.exists(adapter_dir):
+            baseline_model = PeftModel.from_pretrained(base_model, adapter_dir, is_trainable=False)
+        else:
+            baseline_model = base_model
+        baseline_model.to(device)
+        baseline_model.eval()
+
+        # evaluate baseline on val
+        baseline_preds = []
+        baseline_refs = []
+        if val_examples:
+            for ex in val_examples:
+                messages = [
+                    {"role": "user", "content": [
+                        {"type": "image", "image": Image.open(ex['image_path']).convert('RGB')},
+                        {"type": "text", "text": "Text Recognition:"},
+                    ]}
+                ]
+                try:
+                    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                    image_inputs, video_inputs = process_vision_info(messages)
+                    inputs = processor(text=[text], images=image_inputs, videos=video_inputs, padding=True, return_tensors='pt')
+                    inputs = {k: v.to(device) for k, v in inputs.items()}
+                    with torch.no_grad():
+                        generated_ids = baseline_model.generate(**inputs, max_new_tokens=256)
+                    # attempt to trim prompt tokens if present
+                    generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.get('input_ids', []), generated_ids)] if inputs.get('input_ids', None) is not None else generated_ids
+                    output_text = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+                    baseline_preds.append(output_text[0].strip())
+                    baseline_refs.append(ex['edited_text'])
+                except Exception:
+                    baseline_preds.append('')
+                    baseline_refs.append(ex['edited_text'])
+            baseline_cer = cer(baseline_preds, baseline_refs)
+        else:
+            baseline_cer = float('inf')
+
+        # prepare model for training
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            base_model_dir, torch_dtype=torch_dtype, device_map=device_map,
+        )
+        model = PeftModel.from_pretrained(model, adapter_dir, is_trainable=True)
+        model.to(device)
+        model.train()
+
+        dataset = CorrectionDataset(train_examples, processor)
+        loader = DataLoader(
+            dataset, batch_size=batch_size, shuffle=True,
+            collate_fn=lambda b: collate_fn(b, processor.tokenizer.pad_token_id),
+        )
+
+        optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=learning_rate)
+
+        scaler = torch.cuda.amp.GradScaler() if use_amp and torch.cuda.is_available() else None
+        for epoch in range(num_epochs):
+            epoch_loss = 0.0
+            for step, batch in enumerate(loader):
+                batch = {k: v.to(device) for k, v in batch.items()}
+
+                if scaler is not None:
+                    with torch.cuda.amp.autocast():
+                        outputs = model(**batch)
+                        loss = outputs.loss / grad_accum_steps
+                    scaler.scale(loss).backward()
+                    if (step + 1) % grad_accum_steps == 0:
+                        scaler.step(optimizer)
+                        scaler.update()
+                        optimizer.zero_grad()
+                else:
+                    outputs = model(**batch)
+                    loss = outputs.loss / grad_accum_steps
+                    loss.backward()
+                    if (step + 1) % grad_accum_steps == 0:
+                        optimizer.step()
+                        optimizer.zero_grad()
+
+                epoch_loss += loss.item() * (grad_accum_steps if scaler is None else 1)
+
+            avg_loss = epoch_loss / max(1, len(loader))
+            print(f"[active_train] epoch {epoch+1}/{num_epochs} avg_loss={avg_loss:.4f}")
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        new_weights_dir = os.path.join(output_root, f"adapter_{timestamp}")
+        os.makedirs(new_weights_dir, exist_ok=True)
+        model.save_pretrained(new_weights_dir)
+
+        # evaluate new model on val
+        if val_examples:
+            new_base = Qwen2_5_VLForConditionalGeneration.from_pretrained(base_model_dir, torch_dtype=torch_dtype, device_map=device_map)
+            new_model = PeftModel.from_pretrained(new_base, new_weights_dir, is_trainable=False)
+            new_model.to(device)
+            new_model.eval()
+
+            new_preds = []
+            new_refs = []
+            for ex in val_examples:
+                messages = [
+                    {"role": "user", "content": [
+                        {"type": "image", "image": Image.open(ex['image_path']).convert('RGB')},
+                        {"type": "text", "text": "Text Recognition:"},
+                    ]}
+                ]
+                try:
+                    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                    image_inputs, video_inputs = process_vision_info(messages)
+                    inputs = processor(text=[text], images=image_inputs, videos=video_inputs, padding=True, return_tensors='pt')
+                    inputs = {k: v.to(device) for k, v in inputs.items()}
+                    with torch.no_grad():
+                        generated_ids = new_model.generate(**inputs, max_new_tokens=256)
+                    generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.get('input_ids', []), generated_ids)] if inputs.get('input_ids', None) is not None else generated_ids
+                    output_text = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+                    new_preds.append(output_text[0].strip())
+                    new_refs.append(ex['edited_text'])
+                except Exception:
+                    new_preds.append('')
+                    new_refs.append(ex['edited_text'])
+
+            new_cer = cer(new_preds, new_refs)
+        else:
+            new_cer = float('inf')
+
+        if not val_examples and not allow_promotion_without_val:
+            promoted = False
+        else:
+            promoted = (new_cer < baseline_cer)
+
+        return {
+            'success': bool(promoted),
+            'new_weights_dir': new_weights_dir if promoted else None,
+            'baseline_cer': baseline_cer,
+            'new_cer': new_cer,
+            'promoted': promoted,
+        }
+
+    except Exception as e:
+        return {'success': False, 'new_weights_dir': None, 'error': str(e)}
+    
+
+```
+
+---
+
+### <a id="📄-ocr-api-serializers-py"></a>📄 `ocr_api/serializers.py`
+
+**File Info:**
+- **Size**: 5.74 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/serializers.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `f1e1b5a32a003ba843aa9c4c7a44edf4`
+- **SHA256**: `1825b5dcd2547602ce540cc206cf58c84bebcbaae041b07369de2f008cd27f1e`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import os
+
+from rest_framework import serializers
+
+from .models import OCRRecord, UserProfile, EditedOCRExample
+
+
+class OCRRecordSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    image_name = serializers.SerializerMethodField()
+    image_size_bytes = serializers.SerializerMethodField()
+    image_extension = serializers.SerializerMethodField()
+    image_mime_type = serializers.SerializerMethodField()
+    uploaded_at = serializers.SerializerMethodField()
+    completed_at = serializers.SerializerMethodField()
+    download_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OCRRecord
+        fields = [
+            'id',
+            'user',
+            'image',
+            'file_name',
+            'file_size',
+            'extracted_text',
+            'status',
+            'error_message',
+            'document_type',
+            'created_at',
+            'user_email',
+            'image_name',
+            'image_size_bytes',
+            'image_extension',
+            'image_mime_type',
+            'uploaded_at',
+            'completed_at',
+            'download_url',
+        ]
+        read_only_fields = [
+            'user',
+            'file_size',
+            'file_name',
+            'status',
+            'extracted_text',
+            'user_email',
+            'image_name',
+            'image_size_bytes',
+            'image_extension',
+            'image_mime_type',
+            'uploaded_at',
+            'completed_at',
+            'download_url',
+        ]
+
+    def get_image_name(self, obj):
+        return obj.file_name or (os.path.basename(obj.image.name) if obj.image and obj.image.name else None)
+
+    def get_image_size_bytes(self, obj):
+        return obj.file_size or 0
+
+    def get_image_extension(self, obj):
+        if not obj.image or not obj.image.name:
+            return None
+        return os.path.splitext(obj.image.name)[1].lower().lstrip('.')
+
+    def get_image_mime_type(self, obj):
+        if not obj.image or not obj.image.name:
+            return None
+        return getattr(obj.image, 'content_type', None) or 'application/octet-stream'
+
+    def get_uploaded_at(self, obj):
+        return obj.created_at.isoformat() if obj.created_at else None
+
+    def get_completed_at(self, obj):
+        return obj.updated_at.isoformat() if getattr(obj, 'updated_at', None) else None
+
+    def get_download_url(self, obj):
+        if not obj.id:
+            return None
+        return f'/api/download-ocr/{obj.id}/'
+
+
+class StorageInfoSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    bytes_used = serializers.IntegerField()
+    megabytes_used = serializers.FloatField()
+    gigabytes_used = serializers.FloatField()
+
+    @staticmethod
+    def from_profile(profile):
+        bytes_used = profile.total_storage_used
+        return {
+            'user_id': profile.user_id,
+            'username': profile.user.username,
+            'email': profile.user.email,
+            'bytes_used': bytes_used,
+            'megabytes_used': round(bytes_used / (1024 * 1024), 4),
+            'gigabytes_used': round(bytes_used / (1024 * 1024 * 1024), 4),
+        }
+
+
+class UserDetailSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    bytes_used = serializers.IntegerField()
+    megabytes_used = serializers.FloatField()
+    gigabytes_used = serializers.FloatField()
+    total_files = serializers.IntegerField()
+    total_completed = serializers.IntegerField()
+    total_pending = serializers.IntegerField()
+    total_failed = serializers.IntegerField()
+    total_edits = serializers.IntegerField()
+    total_used_edits = serializers.IntegerField()
+    last_upload_at = serializers.DateTimeField(allow_null=True)
+
+    @staticmethod
+    def from_user(user):
+        profile = getattr(user, 'profile', None)
+        bytes_used = profile.total_storage_used if profile else 0
+        ocr_qs = user.ocr_records.all()
+        total_files = ocr_qs.count()
+        total_completed = ocr_qs.filter(status=OCRRecord.STATUS_COMPLETED).count()
+        total_pending = ocr_qs.filter(status=OCRRecord.STATUS_PENDING).count()
+        total_failed = ocr_qs.filter(status=OCRRecord.STATUS_FAILED).count()
+        total_edits = user.edited_examples.count()
+        total_used_edits = user.edited_examples.filter(used=True).count()
+        last_upload = ocr_qs.order_by('-created_at').values_list('created_at', flat=True).first()
+        return {
+            'user_id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'bytes_used': bytes_used,
+            'megabytes_used': round(bytes_used / (1024 * 1024), 4),
+            'gigabytes_used': round(bytes_used / (1024 * 1024 * 1024), 4),
+            'total_files': total_files,
+            'total_completed': total_completed,
+            'total_pending': total_pending,
+            'total_failed': total_failed,
+            'total_edits': total_edits,
+            'total_used_edits': total_used_edits,
+            'last_upload_at': last_upload,
+        }
+
+
+class EditedOCRExampleSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = EditedOCRExample
+        fields = ('id', 'ocr_record', 'user', 'user_email', 'edited_text', 'created_at', 'used', 'used_at')
+        read_only_fields = ('id', 'created_at', 'used', 'used_at', 'user_email')
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+```
+
+---
+
+### <a id="📄-ocr-api-tasks-py"></a>📄 `ocr_api/tasks.py`
+
+**File Info:**
+- **Size**: 10.49 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/tasks.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:44:23 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `547c72dae9f1e21e5fb6c3fb42c769b7`
+- **SHA256**: `24655bcb424f264ae17441e97de847452d86e2eb57865c1a00d7d1950aa1b4aa`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import os
+import shutil
+import time
+from datetime import datetime
+
+import json
+from celery import shared_task
+from celery.utils.log import get_task_logger
+from django.db import transaction
+from django.conf import settings
+from prometheus_client import Counter, Gauge
+
+task_logger = get_task_logger(__name__)
+
+# metrics
+TASK_RUNS = Counter('active_training_runs_total', 'Total active training task runs')
+TASK_SUCCESSES = Counter('active_training_success_total', 'Successful active training runs')
+TASK_FAILURES = Counter('active_training_failure_total', 'Failed active training runs')
+LAST_BASELINE_CER = Gauge('active_training_last_baseline_cer', 'Last baseline CER')
+LAST_NEW_CER = Gauge('active_training_last_new_cer', 'Last new CER')
+from django.utils import timezone
+
+from .models import EditedOCRExample
+from . import ocr_engine
+import torch
+
+# default weights directory configured in ocr_engine
+WEIGHTS_DIR = getattr(ocr_engine, 'WEIGHTS_PATH', None)
+
+
+@shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=True, max_retries=3)
+def run_active_training(self, threshold=10):
+    TASK_RUNS.inc()
+    # Prefer a Redis-backed distributed lock when Redis is available (recommended for multi-host).
+    # Fallback to a simple file lock for single-host / Windows dev environments.
+    redis_lock = None
+    use_redis_lock = False
+    lock_path = os.path.join(getattr(ocr_engine, 'BASE_DIR', '.'), '.run_active_training.lock')
+
+    # ------------------
+    # Redis lock attempt
+    # ------------------
+    try:
+        import redis as _redis
+        redis_url = os.environ.get('REDIS_URL') or os.environ.get('CELERY_BROKER_URL') or getattr(settings, 'CELERY_BROKER_URL', None)
+        if redis_url:
+            try:
+                redis_client = _redis.from_url(redis_url)
+                lock_key = 'backend_ocr:run_active_training_lock'
+                # 6 hours TTL to match file-lock behaviour
+                redis_lock = redis_client.lock(lock_key, timeout=6 * 3600)
+                acquired = redis_lock.acquire(blocking=False)
+                if acquired:
+                    use_redis_lock = True
+                    task_logger.info('Acquired Redis lock for active training')
+                else:
+                    task_logger.info('Another active training run holds the Redis lock; skipping.')
+                    return {'status': 'skipped', 'reason': 'redis_lock_present'}
+            except Exception as _e:
+                task_logger.debug('Redis lock attempt failed: %s', _e)
+    except Exception:
+        # redis client not available or import failed — fallback to file lock
+        pass
+
+    # ------------------
+    # File lock fallback (single-host / Windows)
+    # ------------------
+    if not use_redis_lock:
+        if os.path.exists(lock_path):
+            try:
+                with open(lock_path, 'r') as fh:
+                    data = json.load(fh)
+                ts = data.get('ts')
+                if ts and (time.time() - ts) < 6 * 3600:
+                    task_logger.info('Another active training run is in progress or recently completed; skipping.')
+                    return {'status': 'skipped', 'reason': 'lock present'}
+            except Exception:
+                pass
+        try:
+            with open(lock_path, 'w') as fh:
+                json.dump({'ts': time.time(), 'task_id': self.request.id}, fh)
+        except Exception:
+            task_logger.warning('Could not create lock file; proceeding anyway')
+
+    pending_qs = EditedOCRExample.objects.filter(used=False).order_by('created_at')
+    total_pending = pending_qs.count()
+
+    if total_pending < threshold:
+        return {'status': 'skipped', 'reason': f'not enough edits ({total_pending})'}
+
+    examples = []
+    for edit in pending_qs:
+        record = edit.ocr_record
+        image_path = None
+        try:
+            image_path = record.image.path if record.image and hasattr(record.image, 'path') else None
+        except Exception:
+            image_path = None
+
+        examples.append({
+            'ocr_record_id': record.id,
+            'original_text': record.extracted_text or '',
+            'edited_text': edit.edited_text or '',
+            'image_path': image_path,
+            'user_id': edit.user_id,
+        })
+
+    backup_dir = None
+    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    try:
+        if WEIGHTS_DIR and os.path.exists(WEIGHTS_DIR):
+            backup_dir = f'{WEIGHTS_DIR}_backup_{timestamp}'
+            shutil.copytree(WEIGHTS_DIR, backup_dir)
+
+        task_logger.info('Starting active training with %d examples', len(examples))
+        result = ocr_engine.active_train_on_examples(
+            examples,
+            base_model_dir=ocr_engine.BASE_MODEL_NAME,
+            adapter_dir=ocr_engine.WEIGHTS_PATH,
+            output_root=os.path.join(ocr_engine.BASE_DIR, 'weights_active_runs'),
+            num_epochs=2,
+            batch_size=4,
+            learning_rate=1e-5,
+            device='cuda' if torch.cuda.is_available() else 'cpu',
+        )
+
+        # support both boolean and dict return for backward compatibility
+        success = False
+        new_weights_dir = None
+        if isinstance(result, dict):
+            success = result.get('success', False)
+            new_weights_dir = result.get('new_weights_dir')
+        else:
+            success = bool(result)
+
+        if success:
+            # if new weights are produced, replace WEIGHTS_DIR safely
+            if new_weights_dir:
+                try:
+                    if WEIGHTS_DIR and os.path.exists(WEIGHTS_DIR):
+                        shutil.rmtree(WEIGHTS_DIR)
+                    shutil.copytree(new_weights_dir, WEIGHTS_DIR)
+                except Exception:
+                    # failed to promote new weights: attempt rollback
+                    if backup_dir and os.path.exists(backup_dir):
+                        if WEIGHTS_DIR and os.path.exists(WEIGHTS_DIR):
+                            shutil.rmtree(WEIGHTS_DIR)
+                        shutil.copytree(backup_dir, WEIGHTS_DIR)
+            now = timezone.now()
+            pending_qs.update(used=True, used_at=now)
+            TASK_SUCCESSES.inc()
+            try:
+                if isinstance(result, dict):
+                    baseline = result.get('baseline_cer')
+                    new = result.get('new_cer')
+                    if baseline is not None:
+                        LAST_BASELINE_CER.set(float(baseline))
+                    if new is not None:
+                        LAST_NEW_CER.set(float(new))
+            except Exception:
+                pass
+            task_logger.info('Active training completed successfully')
+            return {'status': 'success', 'examples_trained': len(examples)}
+        else:
+            # training failed: restore backup
+            if backup_dir and os.path.exists(backup_dir):
+                try:
+                    if WEIGHTS_DIR and os.path.exists(WEIGHTS_DIR):
+                        shutil.rmtree(WEIGHTS_DIR)
+                    shutil.copytree(backup_dir, WEIGHTS_DIR)
+                except Exception:
+                    pass
+            TASK_FAILURES.inc()
+            task_logger.warning('Active training run did not promote weights')
+            return {'status': 'failed'}
+    except Exception as exc:
+        # on unexpected failure try to restore
+        if backup_dir and os.path.exists(backup_dir):
+            try:
+                if WEIGHTS_DIR and os.path.exists(WEIGHTS_DIR):
+                    shutil.rmtree(WEIGHTS_DIR)
+                shutil.copytree(backup_dir, WEIGHTS_DIR)
+            except Exception:
+                pass
+        TASK_FAILURES.inc()
+        task_logger.exception('Active training error: %s', exc)
+        return {'status': 'error', 'error': str(exc)}
+    finally:
+                try:
+                        if use_redis_lock and redis_lock is not None:
+                                try:
+                                        redis_lock.release()
+                                        task_logger.info('Released Redis lock for active training')
+                                except Exception:
+                                        task_logger.warning('Failed to release Redis lock')
+                        else:
+                                if os.path.exists(lock_path):
+                                        os.remove(lock_path)
+                except Exception:
+                        pass
+
+
+@shared_task(bind=True)
+def process_ocr_record(self, record_id):
+    """Process a single OCRRecord in the background (moved from views to Celery task)."""
+    logger = get_task_logger(__name__)
+    try:
+        from .models import OCRRecord
+        record = OCRRecord.objects.filter(pk=record_id).first()
+        if not record:
+            logger.warning('process_ocr_record: record not found %s', record_id)
+            return {'status': 'not_found'}
+
+        record.status = OCRRecord.STATUS_PROCESSING
+        record.error_message = None
+        record.save(update_fields=['status', 'error_message'])
+
+        engine = ocr_engine.get_ocr_engine()
+        try:
+            extracted_text = (engine.predict(record.image.path) or '').strip()
+            logger.info("Full-page OCR text for record_id=%s: '%s'", record.id, extracted_text)
+        except Exception:
+            logger.exception('Full-page OCR failed for record_id=%s', record.id)
+            extracted_text = ''
+        finally:
+            try:
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except Exception:
+                pass
+            try:
+                gc.collect()
+            except Exception:
+                pass
+
+        record.extracted_text = extracted_text
+        record.status = OCRRecord.STATUS_COMPLETED
+        record.error_message = None
+        record.save(update_fields=['extracted_text', 'status', 'error_message'])
+        return {'status': 'success'}
+    except Exception as exc:
+        try:
+            from .models import OCRRecord
+            record = OCRRecord.objects.filter(pk=record_id).first()
+            if record:
+                record.error_message = str(exc)
+                record.status = OCRRecord.STATUS_FAILED
+                record.save(update_fields=['status', 'error_message'])
+        except Exception:
+            pass
+        logger.exception('Unhandled OCR background exception for record_id=%s', record_id)
+        return {'status': 'error', 'error': str(exc)}
+
+
+    
+
+```
+
+---
+
+### <a id="📄-ocr-api-tests-py"></a>📄 `ocr_api/tests.py`
+
+**File Info:**
+- **Size**: 63 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/tests.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `e08f0582500f6562bf0a931ef9503b39`
+- **SHA256**: `dae0da7efdcdb3a7fb572d5e914b60631099122d4a4727ac6434c016161c5fe1`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.test import TestCase
+
+# Create your tests here.
+
+```
+
+---
+
+### <a id="📄-ocr-api-urls-py"></a>📄 `ocr_api/urls.py`
+
+**File Info:**
+- **Size**: 1.56 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/urls.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `bb0f778b1bb71bab4ae5102b3d369a7f`
+- **SHA256**: `4d1a7dcca36125191d5e2e5d3814b8e99c80ea8042c10bc28e7d7c7a736c0a4b`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+
+from .auth_views import LoginView, LogoutView, SignupView
+from .exporters import OCRExportDocxView, OCRExportPdfView, OCRExportXlsxView
+from .views import (
+    OCRDownloadView,
+    OCRHistoryView,
+    OCRRecordViewSet,
+    OCRStatusView,
+    ProcessOCRView,
+    StorageInfoView,
+    UserDetailsView,
+)
+
+app_name = 'ocr_api'
+
+router = DefaultRouter()
+router.register(r'ocr-records', OCRRecordViewSet, basename='ocr-record')
+
+urlpatterns = [
+    path('auth/signup/', SignupView.as_view(), name='auth-signup'),
+    path('auth/login/', LoginView.as_view(), name='auth-login'),
+    path('auth/logout/', LogoutView.as_view(), name='auth-logout'),
+    path('storage-info/', StorageInfoView.as_view(), name='storage-info'),
+    path('user-details/', UserDetailsView.as_view(), name='user-details'),
+    path('user-details/<int:user_id>/', UserDetailsView.as_view(), name='user-details-admin'),
+    path('process-ocr/', ProcessOCRView.as_view(), name='process-ocr'),
+    path('ocr-status/<int:pk>/', OCRStatusView.as_view(), name='ocr-status'),
+    path('ocr-history/', OCRHistoryView.as_view(), name='ocr-history'),
+    path('download-ocr/<int:pk>/', OCRDownloadView.as_view(), name='ocr-download'),
+    path('export-ocr/<int:pk>/pdf/', OCRExportPdfView.as_view(), name='export-ocr-pdf'),
+    path('export-ocr/<int:pk>/docx/', OCRExportDocxView.as_view(), name='export-ocr-docx'),
+    path('export-ocr/<int:pk>/xlsx/', OCRExportXlsxView.as_view(), name='export-ocr-xlsx'),
+] + router.urls
+
+```
+
+---
+
+### <a id="📄-ocr-api-views-py"></a>📄 `ocr_api/views.py`
+
+**File Info:**
+- **Size**: 16.81 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `ocr_api/views.py`
+- **Relative Path**: `ocr_api`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `2ad605c4ec80e6f3d5a457a079d7075b`
+- **SHA256**: `e0d226e3f5c683ed8aba92b33b3bf35f641161f14837a17d66b4b8627ce37602`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import io
+import json
+import gc
+import logging
+import os
+
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from PIL import Image
+import torch
+from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+from .models import OCRRecord, UserProfile, EditedOCRExample
+from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
+from .serializers import UserDetailSerializer
+from .ocr_engine import get_ocr_engine
+
+logger = logging.getLogger(__name__)
+MODEL_NAME = 'sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3'
+
+try:
+    import arabic_reshaper
+    from bidi.algorithm import get_display
+except Exception:
+    arabic_reshaper = None
+    get_display = None
+
+
+def get_accessible_ocr_queryset(user):
+    queryset = OCRRecord.objects.select_related('user')
+    if user.is_staff or user.is_superuser:
+        return queryset
+    return queryset.filter(user=user)
+
+
+def split_text_into_paragraphs(raw_text):
+    text = (raw_text or '').strip()
+    if not text:
+        return []
+
+    if '\n\n' in text:
+        parts = text.split('\n\n')
+    elif '\n' in text:
+        parts = text.split('\n')
+    else:
+        return [{'index': 1, 'text': text}]
+
+    paragraphs = []
+    for part in parts:
+        cleaned = part.strip()
+        if cleaned:
+            paragraphs.append({'index': len(paragraphs) + 1, 'text': cleaned})
+
+    if not paragraphs:
+        return []
+
+    return paragraphs
+
+
+def build_document_payload(ocr_record, request=None):
+    if ocr_record.status != OCRRecord.STATUS_COMPLETED:
+        return {'paragraphs': []}
+
+    paragraphs = split_text_into_paragraphs(ocr_record.extracted_text)
+    return {'paragraphs': paragraphs}
+
+
+def build_metadata_payload(ocr_record, request=None):
+    source_image = None
+    if ocr_record.image and ocr_record.image.name:
+        if request is not None:
+            try:
+                source_image = request.build_absolute_uri(ocr_record.image.url)
+            except Exception:
+                source_image = ocr_record.image.url
+        else:
+            source_image = ocr_record.image.url
+
+    return {
+        'created_at': ocr_record.created_at.isoformat() if ocr_record.created_at else None,
+        'source_image': source_image,
+        'model': MODEL_NAME,
+    }
+
+
+def serialize_ocr_record_response(ocr_record, request=None):
+    raw_text = ocr_record.extracted_text if ocr_record.status == OCRRecord.STATUS_COMPLETED else None
+    image_url = None
+    if ocr_record.image and ocr_record.image.name:
+        if request is not None:
+            try:
+                image_url = request.build_absolute_uri(ocr_record.image.url)
+            except Exception:
+                image_url = ocr_record.image.url
+        else:
+            image_url = ocr_record.image.url
+
+    data = {
+        'id': ocr_record.id,
+        'status': ocr_record.status,
+        'extracted_text': raw_text,
+        'error_message': ocr_record.error_message,
+        'document': build_document_payload(ocr_record, request),
+        'metadata': build_metadata_payload(ocr_record, request),
+        'image': {
+            'name': ocr_record.file_name or (os.path.basename(ocr_record.image.name) if ocr_record.image and ocr_record.image.name else None),
+            'size_bytes': ocr_record.file_size or 0,
+            'uploaded_at': ocr_record.created_at.isoformat() if ocr_record.created_at else None,
+            'extension': os.path.splitext((ocr_record.file_name or (ocr_record.image.name if ocr_record.image and ocr_record.image.name else '')))[1].lower().lstrip('.') if (ocr_record.file_name or (ocr_record.image.name if ocr_record.image and ocr_record.image.name else '')) else None,
+            'mime_type': getattr(ocr_record.image, 'content_type', None) or 'application/octet-stream',
+            'url': image_url,
+        },
+        'result': {
+            'status': ocr_record.status,
+            'completed_at': ocr_record.updated_at.isoformat() if getattr(ocr_record, 'updated_at', None) else None,
+            'download': {
+                'pdf_url': f'/api/download-ocr/{ocr_record.id}/?format=pdf' if ocr_record.status == OCRRecord.STATUS_COMPLETED else None,
+                'json_url': f'/api/download-ocr/{ocr_record.id}/?format=json' if ocr_record.status == OCRRecord.STATUS_COMPLETED else None,
+            },
+        },
+    }
+    return data
+
+
+def run_ocr_background(record_id):
+    record = OCRRecord.objects.filter(pk=record_id).first()
+    if not record:
+        return
+
+    # This function has been moved to a Celery task; keep a noop fallback for local calls
+    try:
+        logger.info('run_ocr_background invoked for record_id=%s but background processing is handled by Celery task.', record_id)
+    except Exception:
+        pass
+
+
+class OCRRecordViewSet(viewsets.ModelViewSet):
+    serializer_class = OCRRecordSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get_queryset(self):
+        return get_accessible_ocr_queryset(self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class StorageInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        is_admin = user.is_staff or user.is_superuser
+
+        if is_admin:
+            user_id = request.query_params.get('user_id')
+            if user_id:
+                profiles = UserProfile.objects.filter(user_id=user_id).select_related('user')
+                if not profiles.exists():
+                    return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+                payload = StorageInfoSerializer.from_profile(profiles.first())
+                return Response(payload, status=status.HTTP_200_OK)
+
+            profiles = UserProfile.objects.select_related('user').order_by('user_id')
+            payload = [StorageInfoSerializer.from_profile(profile) for profile in profiles]
+            return Response(payload, status=status.HTTP_200_OK)
+
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        payload = StorageInfoSerializer.from_profile(profile)
+        return Response(payload, status=status.HTTP_200_OK)
+
+
+class UserDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id=None, *args, **kwargs):
+        # allow admins to query other users; normal users can only query themselves
+        if user_id:
+            if not (request.user.is_staff or request.user.is_superuser):
+                return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+            from django.contrib.auth.models import User
+            user = User.objects.filter(pk=user_id).first()
+            if not user:
+                return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            user = request.user
+
+        payload = UserDetailSerializer.from_user(user)
+        return Response(payload, status=status.HTTP_200_OK)
+
+
+class ProcessOCRView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+    from rest_framework.throttling import SimpleRateThrottle
+
+    class UploadRateThrottle(SimpleRateThrottle):
+        scope = 'uploads'
+    throttle_classes = [UploadRateThrottle]
+
+    def post(self, request, *args, **kwargs):
+        serializer = OCRRecordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        ocr_record = serializer.save(user=request.user)
+        ocr_record.status = OCRRecord.STATUS_PENDING
+        ocr_record.save(update_fields=['status'])
+        
+        # enqueue background processing via Celery task
+        try:
+            from .tasks import process_ocr_record
+            process_ocr_record.delay(ocr_record.id)
+        except Exception:
+            logger.exception('Failed to enqueue OCR background task; falling back to synchronous processing')
+            # fallback synchronous processing via Celery task apply
+            try:
+                process_ocr_record.apply(args=(ocr_record.id,))
+            except Exception:
+                logger.exception('Fallback synchronous OCR processing failed')
+
+        return Response(
+            {
+                'id': ocr_record.id,
+                'status': ocr_record.status,
+                'message': 'OCR task accepted. Poll the status endpoint for updates.',
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+
+class OCRStatusView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+        data = serialize_ocr_record_response(ocr_record, request)
+        return Response(data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+
+        if 'extracted_text' not in request.data:
+            return Response(
+                {'message': 'extracted_text is required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        extracted_text = request.data.get('extracted_text')
+        if extracted_text is None:
+            extracted_text = ''
+        if not isinstance(extracted_text, str):
+            return Response(
+                {'message': 'extracted_text must be a string.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Save the edited text as an audit/training example
+        edit = EditedOCRExample.objects.create(
+            ocr_record=ocr_record,
+            user=request.user,
+            edited_text=extracted_text,
+        )
+
+        # Also update the displayed extracted_text so users see their change immediately
+        ocr_record.extracted_text = extracted_text
+        ocr_record.save(update_fields=['extracted_text'])
+
+        payload = EditedOCRExampleSerializer(edit).data
+        payload.update({'message': 'Text updated and saved for training.', 'id': ocr_record.id, 'status': ocr_record.status, 'extracted_text': ocr_record.extracted_text})
+
+        return Response(payload, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+        ocr_record.delete()
+        return Response({'message': 'Record and image deleted successfully'}, status=status.HTTP_200_OK)
+
+
+class OCRHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        records = get_accessible_ocr_queryset(request.user).order_by('-created_at')
+        payload = [serialize_ocr_record_response(record, request) for record in records]
+        return Response(payload, status=status.HTTP_200_OK)
+
+
+class OCRDownloadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, *args, **kwargs):
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
+
+        if ocr_record.status != OCRRecord.STATUS_COMPLETED:
+            return Response(
+                {
+                    'message': 'OCR record is not completed yet.',
+                    'status': ocr_record.status,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        output_format = request.query_params.get('format', 'pdf').lower()
+        if output_format not in ('pdf', 'json'):
+            return Response(
+                {'message': "Invalid format. Use 'pdf' or 'json'."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if output_format == 'json':
+            payload = {'text': ocr_record.extracted_text or ''}
+            response = HttpResponse(
+                json.dumps(payload, ensure_ascii=False, indent=2),
+                content_type='application/json',
+            )
+            response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.json"'
+            return response
+
+        buffer = io.BytesIO()
+        pdf = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+        left_margin = 40
+        right_margin = 40
+        top_margin = 50
+        bottom_margin = 50
+        line_spacing = 18
+        font_name = 'ArialUnicode'
+        font_size = 14
+
+        font_path = r'C:\Windows\Fonts\arial.ttf'
+        if not os.path.exists(font_path):
+            return Response(
+                {'message': f'Arabic font not found at {font_path}.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        try:
+            if font_name not in pdfmetrics.getRegisteredFontNames():
+                pdfmetrics.registerFont(TTFont(font_name, font_path))
+        except Exception:
+            return Response(
+                {'message': 'Failed to load Arabic PDF font.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        if not (arabic_reshaper and get_display):
+            return Response(
+                {'message': 'Arabic shaping libraries are missing. Install arabic-reshaper and python-bidi.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        def to_pdf_text(value):
+            text = value or ''
+            try:
+                return get_display(arabic_reshaper.reshape(text))
+            except Exception:
+                return text
+
+        def wrap_for_width(original_text, max_width):
+            wrapped_lines = []
+            paragraphs = original_text.splitlines() if original_text else ['']
+            for paragraph in paragraphs:
+                words = paragraph.split(' ')
+                if not words:
+                    wrapped_lines.append('')
+                    continue
+
+                current = []
+                for word in words:
+                    candidate_words = current + [word]
+                    candidate_original = ' '.join(candidate_words).strip()
+                    candidate_shaped = to_pdf_text(candidate_original)
+                    candidate_width = pdfmetrics.stringWidth(candidate_shaped, font_name, font_size)
+
+                    if candidate_width <= max_width or not current:
+                        current = candidate_words
+                    else:
+                        wrapped_lines.append(' '.join(current).strip())
+                        current = [word]
+
+                wrapped_lines.append(' '.join(current).strip())
+            return wrapped_lines
+
+        max_text_width = width - left_margin - right_margin
+        source_text = ocr_record.extracted_text or ''
+        logical_lines = wrap_for_width(source_text, max_text_width)
+
+        y = height - top_margin
+        pdf.setFont(font_name, font_size)
+        for logical_line in logical_lines:
+            if y <= bottom_margin:
+                pdf.showPage()
+                pdf.setFont(font_name, font_size)
+                y = height - top_margin
+
+            shaped_line = to_pdf_text(logical_line)
+            line_width = pdfmetrics.stringWidth(shaped_line, font_name, font_size)
+            x = width - right_margin - line_width
+            if x < left_margin:
+                x = left_margin
+
+            pdf.drawString(x, y, shaped_line)
+            y -= line_spacing
+
+        pdf.save()
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.pdf"'
+        return response
+
+
+class MetricsView(APIView):
+    # expose Prometheus metrics; no auth to allow monitoring systems to scrape
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        try:
+            from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+        except Exception:
+            return Response({'detail': 'prometheus client not available'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        data = generate_latest()
+        return HttpResponse(data, content_type=CONTENT_TYPE_LATEST)
+
+```
+
+---
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `scripts/output/detected_cells_visualization.jpg`
+
+### <a id="📄-scripts-test-structured-prompt-py"></a>📄 `scripts/test_structured_prompt.py`
+
+**File Info:**
+- **Size**: 6.17 KB
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `scripts/test_structured_prompt.py`
+- **Relative Path**: `scripts`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `011fa206e31f0ece09be1816e6aae7fe`
+- **SHA256**: `de77fed33720212a47b1e94a772e1691920b98ea2481f54aa03baefc79ec05df`
+- **Encoding**: UTF-8
+
+**File code content:**
+
+```python
+import argparse
+import sys
+from pathlib import Path
+
+from PIL import Image
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+import torch
+
+from ocr_api.ocr_engine import get_ocr_engine
+
+MAX_DIMENSION = 1280
+
+IMAGE_DIRS = [
+    ROOT / 'media' / 'ocr_images' / '2026' / '08' / '13',
+    ROOT / 'media' / 'ocr_images' / '2026' / '08' / '03',
+    ROOT / 'media' / 'ocr_images' / '2026' / '08' / '02',
+]
+
+IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.webp'}
+
+PROMPTS = {
+    'A': (
+        'اقرأ النص العربي المكتوب بخط اليد في هذه الصورة، واكتبه بدقة، مع تقسيم النص إلى فقرات منفصلة. '
+        'أرجع النتيجة بصيغة Markdown، بحيث تفصل كل فقرة بسطر فارغ.'
+    ),
+    'B': (
+        'اقرأ النص العربي المكتوب بخط اليد في هذه الصورة بدقة، وأرجع النتيجة فقط بصيغة JSON بدون أي شرح إضافي، '
+        'بالشكل التالي: {"paragraphs": ["نص الفقرة الأولى", "نص الفقرة الثانية"]}'
+    ),
+}
+
+
+def find_image_files():
+    images = []
+    for directory in IMAGE_DIRS:
+        if not directory.exists():
+            continue
+        for path in sorted(directory.iterdir()):
+            if not path.is_file():
+                continue
+            if path.suffix.lower() not in IMAGE_EXTENSIONS:
+                continue
+            name_lower = path.name.lower()
+            if name_lower == 'debug_input.jpg' or name_lower.startswith('debug_input'):
+                continue
+            images.append(path)
+
+    return images
+
+
+def resolve_image_path(image_arg):
+    candidates = []
+
+    if image_arg:
+        candidates.append(Path(image_arg))
+        if not Path(image_arg).is_absolute():
+            candidates.append(ROOT / image_arg)
+            candidates.append(ROOT / 'media' / 'ocr_images' / image_arg)
+
+    for candidate in candidates:
+        if candidate.exists() and candidate.is_file():
+            return candidate
+
+    images = find_image_files()
+    if not images:
+        raise FileNotFoundError(
+            'No non-debug sample images were found under media/ocr_images/2026/08/13/, '
+            'media/ocr_images/2026/08/03/, or media/ocr_images/2026/08/02/.'
+        )
+
+    print('Available images (excluding debug_input.jpg):')
+    for img in images:
+        rel = img.relative_to(ROOT)
+        print(f' - {rel.as_posix()}')
+    raise FileNotFoundError('Please rerun with --image pointing to one of the files above.')
+
+
+def resize_image_for_ocr(image_path, max_dimension=MAX_DIMENSION):
+    source = Image.open(image_path)
+    try:
+        original_width, original_height = source.size
+        if max(original_width, original_height) <= max_dimension:
+            return image_path, (original_width, original_height)
+
+        resized = source.copy()
+        resized.thumbnail((max_dimension, max_dimension), Image.LANCZOS)
+        resized_path = image_path.with_name(f'{image_path.stem}_resized{image_path.suffix}')
+        resized.save(resized_path, format='JPEG' if image_path.suffix.lower() in {'.jpg', '.jpeg'} else None)
+        return resized_path, (original_width, original_height)
+    finally:
+        source.close()
+
+
+def run_prompt_with_custom_text(engine, image_path, prompt_text):
+    messages = [
+        {
+            'role': 'user',
+            'content': [
+                {'type': 'image', 'image': str(image_path)},
+                {'type': 'text', 'text': prompt_text},
+            ],
+        }
+    ]
+
+    text = engine.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    image_inputs, video_inputs = __import__('qwen_vl_utils').process_vision_info(messages)
+    inputs = engine.processor(
+        text=[text],
+        images=image_inputs,
+        videos=video_inputs,
+        padding=True,
+        return_tensors='pt'
+    ).to(engine.device)
+
+    generated_ids = engine.model.generate(**inputs, max_new_tokens=256)
+    generated_ids_trimmed = [
+        out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+    ]
+    output_text = engine.processor.batch_decode(
+        generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+    )
+
+    del inputs
+    del generated_ids
+    del generated_ids_trimmed
+    del image_inputs
+    del video_inputs
+    return output_text[0].strip()
+
+
+def run_prompt(engine, image_path, label, prompt_text):
+    print(f'\n========================================')
+    print(f'IMAGE: {image_path}')
+    print(f'PROMPT {label}:')
+    print(prompt_text)
+    print('RAW OUTPUT START')
+    try:
+        result = run_prompt_with_custom_text(engine, image_path, prompt_text)
+        print(result)
+    except Exception as exc:
+        print(f'ERROR: {exc}')
+    print('RAW OUTPUT END')
+    print('========================================\n')
+
+
+def cleanup_cuda():
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Run OCR prompt tests on a single image.')
+    parser.add_argument('--image', dest='image', help='Image path relative to media/ocr_images or full path to a file.')
+    args = parser.parse_args()
+
+    try:
+        image_path = resolve_image_path(args.image)
+    except FileNotFoundError as exc:
+        print(exc)
+        return 1
+
+    image_path_for_run, original_size = resize_image_for_ocr(image_path)
+    if image_path_for_run != image_path:
+        print(f'Resized from {original_size[0]}x{original_size[1]} to {Image.open(image_path_for_run).size[0]}x{Image.open(image_path_for_run).size[1]}')
+        Image.open(image_path_for_run).close()
+
+    engine = get_ocr_engine()
+    try:
+        for label, prompt_text in PROMPTS.items():
+            run_prompt(engine, image_path_for_run, label, prompt_text)
+    finally:
+        cleanup_cuda()
+        print(f'GPU cache cleared after processing: {image_path_for_run}')
+
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
+
+```
+
+---
+
+### <a id="📄-scripts-test-table-border-detection-py"></a>📄 `scripts/test_table_border_detection.py`
+
+**File Info:**
+- **Size**: 0 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `scripts/test_table_border_detection.py`
+- **Relative Path**: `scripts`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `d41d8cd98f00b204e9800998ecf8427e`
+- **SHA256**: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+
+```
+
+---
+
+### <a id="📄-weights-adapter-config-json"></a>📄 `weights/adapter_config.json`
+
+**File Info:**
+- **Size**: 1.16 KB
+- **Extension**: `.json`
+- **Language**: `json`
+- **Location**: `weights/adapter_config.json`
+- **Relative Path**: `weights`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `2ac0635072510ff68896180e11a2d607`
+- **SHA256**: `776c15fbf0127c5b9289fd8e0d50d61c00ce43b2e2397c05c60ca8f9acadd7fd`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```json
+{
+  "alora_invocation_tokens": null,
+  "alpha_pattern": {},
+  "arrow_config": null,
+  "auto_mapping": null,
+  "base_model_name_or_path": "sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3",
+  "bias": "none",
+  "corda_config": null,
+  "ensure_weight_tying": false,
+  "eva_config": null,
+  "exclude_modules": null,
+  "fan_in_fan_out": false,
+  "inference_mode": true,
+  "init_lora_weights": true,
+  "layer_replication": null,
+  "layers_pattern": null,
+  "layers_to_transform": null,
+  "loftq_config": {},
+  "lora_alpha": 32,
+  "lora_bias": false,
+  "lora_dropout": 0.05,
+  "lora_ga_config": null,
+  "megatron_config": null,
+  "megatron_core": "megatron.core",
+  "modules_to_save": null,
+  "monteclora_config": null,
+  "peft_type": "LORA",
+  "peft_version": "0.20.0",
+  "qalora_group_size": 16,
+  "r": 16,
+  "rank_pattern": {},
+  "revision": null,
+  "target_modules": [
+    "v_proj",
+    "k_proj",
+    "q_proj",
+    "o_proj"
+  ],
+  "target_parameters": null,
+  "task_type": "CAUSAL_LM",
+  "trainable_token_indices": null,
+  "use_bdlora": null,
+  "use_dora": false,
+  "use_qalora": false,
+  "use_rslora": false,
+  "velora_config": null
+}
+```
+
+---
+
+### <a id="📄-weights-processor-config-json"></a>📄 `weights/processor_config.json`
+
+**File Info:**
+- **Size**: 1.43 KB
+- **Extension**: `.json`
+- **Language**: `json`
+- **Location**: `weights/processor_config.json`
+- **Relative Path**: `weights`
+- **Created**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **MD5**: `c1ada6d5141b5c843285b2042efc5714`
+- **SHA256**: `a0058023b1e6d80ad6ceb2e5a23aaab6929415ab980d6001070372bc8d52492d`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```json
+{
+  "image_processor": {
+    "data_format": "channels_first",
+    "default_to_square": true,
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "merge_size": 2,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen2_5_VLProcessor",
+  "video_processor": {
+    "data_format": "channels_first",
+    "default_to_square": true,
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": false,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen2VLVideoProcessor"
+  }
+}
+
+```
+
+---
+
+### <a id="📄-weights-readme-md"></a>📄 `weights/README.md`
+
+**File Info:**
+- **Size**: 5.36 KB
+- **Extension**: `.md`
+- **Language**: `text`
+- **Location**: `weights/README.md`
+- **Relative Path**: `weights`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `870a20da8e3c296287ac27eb404e98a9`
+- **SHA256**: `0e87cd81fd70056c98dd6d2613f9bb0c9cc87ba43ea56a0793f1415d3fc5554e`
+- **Encoding**: ASCII
+
+**File code content:**
+
+````markdown
+---
+base_model: sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3
+library_name: peft
+pipeline_tag: text-generation
+tags:
+- base_model:adapter:sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3
+- lora
+- sft
+- transformers
+- trl
+---
+
+# Model Card for Model ID
+
+<!-- Provide a quick summary of what the model is/does. -->
+
+
+
+## Model Details
+
+### Model Description
+
+<!-- Provide a longer summary of what this model is. -->
+
+
+
+- **Developed by:** [More Information Needed]
+- **Funded by [optional]:** [More Information Needed]
+- **Shared by [optional]:** [More Information Needed]
+- **Model type:** [More Information Needed]
+- **Language(s) (NLP):** [More Information Needed]
+- **License:** [More Information Needed]
+- **Finetuned from model [optional]:** [More Information Needed]
+
+### Model Sources [optional]
+
+<!-- Provide the basic links for the model. -->
+
+- **Repository:** [More Information Needed]
+- **Paper [optional]:** [More Information Needed]
+- **Demo [optional]:** [More Information Needed]
+
+## Uses
+
+<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
+
+### Direct Use
+
+<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
+
+[More Information Needed]
+
+### Downstream Use [optional]
+
+<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
+
+[More Information Needed]
+
+### Out-of-Scope Use
+
+<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
+
+[More Information Needed]
+
+## Bias, Risks, and Limitations
+
+<!-- This section is meant to convey both technical and sociotechnical limitations. -->
+
+[More Information Needed]
+
+### Recommendations
+
+<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
+
+Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
+
+## How to Get Started with the Model
+
+Use the code below to get started with the model.
+
+[More Information Needed]
+
+## Training Details
+
+### Training Data
+
+<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
+
+[More Information Needed]
+
+### Training Procedure
+
+<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
+
+#### Preprocessing [optional]
+
+[More Information Needed]
+
+
+#### Training Hyperparameters
+
+- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+
+#### Speeds, Sizes, Times [optional]
+
+<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
+
+[More Information Needed]
+
+## Evaluation
+
+<!-- This section describes the evaluation protocols and provides the results. -->
+
+### Testing Data, Factors & Metrics
+
+#### Testing Data
+
+<!-- This should link to a Dataset Card if possible. -->
+
+[More Information Needed]
+
+#### Factors
+
+<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
+
+[More Information Needed]
+
+#### Metrics
+
+<!-- These are the evaluation metrics being used, ideally with a description of why. -->
+
+[More Information Needed]
+
+### Results
+
+[More Information Needed]
+
+#### Summary
+
+
+
+## Model Examination [optional]
+
+<!-- Relevant interpretability work for the model goes here -->
+
+[More Information Needed]
+
+## Environmental Impact
+
+<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
+
+Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
+
+- **Hardware Type:** [More Information Needed]
+- **Hours used:** [More Information Needed]
+- **Cloud Provider:** [More Information Needed]
+- **Compute Region:** [More Information Needed]
+- **Carbon Emitted:** [More Information Needed]
+
+## Technical Specifications [optional]
+
+### Model Architecture and Objective
+
+[More Information Needed]
+
+### Compute Infrastructure
+
+[More Information Needed]
+
+#### Hardware
+
+[More Information Needed]
+
+#### Software
+
+[More Information Needed]
+
+## Citation [optional]
+
+<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
+
+**BibTeX:**
+
+[More Information Needed]
+
+**APA:**
+
+[More Information Needed]
+
+## Glossary [optional]
+
+<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
+
+[More Information Needed]
+
+## More Information [optional]
+
+[More Information Needed]
+
+## Model Card Authors [optional]
+
+[More Information Needed]
+
+## Model Card Contact
+
+[More Information Needed]
+### Framework versions
+
+- PEFT 0.20.0
+````
+
+---
+
+### <a id="📄-weights-tokenizer-config-json"></a>📄 `weights/tokenizer_config.json`
+
+**File Info:**
+- **Size**: 547 B
+- **Extension**: `.json`
+- **Language**: `json`
+- **Location**: `weights/tokenizer_config.json`
+- **Relative Path**: `weights`
+- **Created**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **MD5**: `b3124ad8b7d09c7261766aecf469b37f`
+- **SHA256**: `4d3609e969ef94808a839316e414f70204f2706b59f9a9699b3962d77a5d7a84`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```json
+{
+  "add_prefix_space": false,
+  "backend": "tokenizers",
+  "bos_token": null,
+  "clean_up_tokenization_spaces": false,
+  "eos_token": "<|im_end|>",
+  "errors": "replace",
+  "is_local": false,
+  "local_files_only": false,
+  "max_length": null,
+  "model_max_length": 131072,
+  "pad_to_multiple_of": null,
+  "pad_token": "<|endoftext|>",
+  "pad_token_type_id": 0,
+  "padding_side": "right",
+  "processor_class": "Qwen2_5_VLProcessor",
+  "split_special_tokens": false,
+  "tokenizer_class": "Qwen2Tokenizer",
+  "unk_token": null
+}
+
+```
+
+---
+
+### <a id="📄-weights-trainer-state-json"></a>📄 `weights/trainer_state.json`
+
+**File Info:**
+- **Size**: 23.06 KB
+- **Extension**: `.json`
+- **Language**: `json`
+- **Location**: `weights/trainer_state.json`
+- **Relative Path**: `weights`
+- **Created**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:02 (Asia/Damascus / GMT+03:00)
+- **MD5**: `b5d0100f02b2e4d9f6e085686e9342ed`
+- **SHA256**: `df85c37d72b5d23929279f11512ffd0ee41ab60df095bd0f1abf9bcfa0ce2844`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```json
+{
+  "best_global_step": null,
+  "best_metric": null,
+  "best_model_checkpoint": null,
+  "epoch": 2.284081632653061,
+  "eval_steps": 400,
+  "global_step": 1400,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "entropy": 2.982597976922989,
+      "epoch": 0.004082465809348847,
+      "grad_norm": 3.15625,
+      "learning_rate": 0.00019974144383207458,
+      "loss": 6.17595329284668,
+      "mean_token_accuracy": 0.4491495996713638,
+      "num_tokens": 6796.0,
+      "step": 20
+    },
+    {
+      "entropy": 2.8465474516153337,
+      "epoch": 0.008164931618697694,
+      "grad_norm": 0.94140625,
+      "learning_rate": 0.00019946927944478467,
+      "loss": 2.7532064437866213,
+      "mean_token_accuracy": 0.634966342151165,
+      "num_tokens": 13361.0,
+      "step": 40
+    },
+    {
+      "entropy": 2.791534644365311,
+      "epoch": 0.01224739742804654,
+      "grad_norm": 0.51171875,
+      "learning_rate": 0.00019919711505749475,
+      "loss": 2.729237747192383,
+      "mean_token_accuracy": 0.622294756770134,
+      "num_tokens": 20178.0,
+      "step": 60
+    },
+    {
+      "entropy": 2.8301392644643784,
+      "epoch": 0.016329863237395388,
+      "grad_norm": 1.046875,
+      "learning_rate": 0.0001989249506702048,
+      "loss": 2.785295295715332,
+      "mean_token_accuracy": 0.6117565780878067,
+      "num_tokens": 26966.0,
+      "step": 80
+    },
+    {
+      "entropy": 2.738146576285362,
+      "epoch": 0.020412329046744233,
+      "grad_norm": 0.70703125,
+      "learning_rate": 0.00019865278628291487,
+      "loss": 2.687871742248535,
+      "mean_token_accuracy": 0.6209247544407844,
+      "num_tokens": 33785.0,
+      "step": 100
+    },
+    {
+      "entropy": 2.766917309165001,
+      "epoch": 0.02449479485609308,
+      "grad_norm": 0.564399003982544,
+      "learning_rate": 0.00019838062189562496,
+      "loss": 2.712394142150879,
+      "mean_token_accuracy": 0.6152907326817513,
+      "num_tokens": 7013.0,
+      "step": 120
+    },
+    {
+      "entropy": 2.708142784237862,
+      "epoch": 0.028577260665441927,
+      "grad_norm": 0.4635663330554962,
+      "learning_rate": 0.00019810845750833504,
+      "loss": 2.6367984771728517,
+      "mean_token_accuracy": 0.6315624639391899,
+      "num_tokens": 13569.0,
+      "step": 140
+    },
+    {
+      "entropy": 2.7352416187524797,
+      "epoch": 0.032659726474790776,
+      "grad_norm": 0.9473080039024353,
+      "learning_rate": 0.00019783629312104513,
+      "loss": 2.686029815673828,
+      "mean_token_accuracy": 0.6215049251914024,
+      "num_tokens": 20351.0,
+      "step": 160
+    },
+    {
+      "entropy": 2.7247752606868745,
+      "epoch": 0.03674219228413962,
+      "grad_norm": 0.2606116533279419,
+      "learning_rate": 0.00019756412873375522,
+      "loss": 2.673515510559082,
+      "mean_token_accuracy": 0.6326142132282258,
+      "num_tokens": 27062.0,
+      "step": 180
+    },
+    {
+      "entropy": 2.6899783700704574,
+      "epoch": 0.04082465809348847,
+      "grad_norm": 0.6265736222267151,
+      "learning_rate": 0.00019729196434646525,
+      "loss": 2.640633392333984,
+      "mean_token_accuracy": 0.6280701935291291,
+      "num_tokens": 33819.0,
+      "step": 200
+    },
+    {
+      "entropy": 2.7957171112298966,
+      "epoch": 0.04490712390283731,
+      "grad_norm": 0.6511725187301636,
+      "learning_rate": 0.00019701979995917534,
+      "loss": 2.727088737487793,
+      "mean_token_accuracy": 0.6233477324247361,
+      "num_tokens": 40554.0,
+      "step": 220
+    },
+    {
+      "entropy": 2.6844897001981733,
+      "epoch": 0.04898958971218616,
+      "grad_norm": 0.3627369701862335,
+      "learning_rate": 0.00019674763557188542,
+      "loss": 2.6337863922119142,
+      "mean_token_accuracy": 0.6267463028430938,
+      "num_tokens": 47418.0,
+      "step": 240
+    },
+    {
+      "entropy": 2.7436996310949326,
+      "epoch": 0.05307205552153501,
+      "grad_norm": 0.8804628849029541,
+      "learning_rate": 0.0001964754711845955,
+      "loss": 2.686697769165039,
+      "mean_token_accuracy": 0.6290063433349132,
+      "num_tokens": 54236.0,
+      "step": 260
+    },
+    {
+      "entropy": 2.686279135942459,
+      "epoch": 0.057154521330883855,
+      "grad_norm": 0.7753104567527771,
+      "learning_rate": 0.0001962033067973056,
+      "loss": 2.640818214416504,
+      "mean_token_accuracy": 0.6306790575385094,
+      "num_tokens": 60872.0,
+      "step": 280
+    },
+    {
+      "entropy": 2.801331967115402,
+      "epoch": 0.0612369871402327,
+      "grad_norm": 0.6780321598052979,
+      "learning_rate": 0.00019593114241001566,
+      "loss": 2.732925605773926,
+      "mean_token_accuracy": 0.6211437582969666,
+      "num_tokens": 67596.0,
+      "step": 300
+    },
+    {
+      "entropy": 2.27187502682209,
+      "epoch": 0.5224489795918368,
+      "grad_norm": 0.17982949316501617,
+      "learning_rate": 0.0001653072321914084,
+      "loss": 2.229964256286621,
+      "mean_token_accuracy": 0.6878542140126228,
+      "num_tokens": 54288.0,
+      "step": 320
+    },
+    {
+      "entropy": 2.2927686274051666,
+      "epoch": 0.5551020408163265,
+      "grad_norm": 0.13666918873786926,
+      "learning_rate": 0.00016313213703099514,
+      "loss": 2.2475513458251952,
+      "mean_token_accuracy": 0.6852143421769142,
+      "num_tokens": 107886.0,
+      "step": 340
+    },
+    {
+      "entropy": 2.2850712478160857,
+      "epoch": 0.5877551020408164,
+      "grad_norm": 0.16162854433059692,
+      "learning_rate": 0.00016095704187058186,
+      "loss": 2.2341588973999023,
+      "mean_token_accuracy": 0.6845744401216507,
+      "num_tokens": 161981.0,
+      "step": 360
+    },
+    {
+      "entropy": 2.2323326081037522,
+      "epoch": 0.6204081632653061,
+      "grad_norm": 0.13139760494232178,
+      "learning_rate": 0.00015878194671016858,
+      "loss": 2.182969665527344,
+      "mean_token_accuracy": 0.6935716181993484,
+      "num_tokens": 215012.0,
+      "step": 380
+    },
+    {
+      "entropy": 2.247011363506317,
+      "epoch": 0.6530612244897959,
+      "grad_norm": 0.18592919409275055,
+      "learning_rate": 0.00015660685154975532,
+      "loss": 2.1972110748291014,
+      "mean_token_accuracy": 0.691799382865429,
+      "num_tokens": 268165.0,
+      "step": 400
+    },
+    {
+      "epoch": 0.6530612244897959,
+      "eval_entropy": 2.3979255197879157,
+      "eval_loss": 2.343710422515869,
+      "eval_mean_token_accuracy": 0.6710552788712691,
+      "eval_num_tokens": 268165.0,
+      "eval_runtime": 992.9209,
+      "eval_samples_per_second": 2.466,
+      "eval_steps_per_second": 0.309,
+      "step": 400
+    },
+    {
+      "entropy": 2.274928644299507,
+      "epoch": 0.6857142857142857,
+      "grad_norm": 0.15061508119106293,
+      "learning_rate": 0.00015443175638934204,
+      "loss": 2.228845405578613,
+      "mean_token_accuracy": 0.6863281860947609,
+      "num_tokens": 322355.0,
+      "step": 420
+    },
+    {
+      "entropy": 2.3014499723911284,
+      "epoch": 0.7183673469387755,
+      "grad_norm": 0.22298187017440796,
+      "learning_rate": 0.00015225666122892876,
+      "loss": 2.24691162109375,
+      "mean_token_accuracy": 0.6832581028342247,
+      "num_tokens": 376293.0,
+      "step": 440
+    },
+    {
+      "entropy": 2.328644743561745,
+      "epoch": 0.7510204081632653,
+      "grad_norm": 0.1953238695859909,
+      "learning_rate": 0.0001500815660685155,
+      "loss": 2.2745798110961912,
+      "mean_token_accuracy": 0.6812277913093567,
+      "num_tokens": 430465.0,
+      "step": 460
+    },
+    {
+      "entropy": 2.224363225698471,
+      "epoch": 0.7836734693877551,
+      "grad_norm": 0.18175578117370605,
+      "learning_rate": 0.00014790647090810223,
+      "loss": 2.1821455001831054,
+      "mean_token_accuracy": 0.6930814236402512,
+      "num_tokens": 484729.0,
+      "step": 480
+    },
+    {
+      "entropy": 2.2236262917518617,
+      "epoch": 0.8163265306122449,
+      "grad_norm": 0.1644434630870819,
+      "learning_rate": 0.00014573137574768895,
+      "loss": 2.1724916458129884,
+      "mean_token_accuracy": 0.694337573647499,
+      "num_tokens": 538348.0,
+      "step": 500
+    },
+    {
+      "entropy": 2.25427160859108,
+      "epoch": 0.8489795918367347,
+      "grad_norm": 0.18682773411273956,
+      "learning_rate": 0.0001435562805872757,
+      "loss": 2.204010009765625,
+      "mean_token_accuracy": 0.6899591818451881,
+      "num_tokens": 592152.0,
+      "step": 520
+    },
+    {
+      "entropy": 2.277626892924309,
+      "epoch": 0.8816326530612245,
+      "grad_norm": 0.18360279500484467,
+      "learning_rate": 0.00014138118542686242,
+      "loss": 2.2326841354370117,
+      "mean_token_accuracy": 0.6865544721484185,
+      "num_tokens": 646753.0,
+      "step": 540
+    },
+    {
+      "entropy": 2.249608251452446,
+      "epoch": 0.9142857142857143,
+      "grad_norm": 0.18538925051689148,
+      "learning_rate": 0.00013920609026644916,
+      "loss": 2.197578239440918,
+      "mean_token_accuracy": 0.6895005881786347,
+      "num_tokens": 700571.0,
+      "step": 560
+    },
+    {
+      "entropy": 2.277342754602432,
+      "epoch": 0.9469387755102041,
+      "grad_norm": 0.16978558897972107,
+      "learning_rate": 0.0001370309951060359,
+      "loss": 2.2300085067749023,
+      "mean_token_accuracy": 0.6863494411110878,
+      "num_tokens": 754150.0,
+      "step": 580
+    },
+    {
+      "entropy": 2.216002506017685,
+      "epoch": 0.9795918367346939,
+      "grad_norm": 0.15160438418388367,
+      "learning_rate": 0.00013485589994562263,
+      "loss": 2.1613311767578125,
+      "mean_token_accuracy": 0.6978160545229912,
+      "num_tokens": 808044.0,
+      "step": 600
+    },
+    {
+      "entropy": 2.2079228865794644,
+      "epoch": 1.0114285714285713,
+      "grad_norm": 0.1562044620513916,
+      "learning_rate": 0.00013268080478520938,
+      "loss": 2.169454002380371,
+      "mean_token_accuracy": 0.6944110943720891,
+      "num_tokens": 861512.0,
+      "step": 620
+    },
+    {
+      "entropy": 2.215944689512253,
+      "epoch": 1.0440816326530613,
+      "grad_norm": 0.16956672072410583,
+      "learning_rate": 0.0001305057096247961,
+      "loss": 2.160894584655762,
+      "mean_token_accuracy": 0.6971817702054978,
+      "num_tokens": 915362.0,
+      "step": 640
+    },
+    {
+      "entropy": 2.2868506371974946,
+      "epoch": 1.076734693877551,
+      "grad_norm": 0.1403874158859253,
+      "learning_rate": 0.00012833061446438282,
+      "loss": 2.234630012512207,
+      "mean_token_accuracy": 0.6879301145672798,
+      "num_tokens": 969203.0,
+      "step": 660
+    },
+    {
+      "entropy": 2.3191284209489824,
+      "epoch": 1.1093877551020408,
+      "grad_norm": 0.18316136300563812,
+      "learning_rate": 0.00012615551930396956,
+      "loss": 2.2672042846679688,
+      "mean_token_accuracy": 0.6828137829899787,
+      "num_tokens": 1022655.0,
+      "step": 680
+    },
+    {
+      "entropy": 2.2163998156785967,
+      "epoch": 1.1420408163265305,
+      "grad_norm": 0.21119582653045654,
+      "learning_rate": 0.00012398042414355628,
+      "loss": 2.167039489746094,
+      "mean_token_accuracy": 0.6933652594685554,
+      "num_tokens": 1076551.0,
+      "step": 700
+    },
+    {
+      "entropy": 2.2953397899866106,
+      "epoch": 1.1746938775510205,
+      "grad_norm": 0.1608649343252182,
+      "learning_rate": 0.000121805328983143,
+      "loss": 2.242131233215332,
+      "mean_token_accuracy": 0.6885934218764305,
+      "num_tokens": 1129796.0,
+      "step": 720
+    },
+    {
+      "entropy": 2.2794523775577544,
+      "epoch": 1.2073469387755102,
+      "grad_norm": 0.22808274626731873,
+      "learning_rate": 0.00011963023382272975,
+      "loss": 2.225835609436035,
+      "mean_token_accuracy": 0.6894574671983719,
+      "num_tokens": 1183333.0,
+      "step": 740
+    },
+    {
+      "entropy": 2.2698725044727324,
+      "epoch": 1.24,
+      "grad_norm": 0.16803833842277527,
+      "learning_rate": 0.00011745513866231647,
+      "loss": 2.22003173828125,
+      "mean_token_accuracy": 0.689135704934597,
+      "num_tokens": 1237757.0,
+      "step": 760
+    },
+    {
+      "entropy": 2.2139640897512436,
+      "epoch": 1.2726530612244897,
+      "grad_norm": 0.1912495344877243,
+      "learning_rate": 0.00011528004350190322,
+      "loss": 2.1625087738037108,
+      "mean_token_accuracy": 0.6962667062878609,
+      "num_tokens": 1291516.0,
+      "step": 780
+    },
+    {
+      "entropy": 2.2465760469436646,
+      "epoch": 1.3053061224489797,
+      "grad_norm": 0.172390416264534,
+      "learning_rate": 0.00011310494834148995,
+      "loss": 2.196432876586914,
+      "mean_token_accuracy": 0.6906940028071403,
+      "num_tokens": 1345438.0,
+      "step": 800
+    },
+    {
+      "epoch": 1.3053061224489797,
+      "eval_entropy": 2.3866324234474754,
+      "eval_loss": 2.3337619304656982,
+      "eval_mean_token_accuracy": 0.6726038789904467,
+      "eval_num_tokens": 1345438.0,
+      "eval_runtime": 991.493,
+      "eval_samples_per_second": 2.47,
+      "eval_steps_per_second": 0.31,
+      "step": 800
+    },
+    {
+      "entropy": 2.2509727507829664,
+      "epoch": 1.3379591836734694,
+      "grad_norm": 0.18055668473243713,
+      "learning_rate": 0.00011092985318107667,
+      "loss": 2.1982872009277346,
+      "mean_token_accuracy": 0.6904088869690895,
+      "num_tokens": 1399714.0,
+      "step": 820
+    },
+    {
+      "entropy": 2.305966314673424,
+      "epoch": 1.3706122448979592,
+      "grad_norm": 0.16904646158218384,
+      "learning_rate": 0.00010875475802066342,
+      "loss": 2.254444122314453,
+      "mean_token_accuracy": 0.6858095645904541,
+      "num_tokens": 1453678.0,
+      "step": 840
+    },
+    {
+      "entropy": 2.284677490592003,
+      "epoch": 1.403265306122449,
+      "grad_norm": 0.20098714530467987,
+      "learning_rate": 0.00010657966286025014,
+      "loss": 2.2275806427001954,
+      "mean_token_accuracy": 0.6866115674376487,
+      "num_tokens": 1507803.0,
+      "step": 860
+    },
+    {
+      "entropy": 2.2753060281276705,
+      "epoch": 1.4359183673469387,
+      "grad_norm": 0.1683570295572281,
+      "learning_rate": 0.00010440456769983686,
+      "loss": 2.224364471435547,
+      "mean_token_accuracy": 0.6902513802051544,
+      "num_tokens": 1561640.0,
+      "step": 880
+    },
+    {
+      "entropy": 2.224909096956253,
+      "epoch": 1.4685714285714286,
+      "grad_norm": 0.19771349430084229,
+      "learning_rate": 0.0001022294725394236,
+      "loss": 2.1735166549682616,
+      "mean_token_accuracy": 0.6958454802632332,
+      "num_tokens": 1615466.0,
+      "step": 900
+    },
+    {
+      "entropy": 2.2965739995241163,
+      "epoch": 1.5012244897959184,
+      "grad_norm": 0.19851554930210114,
+      "learning_rate": 0.00010005437737901034,
+      "loss": 2.2479719161987304,
+      "mean_token_accuracy": 0.6809831812977791,
+      "num_tokens": 1669930.0,
+      "step": 920
+    },
+    {
+      "entropy": 2.261217412352562,
+      "epoch": 1.5338775510204081,
+      "grad_norm": 0.22161230444908142,
+      "learning_rate": 9.787928221859707e-05,
+      "loss": 2.206976318359375,
+      "mean_token_accuracy": 0.6920489445328712,
+      "num_tokens": 1723250.0,
+      "step": 940
+    },
+    {
+      "entropy": 2.280756467580795,
+      "epoch": 1.566530612244898,
+      "grad_norm": 0.21031761169433594,
+      "learning_rate": 9.57041870581838e-05,
+      "loss": 2.2277482986450194,
+      "mean_token_accuracy": 0.6870868653059006,
+      "num_tokens": 1777267.0,
+      "step": 960
+    },
+    {
+      "entropy": 2.295613518357277,
+      "epoch": 1.5991836734693878,
+      "grad_norm": 0.1931522786617279,
+      "learning_rate": 9.352909189777053e-05,
+      "loss": 2.2435937881469727,
+      "mean_token_accuracy": 0.6866314247250557,
+      "num_tokens": 1831354.0,
+      "step": 980
+    },
+    {
+      "entropy": 2.2675743609666825,
+      "epoch": 1.6318367346938776,
+      "grad_norm": 0.17874087393283844,
+      "learning_rate": 9.135399673735726e-05,
+      "loss": 2.2148004531860352,
+      "mean_token_accuracy": 0.6897745698690414,
+      "num_tokens": 1885355.0,
+      "step": 1000
+    },
+    {
+      "entropy": 2.3102814972400667,
+      "epoch": 1.6644897959183673,
+      "grad_norm": 0.2026064693927765,
+      "learning_rate": 8.9178901576944e-05,
+      "loss": 2.2546083450317385,
+      "mean_token_accuracy": 0.6842198193073272,
+      "num_tokens": 54214.0,
+      "step": 1020
+    },
+    {
+      "entropy": 2.2584809243679045,
+      "epoch": 1.697142857142857,
+      "grad_norm": 0.1847398281097412,
+      "learning_rate": 8.700380641653073e-05,
+      "loss": 2.209696578979492,
+      "mean_token_accuracy": 0.6907172650098801,
+      "num_tokens": 107670.0,
+      "step": 1040
+    },
+    {
+      "entropy": 2.2629966884851456,
+      "epoch": 1.7297959183673468,
+      "grad_norm": 0.20835156738758087,
+      "learning_rate": 8.482871125611746e-05,
+      "loss": 2.2088274002075194,
+      "mean_token_accuracy": 0.6915211662650108,
+      "num_tokens": 161615.0,
+      "step": 1060
+    },
+    {
+      "entropy": 2.2307616859674453,
+      "epoch": 1.7624489795918368,
+      "grad_norm": 0.21189096570014954,
+      "learning_rate": 8.26536160957042e-05,
+      "loss": 2.1785419464111326,
+      "mean_token_accuracy": 0.695133949816227,
+      "num_tokens": 215190.0,
+      "step": 1080
+    },
+    {
+      "entropy": 2.2602411061525345,
+      "epoch": 1.7951020408163265,
+      "grad_norm": 0.19664277136325836,
+      "learning_rate": 8.047852093529093e-05,
+      "loss": 2.2081811904907225,
+      "mean_token_accuracy": 0.6905084565281868,
+      "num_tokens": 269331.0,
+      "step": 1100
+    },
+    {
+      "entropy": 2.33800847530365,
+      "epoch": 1.8277551020408165,
+      "grad_norm": 0.20499774813652039,
+      "learning_rate": 7.830342577487766e-05,
+      "loss": 2.2873592376708984,
+      "mean_token_accuracy": 0.6803190052509308,
+      "num_tokens": 323343.0,
+      "step": 1120
+    },
+    {
+      "entropy": 2.275328189134598,
+      "epoch": 1.8604081632653062,
+      "grad_norm": 0.21742160618305206,
+      "learning_rate": 7.612833061446438e-05,
+      "loss": 2.226652145385742,
+      "mean_token_accuracy": 0.6873202070593833,
+      "num_tokens": 377232.0,
+      "step": 1140
+    },
+    {
+      "entropy": 2.3248947113752365,
+      "epoch": 1.893061224489796,
+      "grad_norm": 0.2208409160375595,
+      "learning_rate": 7.395323545405111e-05,
+      "loss": 2.270258331298828,
+      "mean_token_accuracy": 0.6823107823729515,
+      "num_tokens": 431828.0,
+      "step": 1160
+    },
+    {
+      "entropy": 2.216088506579399,
+      "epoch": 1.9257142857142857,
+      "grad_norm": 0.1968352198600769,
+      "learning_rate": 7.177814029363785e-05,
+      "loss": 2.1644447326660154,
+      "mean_token_accuracy": 0.6950493007898331,
+      "num_tokens": 486028.0,
+      "step": 1180
+    },
+    {
+      "entropy": 2.239957723021507,
+      "epoch": 1.9583673469387755,
+      "grad_norm": 0.1622295379638672,
+      "learning_rate": 6.960304513322458e-05,
+      "loss": 2.1863628387451173,
+      "mean_token_accuracy": 0.6939541563391686,
+      "num_tokens": 540299.0,
+      "step": 1200
+    },
+    {
+      "epoch": 1.9583673469387755,
+      "eval_entropy": 2.38338864665078,
+      "eval_loss": 2.329328775405884,
+      "eval_mean_token_accuracy": 0.673747758717801,
+      "eval_num_tokens": 540299.0,
+      "eval_runtime": 1074.1135,
+      "eval_samples_per_second": 2.28,
+      "eval_steps_per_second": 0.286,
+      "step": 1200
+    },
+    {
+      "entropy": 2.249850907921791,
+      "epoch": 1.9910204081632652,
+      "grad_norm": 0.18057502806186676,
+      "learning_rate": 6.742794997281132e-05,
+      "loss": 2.1984825134277344,
+      "mean_token_accuracy": 0.6928725749254226,
+      "num_tokens": 594055.0,
+      "step": 1220
+    },
+    {
+      "entropy": 2.3266122799653273,
+      "epoch": 2.0228571428571427,
+      "grad_norm": 0.2023279368877411,
+      "learning_rate": 6.525285481239805e-05,
+      "loss": 2.267445945739746,
+      "mean_token_accuracy": 0.6835609368788891,
+      "num_tokens": 646654.0,
+      "step": 1240
+    },
+    {
+      "entropy": 2.2537063300609588,
+      "epoch": 2.0555102040816324,
+      "grad_norm": 0.1843792200088501,
+      "learning_rate": 6.307775965198478e-05,
+      "loss": 2.193251609802246,
+      "mean_token_accuracy": 0.6926146775484086,
+      "num_tokens": 701394.0,
+      "step": 1260
+    },
+    {
+      "entropy": 2.218360885977745,
+      "epoch": 2.0881632653061226,
+      "grad_norm": 0.19350890815258026,
+      "learning_rate": 6.09026644915715e-05,
+      "loss": 2.160818672180176,
+      "mean_token_accuracy": 0.6967067644000053,
+      "num_tokens": 755597.0,
+      "step": 1280
+    },
+    {
+      "entropy": 2.1970309615135193,
+      "epoch": 2.1208163265306124,
+      "grad_norm": 0.20249606668949127,
+      "learning_rate": 5.8727569331158236e-05,
+      "loss": 2.1434803009033203,
+      "mean_token_accuracy": 0.6991815730929375,
+      "num_tokens": 809734.0,
+      "step": 1300
+    },
+    {
+      "entropy": 2.2247904181480407,
+      "epoch": 2.153469387755102,
+      "grad_norm": 0.20019538700580597,
+      "learning_rate": 5.6552474170744976e-05,
+      "loss": 2.1709102630615233,
+      "mean_token_accuracy": 0.6943493470549583,
+      "num_tokens": 864154.0,
+      "step": 1320
+    },
+    {
+      "entropy": 2.2497821539640426,
+      "epoch": 2.186122448979592,
+      "grad_norm": 0.16775323450565338,
+      "learning_rate": 5.437737901033171e-05,
+      "loss": 2.1940378189086913,
+      "mean_token_accuracy": 0.6942712888121605,
+      "num_tokens": 917657.0,
+      "step": 1340
+    },
+    {
+      "entropy": 2.2757854223251344,
+      "epoch": 2.2187755102040816,
+      "grad_norm": 0.22974926233291626,
+      "learning_rate": 5.220228384991843e-05,
+      "loss": 2.217563438415527,
+      "mean_token_accuracy": 0.6908702746033668,
+      "num_tokens": 972188.0,
+      "step": 1360
+    },
+    {
+      "entropy": 2.266391482949257,
+      "epoch": 2.2514285714285713,
+      "grad_norm": 0.1978043168783188,
+      "learning_rate": 5.002718868950517e-05,
+      "loss": 2.2128028869628906,
+      "mean_token_accuracy": 0.6893731713294983,
+      "num_tokens": 1026325.0,
+      "step": 1380
+    },
+    {
+      "entropy": 2.185168558359146,
+      "epoch": 2.284081632653061,
+      "grad_norm": 0.20957821607589722,
+      "learning_rate": 4.78520935290919e-05,
+      "loss": 2.1271461486816405,
+      "mean_token_accuracy": 0.7014687493443489,
+      "num_tokens": 1079966.0,
+      "step": 1400
+    }
+  ],
+  "logging_steps": 20,
+  "max_steps": 1839,
+  "num_input_tokens_seen": 0,
+  "num_train_epochs": 3,
+  "save_steps": 100,
+  "stateful_callbacks": {
+    "TrainerControl": {
+      "args": {
+        "should_epoch_stop": false,
+        "should_evaluate": false,
+        "should_log": false,
+        "should_save": true,
+        "should_training_stop": false
+      },
+      "attributes": {}
+    }
+  },
+  "total_flos": 8.357674896693658e+16,
+  "train_batch_size": 2,
+  "trial_name": null,
+  "trial_params": null
+}
+
+```
+
+---
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `weights/adapter_model.safetensors`
+- `weights/chat_template.jinja`
+- `weights/optimizer.pt`
+- `weights/rng_state.pth`
+- `weights/scheduler.pt`
+- `weights/tokenizer.json`
+- `weights/training_args.bin`
+
+### <a id="📄-manage-py"></a>📄 `manage.py`
+
+**File Info:**
+- **Size**: 682 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `manage.py`
+- **Relative Path**: `root`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `482b4fa3e73ba5413c52502680db7e1c`
+- **SHA256**: `676a52170cb487187ba149800e0574fe52a57ddba5e243ddd3ef09fb3a3e8f4b`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+#!/usr/bin/env python
+"""Django's command-line utility for administrative tasks."""
+import os
+import sys
+
+
+def main():
+    """Run administrative tasks."""
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    execute_from_command_line(sys.argv)
+
+
+if __name__ == '__main__':
+    main()
+
+```
+
+---
+
+### <a id="📄-requirements-txt"></a>📄 `requirements.txt`
+
+**File Info:**
+- **Size**: 302 B
+- **Extension**: `.txt`
+- **Language**: `text`
+- **Location**: `requirements.txt`
+- **Relative Path**: `root`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `e545631ce40788e1465191d368f1f50f`
+- **SHA256**: `433292d24c522774eccc76974e0f26e23638989219726c1c0318af512e3748d2`
+- **Encoding**: UTF-8 (with BOM)
+
+**File code content:**
+
+```text
+﻿arabic_reshaper==3.0.1
+Django==6.1
+djangorestframework==3.17.1
+peft==0.20.0
+Pillow==12.3.0
+qwen_vl_utils==0.0.14
+openpyxl==3.1.5
+python-docx==1.2.0
+reportlab==5.0.0
+torch==2.5.1+cu121
+transformers==5.14.1
+celery==5.3.1
+redis==4.6.0
+django-celery-beat==2.3.0
+prometheus-client==0.16.0
+
+```
+
+---
+
+### <a id="📄-setup-ps1"></a>📄 `setup.ps1`
+
+**File Info:**
+- **Size**: 3.53 KB
+- **Extension**: `.ps1`
+- **Language**: `powershell`
+- **Location**: `setup.ps1`
+- **Relative Path**: `root`
+- **Created**: 2026-08-15 08:10:51 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 08:42:29 (Asia/Damascus / GMT+03:00)
+- **MD5**: `a1d7f69f4156a0da572c03c67479b56a`
+- **SHA256**: `7c876ab40da886cbba3f306f0bd845b1f92e38b58aa34720b16594802c272cf4`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```powershell
+param(
+    [switch]$StartServices,
+    [switch]$StartServer,
+    [switch]$StartWorkers,
+    [switch]$InstallDeps
+)
+
+# Setup script for backend_ocr (Windows PowerShell)
+# Usage examples:
+#   .\setup.ps1                # create venv, install deps, run migrations
+#   .\setup.ps1 -StartServices # also launches Django server, Celery worker and beat in separate windows
+#   .\setup.ps1 -InstallDeps:$false  # skip installing deps
+
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+Set-Location $scriptDir
+
+Write-Host "[setup] Running from: $scriptDir"
+
+# Check Python
+$py = Get-Command python -ErrorAction SilentlyContinue
+if (-not $py) {
+    Write-Error "Python is not found in PATH. Install Python 3.10+ and re-run this script."
+    exit 1
+}
+
+$venvDir = Join-Path $scriptDir '.venv'
+$pythonExe = Join-Path $venvDir 'Scripts\python.exe'
+$activateScript = Join-Path $venvDir 'Scripts\Activate.ps1'
+
+# Create virtualenv if missing
+if (-not (Test-Path $venvDir)) {
+    Write-Host "[setup] Creating virtual environment at $venvDir"
+    python -m venv $venvDir
+}
+
+# Install dependencies
+if ($InstallDeps -or (-not $PSBoundParameters.ContainsKey('InstallDeps'))) {
+    Write-Host "[setup] Installing/Updating pip and requirements"
+    & $pythonExe -m pip install --upgrade pip setuptools wheel
+    & $pythonExe -m pip install -r requirements.txt
+}
+
+# Create .env if missing with recommended defaults
+$envPath = Join-Path $scriptDir '.env'
+if (-not (Test-Path $envPath)) {
+    Write-Host "[setup] Creating .env with recommended defaults (please review and edit)"
+    $envText = @"
+# Django settings
+DJANGO_DEBUG=True
+SECRET_KEY=replace_me_with_secure_value
+# Celery/Redis
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+# Optional: set to full HuggingFace repo or local path
+BASE_MODEL_NAME=sherif1313/Arabic-handwritten-OCR-4bit-Qwen2.5-VL-3B-v3
+"@
+    $envText | Out-File -FilePath $envPath -Encoding UTF8
+}
+
+# Run migrations
+Write-Host "[setup] Running Django migrations"
+& $pythonExe manage.py makemigrations --noinput
+& $pythonExe manage.py migrate --noinput
+
+# Collect static (optional)
+try {
+    & $pythonExe manage.py collectstatic --noinput
+} catch {
+    Write-Warning "collectstatic failed or not required: $_"
+}
+
+Write-Host "[setup] Setup steps completed."
+
+if ($StartServices -or $StartServer -or $StartWorkers) {
+    Write-Host "[setup] Starting selected services in new PowerShell windows..."
+    # Server
+    if ($StartServices -or $StartServer) {
+        $cmd = "& `"$activateScript`"; python manage.py runserver 0.0.0.0:8000"
+        Start-Process powershell -ArgumentList '-NoExit','-Command',$cmd -WorkingDirectory $scriptDir
+        Start-Sleep -Milliseconds 500
+    }
+    # Celery worker
+    if ($StartServices -or $StartWorkers) {
+        $cmd = "& `"$activateScript`"; celery -A core worker --loglevel=info"
+        Start-Process powershell -ArgumentList '-NoExit','-Command',$cmd -WorkingDirectory $scriptDir
+        Start-Sleep -Milliseconds 500
+
+        # Celery beat
+        $cmd = "& `"$activateScript`"; celery -A core beat --loglevel=info"
+        Start-Process powershell -ArgumentList '-NoExit','-Command',$cmd -WorkingDirectory $scriptDir
+        Start-Sleep -Milliseconds 500
+    }
+    Write-Host "[setup] Services launched. Check the new windows for logs."
+} else {
+    Write-Host "[setup] To start services, re-run with -StartServices or -StartServer/-StartWorkers"
+}
+
+Write-Host "[setup] Done."
+
+```
+
+---
+
+### <a id="📄-test-py"></a>📄 `test.py`
+
+**File Info:**
+- **Size**: 162 B
+- **Extension**: `.py`
+- **Language**: `python`
+- **Location**: `test.py`
+- **Relative Path**: `root`
+- **Created**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **Modified**: 2026-08-15 07:23:01 (Asia/Damascus / GMT+03:00)
+- **MD5**: `da46283fca282c9c2a1f74eab7f76214`
+- **SHA256**: `2a5e712b03f20d5b324400f28d627def4331e4fbd6b6c036ffb83d48ee0b5626`
+- **Encoding**: ASCII
+
+**File code content:**
+
+```python
+import torch
+print("CUDA Available:", torch.cuda.is_available())
+print("Device Name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "No GPU")
+```
+
+---
+
+## 🚫 Binary/Excluded Files
+
+The following files were not included in the text content:
+
+- `test.png`
+

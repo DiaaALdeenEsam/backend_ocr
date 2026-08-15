@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from ocr_api.views import MetricsView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,6 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(('ocr_api.urls', 'ocr_api'), namespace='ocr_api')),
+    path('metrics/', MetricsView.as_view()),
 ]
 
 if settings.DEBUG:

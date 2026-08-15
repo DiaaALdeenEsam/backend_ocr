@@ -63,6 +63,31 @@ class OCRRecord(models.Model):
         super().save(*args, **kwargs)
 
 
+class EditedOCRExample(models.Model):
+    ocr_record = models.ForeignKey(
+        OCRRecord,
+        on_delete=models.CASCADE,
+        related_name='edits',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='edited_examples',
+    )
+    edited_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Edit #{self.id} for OCRRecord #{self.ocr_record_id} by {self.user.username}'
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['used', 'created_at']),
+        ]
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

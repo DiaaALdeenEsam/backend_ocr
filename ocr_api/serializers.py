@@ -2,7 +2,7 @@ import os
 
 from rest_framework import serializers
 
-from .models import OCRRecord, UserProfile
+from .models import OCRRecord, UserProfile, EditedOCRExample
 
 
 class OCRRecordSerializer(serializers.ModelSerializer):
@@ -100,3 +100,59 @@ class StorageInfoSerializer(serializers.Serializer):
             'megabytes_used': round(bytes_used / (1024 * 1024), 4),
             'gigabytes_used': round(bytes_used / (1024 * 1024 * 1024), 4),
         }
+
+
+class UserDetailSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    bytes_used = serializers.IntegerField()
+    megabytes_used = serializers.FloatField()
+    gigabytes_used = serializers.FloatField()
+    total_files = serializers.IntegerField()
+    total_completed = serializers.IntegerField()
+    total_pending = serializers.IntegerField()
+    total_failed = serializers.IntegerField()
+    total_edits = serializers.IntegerField()
+    total_used_edits = serializers.IntegerField()
+    last_upload_at = serializers.DateTimeField(allow_null=True)
+
+    @staticmethod
+    def from_user(user):
+        profile = getattr(user, 'profile', None)
+        bytes_used = profile.total_storage_used if profile else 0
+        ocr_qs = user.ocr_records.all()
+        total_files = ocr_qs.count()
+        total_completed = ocr_qs.filter(status=OCRRecord.STATUS_COMPLETED).count()
+        total_pending = ocr_qs.filter(status=OCRRecord.STATUS_PENDING).count()
+        total_failed = ocr_qs.filter(status=OCRRecord.STATUS_FAILED).count()
+        total_edits = user.edited_examples.count()
+        total_used_edits = user.edited_examples.filter(used=True).count()
+        last_upload = ocr_qs.order_by('-created_at').values_list('created_at', flat=True).first()
+        return {
+            'user_id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'bytes_used': bytes_used,
+            'megabytes_used': round(bytes_used / (1024 * 1024), 4),
+            'gigabytes_used': round(bytes_used / (1024 * 1024 * 1024), 4),
+            'total_files': total_files,
+            'total_completed': total_completed,
+            'total_pending': total_pending,
+            'total_failed': total_failed,
+            'total_edits': total_edits,
+            'total_used_edits': total_used_edits,
+            'last_upload_at': last_upload,
+        }
+
+
+class EditedOCRExampleSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = EditedOCRExample
+        fields = ('id', 'ocr_record', 'user', 'user_email', 'edited_text', 'created_at', 'used', 'used_at')
+        read_only_fields = ('id', 'created_at', 'used', 'used_at', 'user_email')
+
+    def create(self, validated_data):
+        return super().create(validated_data)

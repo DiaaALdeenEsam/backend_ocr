@@ -3,8 +3,6 @@ import json
 import gc
 import logging
 import os
-import threading
-import traceback
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -22,8 +20,9 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-from .models import OCRRecord, UserProfile
-from .serializers import OCRRecordSerializer, StorageInfoSerializer
+from .models import OCRRecord, UserProfile, EditedOCRExample
+from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
+from .serializers import UserDetailSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
@@ -138,39 +137,11 @@ def run_ocr_background(record_id):
     if not record:
         return
 
+    # This function has been moved to a Celery task; keep a noop fallback for local calls
     try:
-        record.status = OCRRecord.STATUS_PROCESSING
-        record.error_message = None
-        record.save(update_fields=['status', 'error_message'])
-
-        ocr_engine = get_ocr_engine()
-
-        try:
-            extracted_text = (ocr_engine.predict(record.image.path) or '').strip()
-            logger.info("Full-page OCR text for record_id=%s: '%s'", record.id, extracted_text)
-        except Exception:
-            logger.exception('Full-page OCR failed for record_id=%s', record.id)
-            traceback.print_exc()
-            extracted_text = ''
-        finally:
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-            gc.collect()
-
-        record.extracted_text = extracted_text
-        record.status = OCRRecord.STATUS_COMPLETED
-        record.error_message = None
-        record.save(update_fields=['extracted_text', 'status', 'error_message'])
-    except Exception as exc:
-        record.error_message = str(exc)
-        record.status = OCRRecord.STATUS_FAILED
-        record.save(update_fields=['status', 'error_message'])
-
-        logger.error('==================================================')
-        logger.error('OCR BACKGROUND FAILURE for record_id=%s', record_id)
-        logger.error('==================================================')
-        logger.exception('Unhandled OCR background exception')
-        traceback.print_exc()
+        logger.info('run_ocr_background invoked for record_id=%s but background processing is handled by Celery task.', record_id)
+    except Exception:
+        pass
 
 
 class OCRRecordViewSet(viewsets.ModelViewSet):
@@ -210,9 +181,33 @@ class StorageInfoView(APIView):
         return Response(payload, status=status.HTTP_200_OK)
 
 
+class UserDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id=None, *args, **kwargs):
+        # allow admins to query other users; normal users can only query themselves
+        if user_id:
+            if not (request.user.is_staff or request.user.is_superuser):
+                return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+            from django.contrib.auth.models import User
+            user = User.objects.filter(pk=user_id).first()
+            if not user:
+                return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            user = request.user
+
+        payload = UserDetailSerializer.from_user(user)
+        return Response(payload, status=status.HTTP_200_OK)
+
+
 class ProcessOCRView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
+    from rest_framework.throttling import SimpleRateThrottle
+
+    class UploadRateThrottle(SimpleRateThrottle):
+        scope = 'uploads'
+    throttle_classes = [UploadRateThrottle]
 
     def post(self, request, *args, **kwargs):
         serializer = OCRRecordSerializer(data=request.data)
@@ -223,8 +218,17 @@ class ProcessOCRView(APIView):
         ocr_record.status = OCRRecord.STATUS_PENDING
         ocr_record.save(update_fields=['status'])
         
-        worker = threading.Thread(target=run_ocr_background, args=(ocr_record.id,), daemon=True)
-        worker.start()
+        # enqueue background processing via Celery task
+        try:
+            from .tasks import process_ocr_record
+            process_ocr_record.delay(ocr_record.id)
+        except Exception:
+            logger.exception('Failed to enqueue OCR background task; falling back to synchronous processing')
+            # fallback synchronous processing via Celery task apply
+            try:
+                process_ocr_record.apply(args=(ocr_record.id,))
+            except Exception:
+                logger.exception('Fallback synchronous OCR processing failed')
 
         return Response(
             {
@@ -263,18 +267,21 @@ class OCRStatusView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Save the edited text as an audit/training example
+        edit = EditedOCRExample.objects.create(
+            ocr_record=ocr_record,
+            user=request.user,
+            edited_text=extracted_text,
+        )
+
+        # Also update the displayed extracted_text so users see their change immediately
         ocr_record.extracted_text = extracted_text
         ocr_record.save(update_fields=['extracted_text'])
 
-        return Response(
-            {
-                'message': 'Text updated successfully',
-                'id': ocr_record.id,
-                'status': ocr_record.status,
-                'extracted_text': ocr_record.extracted_text,
-            },
-            status=status.HTTP_200_OK,
-        )
+        payload = EditedOCRExampleSerializer(edit).data
+        payload.update({'message': 'Text updated and saved for training.', 'id': ocr_record.id, 'status': ocr_record.status, 'extracted_text': ocr_record.extracted_text})
+
+        return Response(payload, status=status.HTTP_200_OK)
 
     def delete(self, request, pk, *args, **kwargs):
         ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
@@ -414,3 +421,18 @@ class OCRDownloadView(APIView):
         response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.pdf"'
         return response
+
+
+class MetricsView(APIView):
+    # expose Prometheus metrics; no auth to allow monitoring systems to scrape
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        try:
+            from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+        except Exception:
+            return Response({'detail': 'prometheus client not available'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        data = generate_latest()
+        return HttpResponse(data, content_type=CONTENT_TYPE_LATEST)

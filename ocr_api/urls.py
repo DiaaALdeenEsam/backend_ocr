@@ -10,6 +10,7 @@ from .views import (
     OCRStatusView,
     ProcessOCRView,
     StorageInfoView,
+    UserDetailsView,
 )
 
 app_name = 'ocr_api'
@@ -22,6 +23,8 @@ urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='auth-login'),
     path('auth/logout/', LogoutView.as_view(), name='auth-logout'),
     path('storage-info/', StorageInfoView.as_view(), name='storage-info'),
+    path('user-details/', UserDetailsView.as_view(), name='user-details'),
+    path('user-details/<int:user_id>/', UserDetailsView.as_view(), name='user-details-admin'),
     path('process-ocr/', ProcessOCRView.as_view(), name='process-ocr'),
     path('ocr-status/<int:pk>/', OCRStatusView.as_view(), name='ocr-status'),
     path('ocr-history/', OCRHistoryView.as_view(), name='ocr-history'),
