@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&hry@zeo#x0cb^htybs8uomsk9op93bk^2&w-!cw!%!x)-h#i5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '[::1]']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'ocr_api',
+    'ocr_api.apps.OcrApiConfig',
 ]
 
 MIDDLEWARE = [

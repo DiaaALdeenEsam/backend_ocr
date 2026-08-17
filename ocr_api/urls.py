@@ -6,12 +6,14 @@ from .exporters import OCRExportDocxView, OCRExportPdfView, OCRExportXlsxView
 from .views import (
     OCRDownloadView,
     DebugOCRRawView,
+    GeneratedFileViewSet,
     OCRHistoryView,
     OCRHistorySearchView,
     OCRRecordViewSet,
     OCRStatusView,
     ProcessOCRView,
     StorageInfoView,
+    StorageStatsView,
     UploadedFilesView,
     UserDetailsView,
     UserListView,
@@ -21,6 +23,10 @@ app_name = 'ocr_api'
 
 router = DefaultRouter()
 router.register(r'ocr-records', OCRRecordViewSet, basename='ocr-record')
+
+generated_file_list = GeneratedFileViewSet.as_view({'get': 'list'})
+generated_file_detail = GeneratedFileViewSet.as_view({'get': 'retrieve', 'delete': 'destroy'})
+generated_file_download = GeneratedFileViewSet.as_view({'get': 'download'})
 
 urlpatterns = [
     path('auth/signup/', SignupView.as_view(), name='auth-signup'),
@@ -40,4 +46,17 @@ urlpatterns = [
     path('export-ocr/<int:pk>/pdf/', OCRExportPdfView.as_view(), name='export-ocr-pdf'),
     path('export-ocr/<int:pk>/docx/', OCRExportDocxView.as_view(), name='export-ocr-docx'),
     path('export-ocr/<int:pk>/xlsx/', OCRExportXlsxView.as_view(), name='export-ocr-xlsx'),
+    # Generated files: storage-stats must be registered before <int:pk>.
+    path(
+        'v1/generated-files/storage-stats/',
+        StorageStatsView.as_view(),
+        name='generated-file-storage-stats',
+    ),
+    path('v1/generated-files/', generated_file_list, name='generated-file-list'),
+    path(
+        'v1/generated-files/<int:pk>/download/',
+        generated_file_download,
+        name='generated-file-download',
+    ),
+    path('v1/generated-files/<int:pk>/', generated_file_detail, name='generated-file-detail'),
 ] + router.urls

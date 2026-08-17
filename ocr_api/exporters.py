@@ -21,7 +21,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import OCRRecord
+from .models import GeneratedFile, OCRRecord, persist_generated_export
 
 try:
     import arabic_reshaper
@@ -32,6 +32,13 @@ except Exception:
 
 
 FONT_NAME = 'ArialUnicode'
+
+
+def get_accessible_ocr_queryset(user):
+    queryset = OCRRecord.objects.select_related('user')
+    if user.is_staff or user.is_superuser:
+        return queryset
+    return queryset.filter(user=user)
 
 
 def split_text_into_paragraphs(raw_text):
@@ -101,7 +108,7 @@ def set_rtl_paragraph(paragraph):
 
 class OCRExportPdfView(APIView):
     def get(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
 
         if ocr_record.status != OCRRecord.STATUS_COMPLETED:
             return Response(
@@ -196,15 +203,22 @@ class OCRExportPdfView(APIView):
 
         doc.build(story)
         buffer.seek(0)
+        pdf_bytes = buffer.getvalue()
+        persist_generated_export(
+            ocr_record,
+            GeneratedFile.FileType.PDF,
+            pdf_bytes,
+            f'ocr_export_{ocr_record.id}.pdf',
+        )
 
-        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.pdf"'
         return response
 
 
 class OCRExportDocxView(APIView):
     def get(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
 
         if ocr_record.status != OCRRecord.STATUS_COMPLETED:
             return Response(
@@ -283,15 +297,25 @@ class OCRExportDocxView(APIView):
         buffer = io.BytesIO()
         doc.save(buffer)
         buffer.seek(0)
+        docx_bytes = buffer.getvalue()
+        persist_generated_export(
+            ocr_record,
+            GeneratedFile.FileType.WORD,
+            docx_bytes,
+            f'ocr_export_{ocr_record.id}.docx',
+        )
 
-        response = HttpResponse(buffer.getvalue(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response = HttpResponse(
+            docx_bytes,
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        )
         response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.docx"'
         return response
 
 
 class OCRExportXlsxView(APIView):
     def get(self, request, pk, *args, **kwargs):
-        ocr_record = get_object_or_404(OCRRecord, pk=pk)
+        ocr_record = get_object_or_404(get_accessible_ocr_queryset(request.user), pk=pk)
 
         if ocr_record.status != OCRRecord.STATUS_COMPLETED:
             return Response(
@@ -338,7 +362,17 @@ class OCRExportXlsxView(APIView):
         buffer = io.BytesIO()
         wb.save(buffer)
         buffer.seek(0)
+        xlsx_bytes = buffer.getvalue()
+        persist_generated_export(
+            ocr_record,
+            GeneratedFile.FileType.EXCEL,
+            xlsx_bytes,
+            f'ocr_export_{ocr_record.id}.xlsx',
+        )
 
-        response = HttpResponse(buffer.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(
+            xlsx_bytes,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
         response['Content-Disposition'] = f'attachment; filename="ocr_export_{ocr_record.id}.xlsx"'
         return response

@@ -7,12 +7,15 @@ import threading
 import queue
 
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.db.models import Q, Sum
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from PIL import Image
 import torch
 from rest_framework import status, viewsets
+from rest_framework.exceptions import APIException
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
@@ -25,9 +28,10 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 from .auth_views import IsAdminUser
-from .models import OCRRecord, UserProfile, EditedOCRExample
+from .models import OCRRecord, UserProfile, EditedOCRExample, GeneratedFile, persist_generated_export
 from .serializers import OCRRecordSerializer, StorageInfoSerializer, EditedOCRExampleSerializer
 from .serializers import UserDetailSerializer, UserListSerializer, UploadedFileListSerializer
+from .serializers import GeneratedFileSerializer, StorageStatsSerializer
 from .ocr_engine import get_ocr_engine
 
 logger = logging.getLogger(__name__)
@@ -495,6 +499,13 @@ class OCRDownloadView(APIView):
 
         if output_format == 'json':
             payload = {'text': ocr_record.extracted_text or ''}
+            payload_bytes = json.dumps(payload, ensure_ascii=False, indent=2).encode('utf-8')
+            persist_generated_export(
+                ocr_record,
+                GeneratedFile.FileType.JSON,
+                payload_bytes,
+                f'ocr_result_{ocr_record.id}.json',
+            )
             # Return Unicode string with explicit charset; avoid returning raw bytes which
             # some clients may mis-handle and display mojibake for Arabic text.
             response = HttpResponse(
@@ -592,8 +603,15 @@ class OCRDownloadView(APIView):
 
         pdf.save()
         buffer.seek(0)
+        pdf_bytes = buffer.getvalue()
+        persist_generated_export(
+            ocr_record,
+            GeneratedFile.FileType.PDF,
+            pdf_bytes,
+            f'ocr_result_{ocr_record.id}.pdf',
+        )
 
-        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="ocr_result_{ocr_record.id}.pdf"'
         return response
 
@@ -641,3 +659,293 @@ class MetricsView(APIView):
 
         payload = f"{base_text.rstrip()}\n{summary_metrics}\n"
         return HttpResponse(payload, content_type=CONTENT_TYPE_LATEST)
+
+
+class StructuredAPIError(APIException):
+    """JSON error envelope: ``{"error": {"code", "message", "details"}}``."""
+
+    def __init__(self, status_code, code, message, details=None):
+        super().__init__(detail={
+            'error': {
+                'code': code,
+                'message': message,
+                'details': details or {},
+            }
+        })
+        self.status_code = status_code
+
+
+class GeneratedFilePagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.page.paginator.count,
+            'page': self.page.number,
+            'page_size': self.get_page_size(self.request),
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'results': data,
+        })
+
+
+class GeneratedFileViewSet(viewsets.GenericViewSet):
+    """List, retrieve, stream-download, and delete persisted OCR exports."""
+
+    serializer_class = GeneratedFileSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = GeneratedFilePagination
+    http_method_names = ['get', 'delete', 'head', 'options']
+
+    ALLOWED_ORDERING = {
+        'created_at',
+        '-created_at',
+        'file_size_bytes',
+        '-file_size_bytes',
+    }
+
+    def get_queryset(self):
+        queryset = GeneratedFile.objects.select_related('source_image', 'user')
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            return queryset
+        return queryset.filter(user=user)
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        try:
+            obj = GeneratedFile.objects.select_related('source_image', 'user').get(pk=pk)
+        except (GeneratedFile.DoesNotExist, ValueError, TypeError):
+            raise StructuredAPIError(
+                status.HTTP_404_NOT_FOUND,
+                'NOT_FOUND',
+                'Generated file not found.',
+            )
+
+        user = self.request.user
+        if obj.user_id != user.id and not (user.is_staff or user.is_superuser):
+            message = (
+                'You do not have permission to delete this file.'
+                if self.request.method == 'DELETE'
+                else 'You do not have permission to access this file.'
+            )
+            raise StructuredAPIError(status.HTTP_403_FORBIDDEN, 'FORBIDDEN', message)
+        return obj
+
+    def _validate_list_params(self):
+        params = self.request.query_params
+        details = {}
+
+        file_type = params.get('file_type')
+        if file_type and file_type not in GeneratedFile.FileType.values:
+            details['file_type'] = ['Must be one of: PDF, JSON, WORD, EXCEL.']
+
+        page_size = params.get('page_size')
+        if page_size is not None:
+            try:
+                page_size_int = int(page_size)
+                if page_size_int < 1 or page_size_int > 100:
+                    raise ValueError
+            except (TypeError, ValueError):
+                details['page_size'] = ['Must be between 1 and 100.']
+
+        ordering = params.get('ordering')
+        if ordering and ordering not in self.ALLOWED_ORDERING:
+            details['ordering'] = [
+                'Must be one of: created_at, -created_at, file_size_bytes, -file_size_bytes.'
+            ]
+
+        source_image_id = params.get('source_image_id')
+        if source_image_id is not None:
+            try:
+                int(source_image_id)
+            except (TypeError, ValueError):
+                details['source_image_id'] = ['Must be an integer.']
+
+        user_id = params.get('user_id')
+        if user_id is not None:
+            try:
+                int(user_id)
+            except (TypeError, ValueError):
+                details['user_id'] = ['Must be an integer.']
+
+        if details:
+            raise StructuredAPIError(
+                status.HTTP_400_BAD_REQUEST,
+                'VALIDATION_ERROR',
+                'Invalid query parameters.',
+                details,
+            )
+
+    def filter_queryset(self, queryset):
+        self._validate_list_params()
+        params = self.request.query_params
+        user = self.request.user
+
+        file_type = params.get('file_type')
+        if file_type:
+            queryset = queryset.filter(file_type=file_type)
+
+        source_image_id = params.get('source_image_id')
+        if source_image_id is not None:
+            queryset = queryset.filter(source_image_id=int(source_image_id))
+
+        search = (params.get('search') or '').strip()
+        if search:
+            queryset = queryset.filter(
+                Q(file_name__icontains=search)
+                | Q(source_image__file_name__icontains=search)
+            )
+
+        if (user.is_staff or user.is_superuser) and params.get('user_id'):
+            queryset = queryset.filter(user_id=int(params['user_id']))
+
+        ordering = params.get('ordering') or '-created_at'
+        return queryset.order_by(ordering)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def download(self, request, *args, **kwargs):
+        """Stream the stored blob (local) or return a signed URL (S3)."""
+        instance = self.get_object()
+        mode = (request.query_params.get('mode') or 'stream').lower()
+
+        file_exists = bool(
+            instance.file
+            and instance.file.name
+            and instance.file.storage.exists(instance.file.name)
+        )
+        if not file_exists:
+            raise StructuredAPIError(
+                status.HTTP_409_CONFLICT,
+                'FILE_MISSING_ON_STORAGE',
+                'The file record exists but the stored object could not be found.',
+            )
+
+        if instance.storage_backend == GeneratedFile.StorageBackend.S3 and mode == 'redirect':
+            try:
+                download_url = instance.file.storage.url(instance.file.name)
+            except Exception:
+                logger.exception('Failed to build S3 download URL for generated file %s', instance.id)
+                raise StructuredAPIError(
+                    status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'INTERNAL_ERROR',
+                    'Failed to generate a download URL.',
+                )
+            return Response(
+                {
+                    'download_url': download_url,
+                    'expires_in_seconds': 300,
+                    'file_name': instance.file_name,
+                    'mime_type': instance.mime_type,
+                    'file_size_bytes': instance.file_size_bytes,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        try:
+            file_handle = instance.file.open('rb')
+        except FileNotFoundError:
+            raise StructuredAPIError(
+                status.HTTP_409_CONFLICT,
+                'FILE_MISSING_ON_STORAGE',
+                'The file record exists but the stored object could not be found.',
+            )
+
+        response = FileResponse(
+            file_handle,
+            as_attachment=True,
+            filename=instance.file_name,
+            content_type=instance.mime_type or 'application/octet-stream',
+        )
+        response['Content-Length'] = instance.file_size_bytes or 0
+        response['X-Content-Type-Options'] = 'nosniff'
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        """Delete the DB row and storage blob inside a transaction."""
+        instance = self.get_object()
+        file_id = instance.id
+        freed_bytes = instance.file_size_bytes or 0
+        owner_id = instance.user_id
+
+        with transaction.atomic():
+            locked = (
+                GeneratedFile.objects.select_for_update()
+                .filter(pk=file_id)
+                .first()
+            )
+            if locked is None:
+                raise StructuredAPIError(
+                    status.HTTP_404_NOT_FOUND,
+                    'NOT_FOUND',
+                    'Generated file not found.',
+                )
+            if locked.file:
+                locked.file.delete(save=False)
+            locked.delete()
+
+        profile = UserProfile.objects.filter(user_id=owner_id).first()
+        generated_used = profile.generated_storage_used if profile else 0
+        return Response(
+            {
+                'message': 'Generated file deleted successfully.',
+                'id': file_id,
+                'freed_bytes': freed_bytes,
+                'generated_storage_used': generated_used,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class StorageStatsView(APIView):
+    """Return total generated-file storage, broken down by file type."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        user_id = request.query_params.get('user_id')
+
+        if user_id is not None:
+            if not (user.is_staff or user.is_superuser):
+                raise StructuredAPIError(
+                    status.HTTP_403_FORBIDDEN,
+                    'FORBIDDEN',
+                    'You do not have permission to view other users\' storage stats.',
+                )
+            try:
+                target_id = int(user_id)
+            except (TypeError, ValueError):
+                raise StructuredAPIError(
+                    status.HTTP_400_BAD_REQUEST,
+                    'VALIDATION_ERROR',
+                    'Invalid query parameters.',
+                    {'user_id': ['Must be an integer.']},
+                )
+            target = User.objects.filter(pk=target_id).first()
+            if target is None:
+                raise StructuredAPIError(
+                    status.HTTP_404_NOT_FOUND,
+                    'NOT_FOUND',
+                    'User not found.',
+                )
+            user = target
+
+        queryset = GeneratedFile.objects.filter(user=user)
+        payload = StorageStatsSerializer.from_user(user, queryset)
+        return Response(payload, status=status.HTTP_200_OK)

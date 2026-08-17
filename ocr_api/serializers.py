@@ -1,8 +1,37 @@
 import os
 
+from django.db.models import Count, Sum, Value
+from django.db.models.functions import Coalesce
 from rest_framework import serializers
 
-from .models import OCRRecord, UserProfile, EditedOCRExample
+from .models import GeneratedFile, OCRRecord, UserProfile, EditedOCRExample
+
+
+def format_file_size(num_bytes):
+    """Return a human-readable size such as ``180.0 KB`` (1024-based)."""
+    value = float(num_bytes or 0)
+    if value < 1024:
+        return f'{int(value)} B'
+    for unit in ('KB', 'MB', 'GB', 'TB'):
+        value /= 1024.0
+        if value < 1024 or unit == 'TB':
+            return f'{value:.1f} {unit}'
+    return f'{value:.1f} TB'
+
+
+def _absolute_media_url(request, file_field):
+    if not file_field or not getattr(file_field, 'name', None):
+        return None
+    try:
+        url = file_field.url
+    except ValueError:
+        return None
+    if request is None:
+        return url
+    try:
+        return request.build_absolute_uri(url)
+    except Exception:
+        return url
 
 
 class OCRRecordSerializer(serializers.ModelSerializer):
@@ -185,3 +214,123 @@ class EditedOCRExampleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return super().create(validated_data)
+
+
+class SourceImageSummarySerializer(serializers.ModelSerializer):
+    """Nested source-image metadata shown on generated-file list/detail."""
+
+    thumbnail_url = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
+    file_size_bytes = serializers.IntegerField(source='file_size', read_only=True)
+    uploaded_at = serializers.DateTimeField(source='created_at', read_only=True)
+
+    class Meta:
+        model = OCRRecord
+        fields = (
+            'id',
+            'file_name',
+            'thumbnail_url',
+            'image_url',
+            'file_size_bytes',
+            'status',
+            'document_type',
+            'uploaded_at',
+        )
+
+    def get_thumbnail_url(self, obj):
+        request = self.context.get('request')
+        return _absolute_media_url(request, obj.image)
+
+    def get_image_url(self, obj):
+        request = self.context.get('request')
+        return _absolute_media_url(request, obj.image)
+
+
+class GeneratedFileSerializer(serializers.ModelSerializer):
+    file_size_human = serializers.SerializerMethodField()
+    download_url = serializers.SerializerMethodField()
+    source_image = SourceImageSummarySerializer(read_only=True)
+
+    class Meta:
+        model = GeneratedFile
+        fields = (
+            'id',
+            'file_name',
+            'file_type',
+            'mime_type',
+            'file_size_bytes',
+            'file_size_human',
+            'download_url',
+            'created_at',
+            'source_image',
+        )
+        read_only_fields = fields
+
+    def get_file_size_human(self, obj):
+        return format_file_size(obj.file_size_bytes)
+
+    def get_download_url(self, obj):
+        return f'/api/v1/generated-files/{obj.id}/download/'
+
+
+class StorageTypeBreakdownSerializer(serializers.Serializer):
+    file_type = serializers.CharField()
+    count = serializers.IntegerField()
+    bytes = serializers.IntegerField()
+    megabytes = serializers.FloatField()
+
+
+class StorageStatsSerializer(serializers.Serializer):
+    """Aggregated generated-file storage, always including all four file types."""
+
+    user_id = serializers.IntegerField()
+    total_files = serializers.IntegerField()
+    total_bytes = serializers.IntegerField()
+    total_megabytes = serializers.FloatField()
+    total_gigabytes = serializers.FloatField()
+    by_file_type = StorageTypeBreakdownSerializer(many=True)
+
+    FILE_TYPE_ORDER = (
+        GeneratedFile.FileType.PDF,
+        GeneratedFile.FileType.JSON,
+        GeneratedFile.FileType.WORD,
+        GeneratedFile.FileType.EXCEL,
+    )
+
+    @staticmethod
+    def from_user(user, queryset=None):
+        qs = queryset if queryset is not None else GeneratedFile.objects.filter(user=user)
+        totals = qs.aggregate(
+            total_bytes=Coalesce(Sum('file_size_bytes'), Value(0)),
+            total_files=Count('id'),
+        )
+        total_bytes = int(totals['total_bytes'] or 0)
+        total_files = int(totals['total_files'] or 0)
+
+        by_type_rows = {
+            row['file_type']: row
+            for row in qs.values('file_type').annotate(
+                count=Count('id'),
+                bytes=Coalesce(Sum('file_size_bytes'), Value(0)),
+            )
+        }
+
+        by_file_type = []
+        for file_type in StorageStatsSerializer.FILE_TYPE_ORDER:
+            row = by_type_rows.get(file_type, {})
+            size_bytes = int(row.get('bytes') or 0)
+            by_file_type.append({
+                'file_type': file_type,
+                'count': int(row.get('count') or 0),
+                'bytes': size_bytes,
+                'megabytes': round(size_bytes / (1024 * 1024), 4),
+            })
+
+        return {
+            'user_id': user.id,
+            'total_files': total_files,
+            'total_bytes': total_bytes,
+            'total_megabytes': round(total_bytes / (1024 * 1024), 4),
+            'total_gigabytes': round(total_bytes / (1024 * 1024 * 1024), 4),
+            'by_file_type': by_file_type,
+        }

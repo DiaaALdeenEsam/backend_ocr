@@ -7,3 +7,4 @@ class OcrApiConfig(AppConfig):
 
     def ready(self):
         from . import models  # noqa: F401
+        from . import signals  # noqa: F401
